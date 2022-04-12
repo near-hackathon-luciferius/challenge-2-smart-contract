@@ -24,4 +24,3 @@ yarn-error.log*
 
 # Rust smart contract
 contract/target
-/package-lock.json
