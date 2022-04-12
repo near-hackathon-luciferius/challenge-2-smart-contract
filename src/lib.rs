@@ -10,7 +10,7 @@ pub struct Contract {
 #[near_bindgen]
 impl Contract {
     pub fn hello(&mut self, name: String) {   
-        env::log_str(format!("Hello {}!", name))
+        env::log_str(format!("Hello", name).as_str())
     }
 }
 
