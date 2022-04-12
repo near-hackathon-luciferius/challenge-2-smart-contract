@@ -9,7 +9,9 @@ pub struct Contract {
 
 #[near_bindgen]
 impl Contract {
-    // ADD CONTRACT METHODS HERE
+    pub fn hello(&mut self, name: String) {   
+        env::log_str("Hello {name}!")
+    }
 }
 
 /*
