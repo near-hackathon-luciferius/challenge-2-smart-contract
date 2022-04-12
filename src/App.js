@@ -24,15 +24,6 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
       setAnswer(answer)
     });
   };
-
-  // This function is called when all entries are filled
-  async function getAnswer(name) {
-    let answer = getAnswerToName(name);
-    // Compare crossword solution's public key with the known public key for this puzzle
-    // (It was given to us when we first fetched the puzzle in index.js)
-    console.log("Answer: ${answer}");
-    setAnswer(answer);
-  }
   
   const signIn = () => {
     wallet.requestSignIn(
