@@ -55,7 +55,7 @@ mod tests {
         // Set up contract object and call the new method
         let mut contract = Contract::new();
         let mut result = contract.hello("Alice".to_string());
-        assert_eq!(!result, "Hello Alice!".to_string(), "Expected correct hello response.");
+        assert_eq!(result, "Hello Alice!".to_string(), "Expected correct hello response.");
         //assert_eq!(get_logs(), ["Try again."], "Expected a failure log.");
     }
 }
