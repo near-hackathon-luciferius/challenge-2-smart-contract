@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { HashRouter as Router } from "react-router-dom";
 import App from './App';
 import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
@@ -56,12 +57,14 @@ async function initContract() {
 window.nearInitPromise = initContract().then(
   ({ contract, currentUser, nearConfig, walletConnection }) => {
     ReactDOM.render(
-      <App
-        contract={contract}
-        currentUser={currentUser}
-        nearConfig={nearConfig}
-        wallet={walletConnection}
-      />,
+	  <Router>
+        <App
+          contract={contract}
+          currentUser={currentUser}
+          nearConfig={nearConfig}
+          wallet={walletConnection}
+        />
+	  </Router>,
       document.getElementById('root')
     );
   }

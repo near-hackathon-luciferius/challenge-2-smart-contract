@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import Form from './components/Form';
 import SignIn from './components/SignIn';
+/*eslint-disable no-undef*/
 
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
@@ -81,3 +82,4 @@ App.propTypes = {
 };
 
 export default App;
+/*eslint-enable no-undef*/
