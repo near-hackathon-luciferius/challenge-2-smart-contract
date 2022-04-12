@@ -1,5 +1,6 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{env, near_bindgen};
+use near_sdk::{near_bindgen};
+//use near_sdk::{env, near_bindgen};
 
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
@@ -14,8 +15,9 @@ impl Contract {
         }
     }
     
-    pub fn hello(&mut self, name: String) {   
-        env::log_str(format!("Hello {}!", name).as_str())
+    pub fn hello(&mut self, name: String) -> String {   
+        //env::log_str(format!("Hello {}!", name).as_str())
+        format!("Hello {}!", name)
     }
 }
 
@@ -30,7 +32,8 @@ impl Contract {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use near_sdk::test_utils::{get_logs, VMContextBuilder};
+    use near_sdk::test_utils::{VMContextBuilder};
+    //use near_sdk::test_utils::{get_logs, VMContextBuilder};
     use near_sdk::{testing_env, AccountId};
 
     // part of writing unit tests is setting up a mock context
