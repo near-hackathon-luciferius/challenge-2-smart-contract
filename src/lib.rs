@@ -4,15 +4,16 @@ use near_sdk::{env, near_bindgen};
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
 pub struct Contract {
+}
+
+#[near_bindgen]
+impl Contract {
     #[init]
     pub fn new() -> Self {
         Self {
         }
     }
-}
-
-#[near_bindgen]
-impl Contract {
+    
     pub fn hello(&mut self, name: String) {   
         env::log_str(format!("Hello {}!", name).as_str())
     }
