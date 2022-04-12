@@ -1,4 +1,4 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'hello.crpytosketches.testnet';
+const CONTRACT_NAME = process.env.CONTRACT_NAME || 'hello.cryptosketches.testnet';
 
 function getConfig(env) {
   switch(env) {

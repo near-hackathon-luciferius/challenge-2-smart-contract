@@ -227,6 +227,9 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
+},{}],"../node_modules/prop-types/lib/has.js":[function(require,module,exports) {
+module.exports = Function.call.bind(Object.prototype.hasOwnProperty);
+
 },{}],"../node_modules/prop-types/checkPropTypes.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -242,7 +245,8 @@ if ("development" !== 'production') {
   var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
 
   var loggedTypeFailures = {};
-  var has = Function.call.bind(Object.prototype.hasOwnProperty);
+
+  var has = require('./lib/has');
 
   printWarning = function (text) {
     var message = 'Warning: ' + text;
@@ -256,7 +260,9 @@ if ("development" !== 'production') {
       // This error was thrown as a convenience so that you can use this stack
       // to find the callsite that caused this warning to fire.
       throw new Error(message);
-    } catch (x) {}
+    } catch (x) {
+      /**/
+    }
   };
 }
 /**
@@ -284,7 +290,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
           // This is intentionally an invariant that gets caught. It's the same
           // behavior as without this statement except with a better message.
           if (typeof typeSpecs[typeSpecName] !== 'function') {
-            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.');
+            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
             err.name = 'Invariant Violation';
             throw err;
           }
@@ -323,7 +329,7 @@ checkPropTypes.resetWarningCache = function () {
 };
 
 module.exports = checkPropTypes;
-},{"./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js"}],"../node_modules/react/cjs/react.development.js":[function(require,module,exports) {
+},{"./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js","./lib/has":"../node_modules/prop-types/lib/has.js"}],"../node_modules/react/cjs/react.development.js":[function(require,module,exports) {
 /** @license React v16.14.0
  * react.development.js
  *
@@ -28357,2561 +28363,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./fonts/static/Inter-Regular.ttf":[["Inter-Regular.3b99ff55.ttf","fonts/static/Inter-Regular.ttf"],"fonts/static/Inter-Regular.ttf"],"./fonts/static/Inter-Medium.ttf":[["Inter-Medium.ccf17ea8.ttf","fonts/static/Inter-Medium.ttf"],"fonts/static/Inter-Medium.ttf"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/@babel/runtime/helpers/interopRequireDefault.js":[function(require,module,exports) {
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
-  };
-}
-
-module.exports = _interopRequireDefault;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-},{}],"../node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
-/** @license React v17.0.2
- * react-is.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-'use strict';
-
-if ("development" !== "production") {
-  (function () {
-    'use strict'; // ATTENTION
-    // When adding new symbols to this file,
-    // Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
-    // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-    // nor polyfill, then a plain number is used for performance.
-
-    var REACT_ELEMENT_TYPE = 0xeac7;
-    var REACT_PORTAL_TYPE = 0xeaca;
-    var REACT_FRAGMENT_TYPE = 0xeacb;
-    var REACT_STRICT_MODE_TYPE = 0xeacc;
-    var REACT_PROFILER_TYPE = 0xead2;
-    var REACT_PROVIDER_TYPE = 0xeacd;
-    var REACT_CONTEXT_TYPE = 0xeace;
-    var REACT_FORWARD_REF_TYPE = 0xead0;
-    var REACT_SUSPENSE_TYPE = 0xead1;
-    var REACT_SUSPENSE_LIST_TYPE = 0xead8;
-    var REACT_MEMO_TYPE = 0xead3;
-    var REACT_LAZY_TYPE = 0xead4;
-    var REACT_BLOCK_TYPE = 0xead9;
-    var REACT_SERVER_BLOCK_TYPE = 0xeada;
-    var REACT_FUNDAMENTAL_TYPE = 0xead5;
-    var REACT_SCOPE_TYPE = 0xead7;
-    var REACT_OPAQUE_ID_TYPE = 0xeae0;
-    var REACT_DEBUG_TRACING_MODE_TYPE = 0xeae1;
-    var REACT_OFFSCREEN_TYPE = 0xeae2;
-    var REACT_LEGACY_HIDDEN_TYPE = 0xeae3;
-
-    if (typeof Symbol === 'function' && Symbol.for) {
-      var symbolFor = Symbol.for;
-      REACT_ELEMENT_TYPE = symbolFor('react.element');
-      REACT_PORTAL_TYPE = symbolFor('react.portal');
-      REACT_FRAGMENT_TYPE = symbolFor('react.fragment');
-      REACT_STRICT_MODE_TYPE = symbolFor('react.strict_mode');
-      REACT_PROFILER_TYPE = symbolFor('react.profiler');
-      REACT_PROVIDER_TYPE = symbolFor('react.provider');
-      REACT_CONTEXT_TYPE = symbolFor('react.context');
-      REACT_FORWARD_REF_TYPE = symbolFor('react.forward_ref');
-      REACT_SUSPENSE_TYPE = symbolFor('react.suspense');
-      REACT_SUSPENSE_LIST_TYPE = symbolFor('react.suspense_list');
-      REACT_MEMO_TYPE = symbolFor('react.memo');
-      REACT_LAZY_TYPE = symbolFor('react.lazy');
-      REACT_BLOCK_TYPE = symbolFor('react.block');
-      REACT_SERVER_BLOCK_TYPE = symbolFor('react.server.block');
-      REACT_FUNDAMENTAL_TYPE = symbolFor('react.fundamental');
-      REACT_SCOPE_TYPE = symbolFor('react.scope');
-      REACT_OPAQUE_ID_TYPE = symbolFor('react.opaque.id');
-      REACT_DEBUG_TRACING_MODE_TYPE = symbolFor('react.debug_trace_mode');
-      REACT_OFFSCREEN_TYPE = symbolFor('react.offscreen');
-      REACT_LEGACY_HIDDEN_TYPE = symbolFor('react.legacy_hidden');
-    } // Filter certain DOM attributes (e.g. src, href) if their values are empty strings.
-
-
-    var enableScopeAPI = false; // Experimental Create Event Handle API.
-
-    function isValidElementType(type) {
-      if (typeof type === 'string' || typeof type === 'function') {
-        return true;
-      } // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
-
-
-      if (type === REACT_FRAGMENT_TYPE || type === REACT_PROFILER_TYPE || type === REACT_DEBUG_TRACING_MODE_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || type === REACT_LEGACY_HIDDEN_TYPE || enableScopeAPI) {
-        return true;
-      }
-
-      if (typeof type === 'object' && type !== null) {
-        if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_BLOCK_TYPE || type[0] === REACT_SERVER_BLOCK_TYPE) {
-          return true;
-        }
-      }
-
-      return false;
-    }
-
-    function typeOf(object) {
-      if (typeof object === 'object' && object !== null) {
-        var $$typeof = object.$$typeof;
-
-        switch ($$typeof) {
-          case REACT_ELEMENT_TYPE:
-            var type = object.type;
-
-            switch (type) {
-              case REACT_FRAGMENT_TYPE:
-              case REACT_PROFILER_TYPE:
-              case REACT_STRICT_MODE_TYPE:
-              case REACT_SUSPENSE_TYPE:
-              case REACT_SUSPENSE_LIST_TYPE:
-                return type;
-
-              default:
-                var $$typeofType = type && type.$$typeof;
-
-                switch ($$typeofType) {
-                  case REACT_CONTEXT_TYPE:
-                  case REACT_FORWARD_REF_TYPE:
-                  case REACT_LAZY_TYPE:
-                  case REACT_MEMO_TYPE:
-                  case REACT_PROVIDER_TYPE:
-                    return $$typeofType;
-
-                  default:
-                    return $$typeof;
-                }
-
-            }
-
-          case REACT_PORTAL_TYPE:
-            return $$typeof;
-        }
-      }
-
-      return undefined;
-    }
-
-    var ContextConsumer = REACT_CONTEXT_TYPE;
-    var ContextProvider = REACT_PROVIDER_TYPE;
-    var Element = REACT_ELEMENT_TYPE;
-    var ForwardRef = REACT_FORWARD_REF_TYPE;
-    var Fragment = REACT_FRAGMENT_TYPE;
-    var Lazy = REACT_LAZY_TYPE;
-    var Memo = REACT_MEMO_TYPE;
-    var Portal = REACT_PORTAL_TYPE;
-    var Profiler = REACT_PROFILER_TYPE;
-    var StrictMode = REACT_STRICT_MODE_TYPE;
-    var Suspense = REACT_SUSPENSE_TYPE;
-    var hasWarnedAboutDeprecatedIsAsyncMode = false;
-    var hasWarnedAboutDeprecatedIsConcurrentMode = false; // AsyncMode should be deprecated
-
-    function isAsyncMode(object) {
-      {
-        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-          hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
-
-          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 18+.');
-        }
-      }
-      return false;
-    }
-
-    function isConcurrentMode(object) {
-      {
-        if (!hasWarnedAboutDeprecatedIsConcurrentMode) {
-          hasWarnedAboutDeprecatedIsConcurrentMode = true; // Using console['warn'] to evade Babel and ESLint
-
-          console['warn']('The ReactIs.isConcurrentMode() alias has been deprecated, ' + 'and will be removed in React 18+.');
-        }
-      }
-      return false;
-    }
-
-    function isContextConsumer(object) {
-      return typeOf(object) === REACT_CONTEXT_TYPE;
-    }
-
-    function isContextProvider(object) {
-      return typeOf(object) === REACT_PROVIDER_TYPE;
-    }
-
-    function isElement(object) {
-      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-    }
-
-    function isForwardRef(object) {
-      return typeOf(object) === REACT_FORWARD_REF_TYPE;
-    }
-
-    function isFragment(object) {
-      return typeOf(object) === REACT_FRAGMENT_TYPE;
-    }
-
-    function isLazy(object) {
-      return typeOf(object) === REACT_LAZY_TYPE;
-    }
-
-    function isMemo(object) {
-      return typeOf(object) === REACT_MEMO_TYPE;
-    }
-
-    function isPortal(object) {
-      return typeOf(object) === REACT_PORTAL_TYPE;
-    }
-
-    function isProfiler(object) {
-      return typeOf(object) === REACT_PROFILER_TYPE;
-    }
-
-    function isStrictMode(object) {
-      return typeOf(object) === REACT_STRICT_MODE_TYPE;
-    }
-
-    function isSuspense(object) {
-      return typeOf(object) === REACT_SUSPENSE_TYPE;
-    }
-
-    exports.ContextConsumer = ContextConsumer;
-    exports.ContextProvider = ContextProvider;
-    exports.Element = Element;
-    exports.ForwardRef = ForwardRef;
-    exports.Fragment = Fragment;
-    exports.Lazy = Lazy;
-    exports.Memo = Memo;
-    exports.Portal = Portal;
-    exports.Profiler = Profiler;
-    exports.StrictMode = StrictMode;
-    exports.Suspense = Suspense;
-    exports.isAsyncMode = isAsyncMode;
-    exports.isConcurrentMode = isConcurrentMode;
-    exports.isContextConsumer = isContextConsumer;
-    exports.isContextProvider = isContextProvider;
-    exports.isElement = isElement;
-    exports.isForwardRef = isForwardRef;
-    exports.isFragment = isFragment;
-    exports.isLazy = isLazy;
-    exports.isMemo = isMemo;
-    exports.isPortal = isPortal;
-    exports.isProfiler = isProfiler;
-    exports.isStrictMode = isStrictMode;
-    exports.isSuspense = isSuspense;
-    exports.isValidElementType = isValidElementType;
-    exports.typeOf = typeOf;
-  })();
-}
-},{}],"../node_modules/react-is/index.js":[function(require,module,exports) {
-'use strict';
-
-if ("development" === 'production') {
-  module.exports = require('./cjs/react-is.production.min.js');
-} else {
-  module.exports = require('./cjs/react-is.development.js');
-}
-},{"./cjs/react-is.development.js":"../node_modules/react-is/cjs/react-is.development.js"}],"../node_modules/shallowequal/index.js":[function(require,module,exports) {
-//
-
-module.exports = function shallowEqual(objA, objB, compare, compareContext) {
-  var ret = compare ? compare.call(compareContext, objA, objB) : void 0;
-
-  if (ret !== void 0) {
-    return !!ret;
-  }
-
-  if (objA === objB) {
-    return true;
-  }
-
-  if (typeof objA !== "object" || !objA || typeof objB !== "object" || !objB) {
-    return false;
-  }
-
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) {
-    return false;
-  }
-
-  var bHasOwnProperty = Object.prototype.hasOwnProperty.bind(objB);
-
-  // Test for A's keys different from B.
-  for (var idx = 0; idx < keysA.length; idx++) {
-    var key = keysA[idx];
-
-    if (!bHasOwnProperty(key)) {
-      return false;
-    }
-
-    var valueA = objA[key];
-    var valueB = objB[key];
-
-    ret = compare ? compare.call(compareContext, valueA, valueB, key) : void 0;
-
-    if (ret === false || (ret === void 0 && valueA !== valueB)) {
-      return false;
-    }
-  }
-
-  return true;
-};
-
-},{}],"../node_modules/@emotion/stylis/dist/stylis.browser.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function stylis_min(W) {
-  function M(d, c, e, h, a) {
-    for (var m = 0, b = 0, v = 0, n = 0, q, g, x = 0, K = 0, k, u = k = q = 0, l = 0, r = 0, I = 0, t = 0, B = e.length, J = B - 1, y, f = '', p = '', F = '', G = '', C; l < B;) {
-      g = e.charCodeAt(l);
-      l === J && 0 !== b + n + v + m && (0 !== b && (g = 47 === b ? 10 : 47), n = v = m = 0, B++, J++);
-
-      if (0 === b + n + v + m) {
-        if (l === J && (0 < r && (f = f.replace(N, '')), 0 < f.trim().length)) {
-          switch (g) {
-            case 32:
-            case 9:
-            case 59:
-            case 13:
-            case 10:
-              break;
-
-            default:
-              f += e.charAt(l);
-          }
-
-          g = 59;
-        }
-
-        switch (g) {
-          case 123:
-            f = f.trim();
-            q = f.charCodeAt(0);
-            k = 1;
-
-            for (t = ++l; l < B;) {
-              switch (g = e.charCodeAt(l)) {
-                case 123:
-                  k++;
-                  break;
-
-                case 125:
-                  k--;
-                  break;
-
-                case 47:
-                  switch (g = e.charCodeAt(l + 1)) {
-                    case 42:
-                    case 47:
-                      a: {
-                        for (u = l + 1; u < J; ++u) {
-                          switch (e.charCodeAt(u)) {
-                            case 47:
-                              if (42 === g && 42 === e.charCodeAt(u - 1) && l + 2 !== u) {
-                                l = u + 1;
-                                break a;
-                              }
-
-                              break;
-
-                            case 10:
-                              if (47 === g) {
-                                l = u + 1;
-                                break a;
-                              }
-
-                          }
-                        }
-
-                        l = u;
-                      }
-
-                  }
-
-                  break;
-
-                case 91:
-                  g++;
-
-                case 40:
-                  g++;
-
-                case 34:
-                case 39:
-                  for (; l++ < J && e.charCodeAt(l) !== g;) {}
-
-              }
-
-              if (0 === k) break;
-              l++;
-            }
-
-            k = e.substring(t, l);
-            0 === q && (q = (f = f.replace(ca, '').trim()).charCodeAt(0));
-
-            switch (q) {
-              case 64:
-                0 < r && (f = f.replace(N, ''));
-                g = f.charCodeAt(1);
-
-                switch (g) {
-                  case 100:
-                  case 109:
-                  case 115:
-                  case 45:
-                    r = c;
-                    break;
-
-                  default:
-                    r = O;
-                }
-
-                k = M(c, r, k, g, a + 1);
-                t = k.length;
-                0 < A && (r = X(O, f, I), C = H(3, k, r, c, D, z, t, g, a, h), f = r.join(''), void 0 !== C && 0 === (t = (k = C.trim()).length) && (g = 0, k = ''));
-                if (0 < t) switch (g) {
-                  case 115:
-                    f = f.replace(da, ea);
-
-                  case 100:
-                  case 109:
-                  case 45:
-                    k = f + '{' + k + '}';
-                    break;
-
-                  case 107:
-                    f = f.replace(fa, '$1 $2');
-                    k = f + '{' + k + '}';
-                    k = 1 === w || 2 === w && L('@' + k, 3) ? '@-webkit-' + k + '@' + k : '@' + k;
-                    break;
-
-                  default:
-                    k = f + k, 112 === h && (k = (p += k, ''));
-                } else k = '';
-                break;
-
-              default:
-                k = M(c, X(c, f, I), k, h, a + 1);
-            }
-
-            F += k;
-            k = I = r = u = q = 0;
-            f = '';
-            g = e.charCodeAt(++l);
-            break;
-
-          case 125:
-          case 59:
-            f = (0 < r ? f.replace(N, '') : f).trim();
-            if (1 < (t = f.length)) switch (0 === u && (q = f.charCodeAt(0), 45 === q || 96 < q && 123 > q) && (t = (f = f.replace(' ', ':')).length), 0 < A && void 0 !== (C = H(1, f, c, d, D, z, p.length, h, a, h)) && 0 === (t = (f = C.trim()).length) && (f = '\x00\x00'), q = f.charCodeAt(0), g = f.charCodeAt(1), q) {
-              case 0:
-                break;
-
-              case 64:
-                if (105 === g || 99 === g) {
-                  G += f + e.charAt(l);
-                  break;
-                }
-
-              default:
-                58 !== f.charCodeAt(t - 1) && (p += P(f, q, g, f.charCodeAt(2)));
-            }
-            I = r = u = q = 0;
-            f = '';
-            g = e.charCodeAt(++l);
-        }
-      }
-
-      switch (g) {
-        case 13:
-        case 10:
-          47 === b ? b = 0 : 0 === 1 + q && 107 !== h && 0 < f.length && (r = 1, f += '\x00');
-          0 < A * Y && H(0, f, c, d, D, z, p.length, h, a, h);
-          z = 1;
-          D++;
-          break;
-
-        case 59:
-        case 125:
-          if (0 === b + n + v + m) {
-            z++;
-            break;
-          }
-
-        default:
-          z++;
-          y = e.charAt(l);
-
-          switch (g) {
-            case 9:
-            case 32:
-              if (0 === n + m + b) switch (x) {
-                case 44:
-                case 58:
-                case 9:
-                case 32:
-                  y = '';
-                  break;
-
-                default:
-                  32 !== g && (y = ' ');
-              }
-              break;
-
-            case 0:
-              y = '\\0';
-              break;
-
-            case 12:
-              y = '\\f';
-              break;
-
-            case 11:
-              y = '\\v';
-              break;
-
-            case 38:
-              0 === n + b + m && (r = I = 1, y = '\f' + y);
-              break;
-
-            case 108:
-              if (0 === n + b + m + E && 0 < u) switch (l - u) {
-                case 2:
-                  112 === x && 58 === e.charCodeAt(l - 3) && (E = x);
-
-                case 8:
-                  111 === K && (E = K);
-              }
-              break;
-
-            case 58:
-              0 === n + b + m && (u = l);
-              break;
-
-            case 44:
-              0 === b + v + n + m && (r = 1, y += '\r');
-              break;
-
-            case 34:
-            case 39:
-              0 === b && (n = n === g ? 0 : 0 === n ? g : n);
-              break;
-
-            case 91:
-              0 === n + b + v && m++;
-              break;
-
-            case 93:
-              0 === n + b + v && m--;
-              break;
-
-            case 41:
-              0 === n + b + m && v--;
-              break;
-
-            case 40:
-              if (0 === n + b + m) {
-                if (0 === q) switch (2 * x + 3 * K) {
-                  case 533:
-                    break;
-
-                  default:
-                    q = 1;
-                }
-                v++;
-              }
-
-              break;
-
-            case 64:
-              0 === b + v + n + m + u + k && (k = 1);
-              break;
-
-            case 42:
-            case 47:
-              if (!(0 < n + m + v)) switch (b) {
-                case 0:
-                  switch (2 * g + 3 * e.charCodeAt(l + 1)) {
-                    case 235:
-                      b = 47;
-                      break;
-
-                    case 220:
-                      t = l, b = 42;
-                  }
-
-                  break;
-
-                case 42:
-                  47 === g && 42 === x && t + 2 !== l && (33 === e.charCodeAt(t + 2) && (p += e.substring(t, l + 1)), y = '', b = 0);
-              }
-          }
-
-          0 === b && (f += y);
-      }
-
-      K = x;
-      x = g;
-      l++;
-    }
-
-    t = p.length;
-
-    if (0 < t) {
-      r = c;
-      if (0 < A && (C = H(2, p, r, d, D, z, t, h, a, h), void 0 !== C && 0 === (p = C).length)) return G + p + F;
-      p = r.join(',') + '{' + p + '}';
-
-      if (0 !== w * E) {
-        2 !== w || L(p, 2) || (E = 0);
-
-        switch (E) {
-          case 111:
-            p = p.replace(ha, ':-moz-$1') + p;
-            break;
-
-          case 112:
-            p = p.replace(Q, '::-webkit-input-$1') + p.replace(Q, '::-moz-$1') + p.replace(Q, ':-ms-input-$1') + p;
-        }
-
-        E = 0;
-      }
-    }
-
-    return G + p + F;
-  }
-
-  function X(d, c, e) {
-    var h = c.trim().split(ia);
-    c = h;
-    var a = h.length,
-        m = d.length;
-
-    switch (m) {
-      case 0:
-      case 1:
-        var b = 0;
-
-        for (d = 0 === m ? '' : d[0] + ' '; b < a; ++b) {
-          c[b] = Z(d, c[b], e).trim();
-        }
-
-        break;
-
-      default:
-        var v = b = 0;
-
-        for (c = []; b < a; ++b) {
-          for (var n = 0; n < m; ++n) {
-            c[v++] = Z(d[n] + ' ', h[b], e).trim();
-          }
-        }
-
-    }
-
-    return c;
-  }
-
-  function Z(d, c, e) {
-    var h = c.charCodeAt(0);
-    33 > h && (h = (c = c.trim()).charCodeAt(0));
-
-    switch (h) {
-      case 38:
-        return c.replace(F, '$1' + d.trim());
-
-      case 58:
-        return d.trim() + c.replace(F, '$1' + d.trim());
-
-      default:
-        if (0 < 1 * e && 0 < c.indexOf('\f')) return c.replace(F, (58 === d.charCodeAt(0) ? '' : '$1') + d.trim());
-    }
-
-    return d + c;
-  }
-
-  function P(d, c, e, h) {
-    var a = d + ';',
-        m = 2 * c + 3 * e + 4 * h;
-
-    if (944 === m) {
-      d = a.indexOf(':', 9) + 1;
-      var b = a.substring(d, a.length - 1).trim();
-      b = a.substring(0, d).trim() + b + ';';
-      return 1 === w || 2 === w && L(b, 1) ? '-webkit-' + b + b : b;
-    }
-
-    if (0 === w || 2 === w && !L(a, 1)) return a;
-
-    switch (m) {
-      case 1015:
-        return 97 === a.charCodeAt(10) ? '-webkit-' + a + a : a;
-
-      case 951:
-        return 116 === a.charCodeAt(3) ? '-webkit-' + a + a : a;
-
-      case 963:
-        return 110 === a.charCodeAt(5) ? '-webkit-' + a + a : a;
-
-      case 1009:
-        if (100 !== a.charCodeAt(4)) break;
-
-      case 969:
-      case 942:
-        return '-webkit-' + a + a;
-
-      case 978:
-        return '-webkit-' + a + '-moz-' + a + a;
-
-      case 1019:
-      case 983:
-        return '-webkit-' + a + '-moz-' + a + '-ms-' + a + a;
-
-      case 883:
-        if (45 === a.charCodeAt(8)) return '-webkit-' + a + a;
-        if (0 < a.indexOf('image-set(', 11)) return a.replace(ja, '$1-webkit-$2') + a;
-        break;
-
-      case 932:
-        if (45 === a.charCodeAt(4)) switch (a.charCodeAt(5)) {
-          case 103:
-            return '-webkit-box-' + a.replace('-grow', '') + '-webkit-' + a + '-ms-' + a.replace('grow', 'positive') + a;
-
-          case 115:
-            return '-webkit-' + a + '-ms-' + a.replace('shrink', 'negative') + a;
-
-          case 98:
-            return '-webkit-' + a + '-ms-' + a.replace('basis', 'preferred-size') + a;
-        }
-        return '-webkit-' + a + '-ms-' + a + a;
-
-      case 964:
-        return '-webkit-' + a + '-ms-flex-' + a + a;
-
-      case 1023:
-        if (99 !== a.charCodeAt(8)) break;
-        b = a.substring(a.indexOf(':', 15)).replace('flex-', '').replace('space-between', 'justify');
-        return '-webkit-box-pack' + b + '-webkit-' + a + '-ms-flex-pack' + b + a;
-
-      case 1005:
-        return ka.test(a) ? a.replace(aa, ':-webkit-') + a.replace(aa, ':-moz-') + a : a;
-
-      case 1e3:
-        b = a.substring(13).trim();
-        c = b.indexOf('-') + 1;
-
-        switch (b.charCodeAt(0) + b.charCodeAt(c)) {
-          case 226:
-            b = a.replace(G, 'tb');
-            break;
-
-          case 232:
-            b = a.replace(G, 'tb-rl');
-            break;
-
-          case 220:
-            b = a.replace(G, 'lr');
-            break;
-
-          default:
-            return a;
-        }
-
-        return '-webkit-' + a + '-ms-' + b + a;
-
-      case 1017:
-        if (-1 === a.indexOf('sticky', 9)) break;
-
-      case 975:
-        c = (a = d).length - 10;
-        b = (33 === a.charCodeAt(c) ? a.substring(0, c) : a).substring(d.indexOf(':', 7) + 1).trim();
-
-        switch (m = b.charCodeAt(0) + (b.charCodeAt(7) | 0)) {
-          case 203:
-            if (111 > b.charCodeAt(8)) break;
-
-          case 115:
-            a = a.replace(b, '-webkit-' + b) + ';' + a;
-            break;
-
-          case 207:
-          case 102:
-            a = a.replace(b, '-webkit-' + (102 < m ? 'inline-' : '') + 'box') + ';' + a.replace(b, '-webkit-' + b) + ';' + a.replace(b, '-ms-' + b + 'box') + ';' + a;
-        }
-
-        return a + ';';
-
-      case 938:
-        if (45 === a.charCodeAt(5)) switch (a.charCodeAt(6)) {
-          case 105:
-            return b = a.replace('-items', ''), '-webkit-' + a + '-webkit-box-' + b + '-ms-flex-' + b + a;
-
-          case 115:
-            return '-webkit-' + a + '-ms-flex-item-' + a.replace(ba, '') + a;
-
-          default:
-            return '-webkit-' + a + '-ms-flex-line-pack' + a.replace('align-content', '').replace(ba, '') + a;
-        }
-        break;
-
-      case 973:
-      case 989:
-        if (45 !== a.charCodeAt(3) || 122 === a.charCodeAt(4)) break;
-
-      case 931:
-      case 953:
-        if (!0 === la.test(d)) return 115 === (b = d.substring(d.indexOf(':') + 1)).charCodeAt(0) ? P(d.replace('stretch', 'fill-available'), c, e, h).replace(':fill-available', ':stretch') : a.replace(b, '-webkit-' + b) + a.replace(b, '-moz-' + b.replace('fill-', '')) + a;
-        break;
-
-      case 962:
-        if (a = '-webkit-' + a + (102 === a.charCodeAt(5) ? '-ms-' + a : '') + a, 211 === e + h && 105 === a.charCodeAt(13) && 0 < a.indexOf('transform', 10)) return a.substring(0, a.indexOf(';', 27) + 1).replace(ma, '$1-webkit-$2') + a;
-    }
-
-    return a;
-  }
-
-  function L(d, c) {
-    var e = d.indexOf(1 === c ? ':' : '{'),
-        h = d.substring(0, 3 !== c ? e : 10);
-    e = d.substring(e + 1, d.length - 1);
-    return R(2 !== c ? h : h.replace(na, '$1'), e, c);
-  }
-
-  function ea(d, c) {
-    var e = P(c, c.charCodeAt(0), c.charCodeAt(1), c.charCodeAt(2));
-    return e !== c + ';' ? e.replace(oa, ' or ($1)').substring(4) : '(' + c + ')';
-  }
-
-  function H(d, c, e, h, a, m, b, v, n, q) {
-    for (var g = 0, x = c, w; g < A; ++g) {
-      switch (w = S[g].call(B, d, x, e, h, a, m, b, v, n, q)) {
-        case void 0:
-        case !1:
-        case !0:
-        case null:
-          break;
-
-        default:
-          x = w;
-      }
-    }
-
-    if (x !== c) return x;
-  }
-
-  function T(d) {
-    switch (d) {
-      case void 0:
-      case null:
-        A = S.length = 0;
-        break;
-
-      default:
-        if ('function' === typeof d) S[A++] = d;else if ('object' === typeof d) for (var c = 0, e = d.length; c < e; ++c) {
-          T(d[c]);
-        } else Y = !!d | 0;
-    }
-
-    return T;
-  }
-
-  function U(d) {
-    d = d.prefix;
-    void 0 !== d && (R = null, d ? 'function' !== typeof d ? w = 1 : (w = 2, R = d) : w = 0);
-    return U;
-  }
-
-  function B(d, c) {
-    var e = d;
-    33 > e.charCodeAt(0) && (e = e.trim());
-    V = e;
-    e = [V];
-
-    if (0 < A) {
-      var h = H(-1, c, e, e, D, z, 0, 0, 0, 0);
-      void 0 !== h && 'string' === typeof h && (c = h);
-    }
-
-    var a = M(O, e, c, 0, 0);
-    0 < A && (h = H(-2, a, e, e, D, z, a.length, 0, 0, 0), void 0 !== h && (a = h));
-    V = '';
-    E = 0;
-    z = D = 1;
-    return a;
-  }
-
-  var ca = /^\0+/g,
-      N = /[\0\r\f]/g,
-      aa = /: */g,
-      ka = /zoo|gra/,
-      ma = /([,: ])(transform)/g,
-      ia = /,\r+?/g,
-      F = /([\t\r\n ])*\f?&/g,
-      fa = /@(k\w+)\s*(\S*)\s*/,
-      Q = /::(place)/g,
-      ha = /:(read-only)/g,
-      G = /[svh]\w+-[tblr]{2}/,
-      da = /\(\s*(.*)\s*\)/g,
-      oa = /([\s\S]*?);/g,
-      ba = /-self|flex-/g,
-      na = /[^]*?(:[rp][el]a[\w-]+)[^]*/,
-      la = /stretch|:\s*\w+\-(?:conte|avail)/,
-      ja = /([^-])(image-set\()/,
-      z = 1,
-      D = 1,
-      E = 0,
-      w = 1,
-      O = [],
-      S = [],
-      A = 0,
-      R = null,
-      Y = 0,
-      V = '';
-  B.use = T;
-  B.set = U;
-  void 0 !== W && U(W);
-  return B;
-}
-
-var _default = stylis_min;
-exports.default = _default;
-},{}],"../node_modules/@emotion/unitless/dist/unitless.browser.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var unitlessKeys = {
-  animationIterationCount: 1,
-  borderImageOutset: 1,
-  borderImageSlice: 1,
-  borderImageWidth: 1,
-  boxFlex: 1,
-  boxFlexGroup: 1,
-  boxOrdinalGroup: 1,
-  columnCount: 1,
-  columns: 1,
-  flex: 1,
-  flexGrow: 1,
-  flexPositive: 1,
-  flexShrink: 1,
-  flexNegative: 1,
-  flexOrder: 1,
-  gridRow: 1,
-  gridRowEnd: 1,
-  gridRowSpan: 1,
-  gridRowStart: 1,
-  gridColumn: 1,
-  gridColumnEnd: 1,
-  gridColumnSpan: 1,
-  gridColumnStart: 1,
-  msGridRow: 1,
-  msGridRowSpan: 1,
-  msGridColumn: 1,
-  msGridColumnSpan: 1,
-  fontWeight: 1,
-  lineHeight: 1,
-  opacity: 1,
-  order: 1,
-  orphans: 1,
-  tabSize: 1,
-  widows: 1,
-  zIndex: 1,
-  zoom: 1,
-  WebkitLineClamp: 1,
-  // SVG-related properties
-  fillOpacity: 1,
-  floodOpacity: 1,
-  stopOpacity: 1,
-  strokeDasharray: 1,
-  strokeDashoffset: 1,
-  strokeMiterlimit: 1,
-  strokeOpacity: 1,
-  strokeWidth: 1
-};
-var _default = unitlessKeys;
-exports.default = _default;
-},{}],"../node_modules/@emotion/memoize/dist/memoize.browser.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function memoize(fn) {
-  var cache = {};
-  return function (arg) {
-    if (cache[arg] === undefined) cache[arg] = fn(arg);
-    return cache[arg];
-  };
-}
-
-var _default = memoize;
-exports.default = _default;
-},{}],"../node_modules/@emotion/is-prop-valid/dist/is-prop-valid.browser.esm.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _memoize = _interopRequireDefault(require("@emotion/memoize"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|inert|itemProp|itemScope|itemType|itemID|itemRef|on|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
-
-var index = (0, _memoize.default)(function (prop) {
-  return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
-  /* o */
-  && prop.charCodeAt(1) === 110
-  /* n */
-  && prop.charCodeAt(2) < 91;
-}
-/* Z+1 */
-);
-var _default = index;
-exports.default = _default;
-},{"@emotion/memoize":"../node_modules/@emotion/memoize/dist/memoize.browser.esm.js"}],"../node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
-/** @license React v16.13.1
- * react-is.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-'use strict';
-
-if ("development" !== "production") {
-  (function () {
-    'use strict'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
-    // nor polyfill, then a plain number is used for performance.
-
-    var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-    var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for('react.element') : 0xeac7;
-    var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for('react.portal') : 0xeaca;
-    var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for('react.fragment') : 0xeacb;
-    var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeacc;
-    var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
-    var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
-    var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace; // TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
-    // (unstable) APIs that have been removed. Can we remove the symbols?
-
-    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
-    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
-    var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-    var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
-    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
-    var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for('react.block') : 0xead9;
-    var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
-    var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
-    var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for('react.scope') : 0xead7;
-
-    function isValidElementType(type) {
-      return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
-    }
-
-    function typeOf(object) {
-      if (typeof object === 'object' && object !== null) {
-        var $$typeof = object.$$typeof;
-
-        switch ($$typeof) {
-          case REACT_ELEMENT_TYPE:
-            var type = object.type;
-
-            switch (type) {
-              case REACT_ASYNC_MODE_TYPE:
-              case REACT_CONCURRENT_MODE_TYPE:
-              case REACT_FRAGMENT_TYPE:
-              case REACT_PROFILER_TYPE:
-              case REACT_STRICT_MODE_TYPE:
-              case REACT_SUSPENSE_TYPE:
-                return type;
-
-              default:
-                var $$typeofType = type && type.$$typeof;
-
-                switch ($$typeofType) {
-                  case REACT_CONTEXT_TYPE:
-                  case REACT_FORWARD_REF_TYPE:
-                  case REACT_LAZY_TYPE:
-                  case REACT_MEMO_TYPE:
-                  case REACT_PROVIDER_TYPE:
-                    return $$typeofType;
-
-                  default:
-                    return $$typeof;
-                }
-
-            }
-
-          case REACT_PORTAL_TYPE:
-            return $$typeof;
-        }
-      }
-
-      return undefined;
-    } // AsyncMode is deprecated along with isAsyncMode
-
-
-    var AsyncMode = REACT_ASYNC_MODE_TYPE;
-    var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
-    var ContextConsumer = REACT_CONTEXT_TYPE;
-    var ContextProvider = REACT_PROVIDER_TYPE;
-    var Element = REACT_ELEMENT_TYPE;
-    var ForwardRef = REACT_FORWARD_REF_TYPE;
-    var Fragment = REACT_FRAGMENT_TYPE;
-    var Lazy = REACT_LAZY_TYPE;
-    var Memo = REACT_MEMO_TYPE;
-    var Portal = REACT_PORTAL_TYPE;
-    var Profiler = REACT_PROFILER_TYPE;
-    var StrictMode = REACT_STRICT_MODE_TYPE;
-    var Suspense = REACT_SUSPENSE_TYPE;
-    var hasWarnedAboutDeprecatedIsAsyncMode = false; // AsyncMode should be deprecated
-
-    function isAsyncMode(object) {
-      {
-        if (!hasWarnedAboutDeprecatedIsAsyncMode) {
-          hasWarnedAboutDeprecatedIsAsyncMode = true; // Using console['warn'] to evade Babel and ESLint
-
-          console['warn']('The ReactIs.isAsyncMode() alias has been deprecated, ' + 'and will be removed in React 17+. Update your code to use ' + 'ReactIs.isConcurrentMode() instead. It has the exact same API.');
-        }
-      }
-      return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
-    }
-
-    function isConcurrentMode(object) {
-      return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
-    }
-
-    function isContextConsumer(object) {
-      return typeOf(object) === REACT_CONTEXT_TYPE;
-    }
-
-    function isContextProvider(object) {
-      return typeOf(object) === REACT_PROVIDER_TYPE;
-    }
-
-    function isElement(object) {
-      return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-    }
-
-    function isForwardRef(object) {
-      return typeOf(object) === REACT_FORWARD_REF_TYPE;
-    }
-
-    function isFragment(object) {
-      return typeOf(object) === REACT_FRAGMENT_TYPE;
-    }
-
-    function isLazy(object) {
-      return typeOf(object) === REACT_LAZY_TYPE;
-    }
-
-    function isMemo(object) {
-      return typeOf(object) === REACT_MEMO_TYPE;
-    }
-
-    function isPortal(object) {
-      return typeOf(object) === REACT_PORTAL_TYPE;
-    }
-
-    function isProfiler(object) {
-      return typeOf(object) === REACT_PROFILER_TYPE;
-    }
-
-    function isStrictMode(object) {
-      return typeOf(object) === REACT_STRICT_MODE_TYPE;
-    }
-
-    function isSuspense(object) {
-      return typeOf(object) === REACT_SUSPENSE_TYPE;
-    }
-
-    exports.AsyncMode = AsyncMode;
-    exports.ConcurrentMode = ConcurrentMode;
-    exports.ContextConsumer = ContextConsumer;
-    exports.ContextProvider = ContextProvider;
-    exports.Element = Element;
-    exports.ForwardRef = ForwardRef;
-    exports.Fragment = Fragment;
-    exports.Lazy = Lazy;
-    exports.Memo = Memo;
-    exports.Portal = Portal;
-    exports.Profiler = Profiler;
-    exports.StrictMode = StrictMode;
-    exports.Suspense = Suspense;
-    exports.isAsyncMode = isAsyncMode;
-    exports.isConcurrentMode = isConcurrentMode;
-    exports.isContextConsumer = isContextConsumer;
-    exports.isContextProvider = isContextProvider;
-    exports.isElement = isElement;
-    exports.isForwardRef = isForwardRef;
-    exports.isFragment = isFragment;
-    exports.isLazy = isLazy;
-    exports.isMemo = isMemo;
-    exports.isPortal = isPortal;
-    exports.isProfiler = isProfiler;
-    exports.isStrictMode = isStrictMode;
-    exports.isSuspense = isSuspense;
-    exports.isValidElementType = isValidElementType;
-    exports.typeOf = typeOf;
-  })();
-}
-},{}],"../node_modules/hoist-non-react-statics/node_modules/react-is/index.js":[function(require,module,exports) {
-'use strict';
-
-if ("development" === 'production') {
-  module.exports = require('./cjs/react-is.production.min.js');
-} else {
-  module.exports = require('./cjs/react-is.development.js');
-}
-},{"./cjs/react-is.development.js":"../node_modules/hoist-non-react-statics/node_modules/react-is/cjs/react-is.development.js"}],"../node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js":[function(require,module,exports) {
-'use strict';
-
-var reactIs = require('react-is');
-
-/**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
- */
-var REACT_STATICS = {
-  childContextTypes: true,
-  contextType: true,
-  contextTypes: true,
-  defaultProps: true,
-  displayName: true,
-  getDefaultProps: true,
-  getDerivedStateFromError: true,
-  getDerivedStateFromProps: true,
-  mixins: true,
-  propTypes: true,
-  type: true
-};
-var KNOWN_STATICS = {
-  name: true,
-  length: true,
-  prototype: true,
-  caller: true,
-  callee: true,
-  arguments: true,
-  arity: true
-};
-var FORWARD_REF_STATICS = {
-  '$$typeof': true,
-  render: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true
-};
-var MEMO_STATICS = {
-  '$$typeof': true,
-  compare: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true,
-  type: true
-};
-var TYPE_STATICS = {};
-TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
-TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
-
-function getStatics(component) {
-  // React v16.11 and below
-  if (reactIs.isMemo(component)) {
-    return MEMO_STATICS;
-  } // React v16.12 and above
-
-
-  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
-}
-
-var defineProperty = Object.defineProperty;
-var getOwnPropertyNames = Object.getOwnPropertyNames;
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var getPrototypeOf = Object.getPrototypeOf;
-var objectPrototype = Object.prototype;
-function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-  if (typeof sourceComponent !== 'string') {
-    // don't hoist over string (html) components
-    if (objectPrototype) {
-      var inheritedComponent = getPrototypeOf(sourceComponent);
-
-      if (inheritedComponent && inheritedComponent !== objectPrototype) {
-        hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-      }
-    }
-
-    var keys = getOwnPropertyNames(sourceComponent);
-
-    if (getOwnPropertySymbols) {
-      keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-    }
-
-    var targetStatics = getStatics(targetComponent);
-    var sourceStatics = getStatics(sourceComponent);
-
-    for (var i = 0; i < keys.length; ++i) {
-      var key = keys[i];
-
-      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
-        var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-
-        try {
-          // Avoid failures from read-only properties
-          defineProperty(targetComponent, key, descriptor);
-        } catch (e) {}
-      }
-    }
-  }
-
-  return targetComponent;
-}
-
-module.exports = hoistNonReactStatics;
-
-},{"react-is":"../node_modules/hoist-non-react-statics/node_modules/react-is/index.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
-
-// shim for using process in browser
-var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-  throw new Error('setTimeout has not been defined');
-}
-
-function defaultClearTimeout() {
-  throw new Error('clearTimeout has not been defined');
-}
-
-(function () {
-  try {
-    if (typeof setTimeout === 'function') {
-      cachedSetTimeout = setTimeout;
-    } else {
-      cachedSetTimeout = defaultSetTimout;
-    }
-  } catch (e) {
-    cachedSetTimeout = defaultSetTimout;
-  }
-
-  try {
-    if (typeof clearTimeout === 'function') {
-      cachedClearTimeout = clearTimeout;
-    } else {
-      cachedClearTimeout = defaultClearTimeout;
-    }
-  } catch (e) {
-    cachedClearTimeout = defaultClearTimeout;
-  }
-})();
-
-function runTimeout(fun) {
-  if (cachedSetTimeout === setTimeout) {
-    //normal enviroments in sane situations
-    return setTimeout(fun, 0);
-  } // if setTimeout wasn't available but was latter defined
-
-
-  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-    cachedSetTimeout = setTimeout;
-    return setTimeout(fun, 0);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedSetTimeout(fun, 0);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-      return cachedSetTimeout.call(null, fun, 0);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-      return cachedSetTimeout.call(this, fun, 0);
-    }
-  }
-}
-
-function runClearTimeout(marker) {
-  if (cachedClearTimeout === clearTimeout) {
-    //normal enviroments in sane situations
-    return clearTimeout(marker);
-  } // if clearTimeout wasn't available but was latter defined
-
-
-  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-    cachedClearTimeout = clearTimeout;
-    return clearTimeout(marker);
-  }
-
-  try {
-    // when when somebody has screwed with setTimeout but no I.E. maddness
-    return cachedClearTimeout(marker);
-  } catch (e) {
-    try {
-      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-      return cachedClearTimeout.call(null, marker);
-    } catch (e) {
-      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-      return cachedClearTimeout.call(this, marker);
-    }
-  }
-}
-
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-  if (!draining || !currentQueue) {
-    return;
-  }
-
-  draining = false;
-
-  if (currentQueue.length) {
-    queue = currentQueue.concat(queue);
-  } else {
-    queueIndex = -1;
-  }
-
-  if (queue.length) {
-    drainQueue();
-  }
-}
-
-function drainQueue() {
-  if (draining) {
-    return;
-  }
-
-  var timeout = runTimeout(cleanUpNextTick);
-  draining = true;
-  var len = queue.length;
-
-  while (len) {
-    currentQueue = queue;
-    queue = [];
-
-    while (++queueIndex < len) {
-      if (currentQueue) {
-        currentQueue[queueIndex].run();
-      }
-    }
-
-    queueIndex = -1;
-    len = queue.length;
-  }
-
-  currentQueue = null;
-  draining = false;
-  runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-  var args = new Array(arguments.length - 1);
-
-  if (arguments.length > 1) {
-    for (var i = 1; i < arguments.length; i++) {
-      args[i - 1] = arguments[i];
-    }
-  }
-
-  queue.push(new Item(fun, args));
-
-  if (queue.length === 1 && !draining) {
-    runTimeout(drainQueue);
-  }
-}; // v8 likes predictible objects
-
-
-function Item(fun, array) {
-  this.fun = fun;
-  this.array = array;
-}
-
-Item.prototype.run = function () {
-  this.fun.apply(null, this.array);
-};
-
-process.title = 'browser';
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) {
-  return [];
-};
-
-process.binding = function (name) {
-  throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () {
-  return '/';
-};
-
-process.chdir = function (dir) {
-  throw new Error('process.chdir is not supported');
-};
-
-process.umask = function () {
-  return 0;
-};
-},{}],"../node_modules/styled-components/dist/styled-components.browser.esm.js":[function(require,module,exports) {
-var process = require("process");
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.StyleSheetManager = ye;
-exports.ThemeProvider = Ge;
-exports.createGlobalStyle = $e;
-exports.css = Ae;
-exports.isStyledComponent = N;
-exports.keyframes = We;
-exports.withTheme = exports.version = exports.useTheme = exports.__PRIVATE__ = exports.ThemeContext = exports.ThemeConsumer = exports.StyleSheetContext = exports.StyleSheetConsumer = exports.ServerStyleSheet = exports.default = void 0;
-
-var _reactIs = require("react-is");
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _shallowequal = _interopRequireDefault(require("shallowequal"));
-
-var _stylis = _interopRequireDefault(require("@emotion/stylis"));
-
-var _unitless = _interopRequireDefault(require("@emotion/unitless"));
-
-var _isPropValid = _interopRequireDefault(require("@emotion/is-prop-valid"));
-
-var _hoistNonReactStatics = _interopRequireDefault(require("hoist-non-react-statics"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function v() {
-  return (v = Object.assign || function (e) {
-    for (var t = 1; t < arguments.length; t++) {
-      var n = arguments[t];
-
-      for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r]);
-    }
-
-    return e;
-  }).apply(this, arguments);
-}
-
-var g = function (e, t) {
-  for (var n = [e[0]], r = 0, o = t.length; r < o; r += 1) n.push(t[r], e[r + 1]);
-
-  return n;
-},
-    S = function (t) {
-  return null !== t && "object" == typeof t && "[object Object]" === (t.toString ? t.toString() : Object.prototype.toString.call(t)) && !(0, _reactIs.typeOf)(t);
-},
-    w = Object.freeze([]),
-    E = Object.freeze({});
-
-function b(e) {
-  return "function" == typeof e;
-}
-
-function _(e) {
-  return "production" !== "development" && "string" == typeof e && e || e.displayName || e.name || "Component";
-}
-
-function N(e) {
-  return e && "string" == typeof e.styledComponentId;
-}
-
-var A = "undefined" != typeof process && (undefined || undefined) || "data-styled",
-    C = "5.3.0",
-    I = "undefined" != typeof window && "HTMLElement" in window,
-    P = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== undefined && "" !== undefined ? "false" !== undefined && undefined : "undefined" != typeof process && void 0 !== undefined && "" !== undefined ? "false" !== undefined && undefined : "production" !== "development"),
-    O = {},
-    R = "production" !== "development" ? {
-  1: "Cannot create styled-component for component: %s.\n\n",
-  2: "Can't collect styles once you've consumed a `ServerStyleSheet`'s styles! `ServerStyleSheet` is a one off instance for each server-side render cycle.\n\n- Are you trying to reuse it across renders?\n- Are you accidentally calling collectStyles twice?\n\n",
-  3: "Streaming SSR is only supported in a Node.js environment; Please do not try to call this method in the browser.\n\n",
-  4: "The `StyleSheetManager` expects a valid target or sheet prop!\n\n- Does this error occur on the client and is your target falsy?\n- Does this error occur on the server and is the sheet falsy?\n\n",
-  5: "The clone method cannot be used on the client!\n\n- Are you running in a client-like environment on the server?\n- Are you trying to run SSR on the client?\n\n",
-  6: "Trying to insert a new style tag, but the given Node is unmounted!\n\n- Are you using a custom target that isn't mounted?\n- Does your document not have a valid head element?\n- Have you accidentally removed a style tag manually?\n\n",
-  7: 'ThemeProvider: Please return an object from your "theme" prop function, e.g.\n\n```js\ntheme={() => ({})}\n```\n\n',
-  8: 'ThemeProvider: Please make your "theme" prop an object.\n\n',
-  9: "Missing document `<head>`\n\n",
-  10: "Cannot find a StyleSheet instance. Usually this happens if there are multiple copies of styled-components loaded at once. Check out this issue for how to troubleshoot and fix the common cases where this situation can happen: https://github.com/styled-components/styled-components/issues/1941#issuecomment-417862021\n\n",
-  11: "_This error was replaced with a dev-time warning, it will be deleted for v4 final._ [createGlobalStyle] received children which will not be rendered. Please use the component without passing children elements.\n\n",
-  12: "It seems you are interpolating a keyframe declaration (%s) into an untagged string. This was supported in styled-components v3, but is not longer supported in v4 as keyframes are now injected on-demand. Please wrap your string in the css\\`\\` helper which ensures the styles are injected correctly. See https://www.styled-components.com/docs/api#css\n\n",
-  13: "%s is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details.\n\n",
-  14: 'ThemeProvider: "theme" prop is required.\n\n',
-  15: "A stylis plugin has been supplied that is not named. We need a name for each plugin to be able to prevent styling collisions between different stylis configurations within the same app. Before you pass your plugin to `<StyleSheetManager stylisPlugins={[]}>`, please make sure each plugin is uniquely-named, e.g.\n\n```js\nObject.defineProperty(importedPlugin, 'name', { value: 'some-unique-name' });\n```\n\n",
-  16: "Reached the limit of how many styled components may be created at group %s.\nYou may only create up to 1,073,741,824 components. If you're creating components dynamically,\nas for instance in your render method then you may be running into this limitation.\n\n",
-  17: "CSSStyleSheet could not be found on HTMLStyleElement.\nHas styled-components' style tag been unmounted or altered by another script?\n"
-} : {};
-exports.version = C;
-
-function D() {
-  for (var e = arguments.length <= 0 ? void 0 : arguments[0], t = [], n = 1, r = arguments.length; n < r; n += 1) t.push(n < 0 || arguments.length <= n ? void 0 : arguments[n]);
-
-  return t.forEach(function (t) {
-    e = e.replace(/%[a-z]/, t);
-  }), e;
-}
-
-function j(e) {
-  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
-
-  throw "production" === "development" ? new Error("An error occurred. See https://git.io/JUIaE#" + e + " for more information." + (n.length > 0 ? " Args: " + n.join(", ") : "")) : new Error(D.apply(void 0, [R[e]].concat(n)).trim());
-}
-
-var T = function () {
-  function e(e) {
-    this.groupSizes = new Uint32Array(512), this.length = 512, this.tag = e;
-  }
-
-  var t = e.prototype;
-  return t.indexOfGroup = function (e) {
-    for (var t = 0, n = 0; n < e; n++) t += this.groupSizes[n];
-
-    return t;
-  }, t.insertRules = function (e, t) {
-    if (e >= this.groupSizes.length) {
-      for (var n = this.groupSizes, r = n.length, o = r; e >= o;) (o <<= 1) < 0 && j(16, "" + e);
-
-      this.groupSizes = new Uint32Array(o), this.groupSizes.set(n), this.length = o;
-
-      for (var i = r; i < o; i++) this.groupSizes[i] = 0;
-    }
-
-    for (var s = this.indexOfGroup(e + 1), a = 0, c = t.length; a < c; a++) this.tag.insertRule(s, t[a]) && (this.groupSizes[e]++, s++);
-  }, t.clearGroup = function (e) {
-    if (e < this.length) {
-      var t = this.groupSizes[e],
-          n = this.indexOfGroup(e),
-          r = n + t;
-      this.groupSizes[e] = 0;
-
-      for (var o = n; o < r; o++) this.tag.deleteRule(n);
-    }
-  }, t.getGroup = function (e) {
-    var t = "";
-    if (e >= this.length || 0 === this.groupSizes[e]) return t;
-
-    for (var n = this.groupSizes[e], r = this.indexOfGroup(e), o = r + n, i = r; i < o; i++) t += this.tag.getRule(i) + "/*!sc*/\n";
-
-    return t;
-  }, e;
-}(),
-    k = new Map(),
-    x = new Map(),
-    V = 1,
-    B = function (e) {
-  if (k.has(e)) return k.get(e);
-
-  for (; x.has(V);) V++;
-
-  var t = V++;
-  return "production" !== "development" && ((0 | t) < 0 || t > 1 << 30) && j(16, "" + t), k.set(e, t), x.set(t, e), t;
-},
-    M = function (e) {
-  return x.get(e);
-},
-    z = function (e, t) {
-  k.set(e, t), x.set(t, e);
-},
-    L = "style[" + A + '][data-styled-version="5.3.0"]',
-    G = new RegExp("^" + A + '\\.g(\\d+)\\[id="([\\w\\d-]+)"\\].*?"([^"]*)'),
-    F = function (e, t, n) {
-  for (var r, o = n.split(","), i = 0, s = o.length; i < s; i++) (r = o[i]) && e.registerName(t, r);
-},
-    Y = function (e, t) {
-  for (var n = t.innerHTML.split("/*!sc*/\n"), r = [], o = 0, i = n.length; o < i; o++) {
-    var s = n[o].trim();
-
-    if (s) {
-      var a = s.match(G);
-
-      if (a) {
-        var c = 0 | parseInt(a[1], 10),
-            u = a[2];
-        0 !== c && (z(u, c), F(e, u, a[3]), e.getTag().insertRules(c, r)), r.length = 0;
-      } else r.push(s);
-    }
-  }
-},
-    q = function () {
-  return "undefined" != typeof window && void 0 !== window.__webpack_nonce__ ? window.__webpack_nonce__ : null;
-},
-    H = function (e) {
-  var t = document.head,
-      n = e || t,
-      r = document.createElement("style"),
-      o = function (e) {
-    for (var t = e.childNodes, n = t.length; n >= 0; n--) {
-      var r = t[n];
-      if (r && 1 === r.nodeType && r.hasAttribute(A)) return r;
-    }
-  }(n),
-      i = void 0 !== o ? o.nextSibling : null;
-
-  r.setAttribute(A, "active"), r.setAttribute("data-styled-version", "5.3.0");
-  var s = q();
-  return s && r.setAttribute("nonce", s), n.insertBefore(r, i), r;
-},
-    $ = function () {
-  function e(e) {
-    var t = this.element = H(e);
-    t.appendChild(document.createTextNode("")), this.sheet = function (e) {
-      if (e.sheet) return e.sheet;
-
-      for (var t = document.styleSheets, n = 0, r = t.length; n < r; n++) {
-        var o = t[n];
-        if (o.ownerNode === e) return o;
-      }
-
-      j(17);
-    }(t), this.length = 0;
-  }
-
-  var t = e.prototype;
-  return t.insertRule = function (e, t) {
-    try {
-      return this.sheet.insertRule(t, e), this.length++, !0;
-    } catch (e) {
-      return !1;
-    }
-  }, t.deleteRule = function (e) {
-    this.sheet.deleteRule(e), this.length--;
-  }, t.getRule = function (e) {
-    var t = this.sheet.cssRules[e];
-    return void 0 !== t && "string" == typeof t.cssText ? t.cssText : "";
-  }, e;
-}(),
-    W = function () {
-  function e(e) {
-    var t = this.element = H(e);
-    this.nodes = t.childNodes, this.length = 0;
-  }
-
-  var t = e.prototype;
-  return t.insertRule = function (e, t) {
-    if (e <= this.length && e >= 0) {
-      var n = document.createTextNode(t),
-          r = this.nodes[e];
-      return this.element.insertBefore(n, r || null), this.length++, !0;
-    }
-
-    return !1;
-  }, t.deleteRule = function (e) {
-    this.element.removeChild(this.nodes[e]), this.length--;
-  }, t.getRule = function (e) {
-    return e < this.length ? this.nodes[e].textContent : "";
-  }, e;
-}(),
-    U = function () {
-  function e(e) {
-    this.rules = [], this.length = 0;
-  }
-
-  var t = e.prototype;
-  return t.insertRule = function (e, t) {
-    return e <= this.length && (this.rules.splice(e, 0, t), this.length++, !0);
-  }, t.deleteRule = function (e) {
-    this.rules.splice(e, 1), this.length--;
-  }, t.getRule = function (e) {
-    return e < this.length ? this.rules[e] : "";
-  }, e;
-}(),
-    J = I,
-    X = {
-  isServer: !I,
-  useCSSOMInjection: !P
-},
-    Z = function () {
-  function e(e, t, n) {
-    void 0 === e && (e = E), void 0 === t && (t = {}), this.options = v({}, X, {}, e), this.gs = t, this.names = new Map(n), !this.options.isServer && I && J && (J = !1, function (e) {
-      for (var t = document.querySelectorAll(L), n = 0, r = t.length; n < r; n++) {
-        var o = t[n];
-        o && "active" !== o.getAttribute(A) && (Y(e, o), o.parentNode && o.parentNode.removeChild(o));
-      }
-    }(this));
-  }
-
-  e.registerId = function (e) {
-    return B(e);
-  };
-
-  var t = e.prototype;
-  return t.reconstructWithOptions = function (t, n) {
-    return void 0 === n && (n = !0), new e(v({}, this.options, {}, t), this.gs, n && this.names || void 0);
-  }, t.allocateGSInstance = function (e) {
-    return this.gs[e] = (this.gs[e] || 0) + 1;
-  }, t.getTag = function () {
-    return this.tag || (this.tag = (n = (t = this.options).isServer, r = t.useCSSOMInjection, o = t.target, e = n ? new U(o) : r ? new $(o) : new W(o), new T(e)));
-    var e, t, n, r, o;
-  }, t.hasNameForId = function (e, t) {
-    return this.names.has(e) && this.names.get(e).has(t);
-  }, t.registerName = function (e, t) {
-    if (B(e), this.names.has(e)) this.names.get(e).add(t);else {
-      var n = new Set();
-      n.add(t), this.names.set(e, n);
-    }
-  }, t.insertRules = function (e, t, n) {
-    this.registerName(e, t), this.getTag().insertRules(B(e), n);
-  }, t.clearNames = function (e) {
-    this.names.has(e) && this.names.get(e).clear();
-  }, t.clearRules = function (e) {
-    this.getTag().clearGroup(B(e)), this.clearNames(e);
-  }, t.clearTag = function () {
-    this.tag = void 0;
-  }, t.toString = function () {
-    return function (e) {
-      for (var t = e.getTag(), n = t.length, r = "", o = 0; o < n; o++) {
-        var i = M(o);
-
-        if (void 0 !== i) {
-          var s = e.names.get(i),
-              a = t.getGroup(o);
-
-          if (void 0 !== s && 0 !== a.length) {
-            var c = A + ".g" + o + '[id="' + i + '"]',
-                u = "";
-            void 0 !== s && s.forEach(function (e) {
-              e.length > 0 && (u += e + ",");
-            }), r += "" + a + c + '{content:"' + u + '"}/*!sc*/\n';
-          }
-        }
-      }
-
-      return r;
-    }(this);
-  }, e;
-}(),
-    K = /(a)(d)/gi,
-    Q = function (e) {
-  return String.fromCharCode(e + (e > 25 ? 39 : 97));
-};
-
-function ee(e) {
-  var t,
-      n = "";
-
-  for (t = Math.abs(e); t > 52; t = t / 52 | 0) n = Q(t % 52) + n;
-
-  return (Q(t % 52) + n).replace(K, "$1-$2");
-}
-
-var te = function (e, t) {
-  for (var n = t.length; n;) e = 33 * e ^ t.charCodeAt(--n);
-
-  return e;
-},
-    ne = function (e) {
-  return te(5381, e);
-};
-
-function re(e) {
-  for (var t = 0; t < e.length; t += 1) {
-    var n = e[t];
-    if (b(n) && !N(n)) return !1;
-  }
-
-  return !0;
-}
-
-var oe = ne("5.3.0"),
-    ie = function () {
-  function e(e, t, n) {
-    this.rules = e, this.staticRulesId = "", this.isStatic = "production" === "development" && (void 0 === n || n.isStatic) && re(e), this.componentId = t, this.baseHash = te(oe, t), this.baseStyle = n, Z.registerId(t);
-  }
-
-  return e.prototype.generateAndInjectStyles = function (e, t, n) {
-    var r = this.componentId,
-        o = [];
-    if (this.baseStyle && o.push(this.baseStyle.generateAndInjectStyles(e, t, n)), this.isStatic && !n.hash) {
-      if (this.staticRulesId && t.hasNameForId(r, this.staticRulesId)) o.push(this.staticRulesId);else {
-        var i = Ne(this.rules, e, t, n).join(""),
-            s = ee(te(this.baseHash, i.length) >>> 0);
-
-        if (!t.hasNameForId(r, s)) {
-          var a = n(i, "." + s, void 0, r);
-          t.insertRules(r, s, a);
-        }
-
-        o.push(s), this.staticRulesId = s;
-      }
-    } else {
-      for (var c = this.rules.length, u = te(this.baseHash, n.hash), l = "", d = 0; d < c; d++) {
-        var h = this.rules[d];
-        if ("string" == typeof h) l += h, "production" !== "development" && (u = te(u, h + d));else if (h) {
-          var p = Ne(h, e, t, n),
-              f = Array.isArray(p) ? p.join("") : p;
-          u = te(u, f + d), l += f;
-        }
-      }
-
-      if (l) {
-        var m = ee(u >>> 0);
-
-        if (!t.hasNameForId(r, m)) {
-          var y = n(l, "." + m, void 0, r);
-          t.insertRules(r, m, y);
-        }
-
-        o.push(m);
-      }
-    }
-    return o.join(" ");
-  }, e;
-}(),
-    se = /^\s*\/\/.*$/gm,
-    ae = [":", "[", ".", "#"];
-
-function ce(e) {
-  var t,
-      n,
-      r,
-      o,
-      i = void 0 === e ? E : e,
-      s = i.options,
-      a = void 0 === s ? E : s,
-      c = i.plugins,
-      u = void 0 === c ? w : c,
-      l = new _stylis.default(a),
-      d = [],
-      h = function (e) {
-    function t(t) {
-      if (t) try {
-        e(t + "}");
-      } catch (e) {}
-    }
-
-    return function (n, r, o, i, s, a, c, u, l, d) {
-      switch (n) {
-        case 1:
-          if (0 === l && 64 === r.charCodeAt(0)) return e(r + ";"), "";
-          break;
-
-        case 2:
-          if (0 === u) return r + "/*|*/";
-          break;
-
-        case 3:
-          switch (u) {
-            case 102:
-            case 112:
-              return e(o[0] + r), "";
-
-            default:
-              return r + (0 === d ? "/*|*/" : "");
-          }
-
-        case -2:
-          r.split("/*|*/}").forEach(t);
-      }
-    };
-  }(function (e) {
-    d.push(e);
-  }),
-      f = function (e, r, i) {
-    return 0 === r && -1 !== ae.indexOf(i[n.length]) || i.match(o) ? e : "." + t;
-  };
-
-  function m(e, i, s, a) {
-    void 0 === a && (a = "&");
-    var c = e.replace(se, ""),
-        u = i && s ? s + " " + i + " { " + c + " }" : c;
-    return t = a, n = i, r = new RegExp("\\" + n + "\\b", "g"), o = new RegExp("(\\" + n + "\\b){2,}"), l(s || !i ? "" : i, u);
-  }
-
-  return l.use([].concat(u, [function (e, t, o) {
-    2 === e && o.length && o[0].lastIndexOf(n) > 0 && (o[0] = o[0].replace(r, f));
-  }, h, function (e) {
-    if (-2 === e) {
-      var t = d;
-      return d = [], t;
-    }
-  }])), m.hash = u.length ? u.reduce(function (e, t) {
-    return t.name || j(15), te(e, t.name);
-  }, 5381).toString() : "", m;
-}
-
-var ue = _react.default.createContext(),
-    le = ue.Consumer,
-    de = _react.default.createContext(),
-    he = (de.Consumer, new Z()),
-    pe = ce();
-
-exports.StyleSheetConsumer = le;
-exports.StyleSheetContext = ue;
-
-function fe() {
-  return (0, _react.useContext)(ue) || he;
-}
-
-function me() {
-  return (0, _react.useContext)(de) || pe;
-}
-
-function ye(e) {
-  var t = (0, _react.useState)(e.stylisPlugins),
-      n = t[0],
-      i = t[1],
-      c = fe(),
-      u = (0, _react.useMemo)(function () {
-    var t = c;
-    return e.sheet ? t = e.sheet : e.target && (t = t.reconstructWithOptions({
-      target: e.target
-    }, !1)), e.disableCSSOMInjection && (t = t.reconstructWithOptions({
-      useCSSOMInjection: !1
-    })), t;
-  }, [e.disableCSSOMInjection, e.sheet, e.target]),
-      l = (0, _react.useMemo)(function () {
-    return ce({
-      options: {
-        prefix: !e.disableVendorPrefixes
-      },
-      plugins: n
-    });
-  }, [e.disableVendorPrefixes, n]);
-  return (0, _react.useEffect)(function () {
-    (0, _shallowequal.default)(n, e.stylisPlugins) || i(e.stylisPlugins);
-  }, [e.stylisPlugins]), _react.default.createElement(ue.Provider, {
-    value: u
-  }, _react.default.createElement(de.Provider, {
-    value: l
-  }, "production" !== "development" ? _react.default.Children.only(e.children) : e.children));
-}
-
-var ve = function () {
-  function e(e, t) {
-    var n = this;
-    this.inject = function (e, t) {
-      void 0 === t && (t = pe);
-      var r = n.name + t.hash;
-      e.hasNameForId(n.id, r) || e.insertRules(n.id, r, t(n.rules, r, "@keyframes"));
-    }, this.toString = function () {
-      return j(12, String(n.name));
-    }, this.name = e, this.id = "sc-keyframes-" + e, this.rules = t;
-  }
-
-  return e.prototype.getName = function (e) {
-    return void 0 === e && (e = pe), this.name + e.hash;
-  }, e;
-}(),
-    ge = /([A-Z])/,
-    Se = /([A-Z])/g,
-    we = /^ms-/,
-    Ee = function (e) {
-  return "-" + e.toLowerCase();
-};
-
-function be(e) {
-  return ge.test(e) ? e.replace(Se, Ee).replace(we, "-ms-") : e;
-}
-
-var _e = function (e) {
-  return null == e || !1 === e || "" === e;
-};
-
-function Ne(e, n, r, o) {
-  if (Array.isArray(e)) {
-    for (var i, s = [], a = 0, c = e.length; a < c; a += 1) "" !== (i = Ne(e[a], n, r, o)) && (Array.isArray(i) ? s.push.apply(s, i) : s.push(i));
-
-    return s;
-  }
-
-  if (_e(e)) return "";
-  if (N(e)) return "." + e.styledComponentId;
-
-  if (b(e)) {
-    if ("function" != typeof (l = e) || l.prototype && l.prototype.isReactComponent || !n) return e;
-    var u = e(n);
-    return "production" !== "development" && (0, _reactIs.isElement)(u) && console.warn(_(e) + " is not a styled component and cannot be referred to via component selector. See https://www.styled-components.com/docs/advanced#referring-to-other-components for more details."), Ne(u, n, r, o);
-  }
-
-  var l;
-  return e instanceof ve ? r ? (e.inject(r, o), e.getName(o)) : e : S(e) ? function e(t, n) {
-    var r,
-        o,
-        i = [];
-
-    for (var s in t) t.hasOwnProperty(s) && !_e(t[s]) && (S(t[s]) ? i.push.apply(i, e(t[s], s)) : b(t[s]) ? i.push(be(s) + ":", t[s], ";") : i.push(be(s) + ": " + (r = s, null == (o = t[s]) || "boolean" == typeof o || "" === o ? "" : "number" != typeof o || 0 === o || r in _unitless.default ? String(o).trim() : o + "px") + ";"));
-
-    return n ? [n + " {"].concat(i, ["}"]) : i;
-  }(e) : e.toString();
-}
-
-function Ae(e) {
-  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
-
-  return b(e) || S(e) ? Ne(g(w, [e].concat(n))) : 0 === n.length && 1 === e.length && "string" == typeof e[0] ? e : Ne(g(e, n));
-}
-
-var Ce = /invalid hook call/i,
-    Ie = new Set(),
-    Pe = function (e, t) {
-  if ("production" !== "development") {
-    var n = "The component " + e + (t ? ' with the id of "' + t + '"' : "") + " has been created dynamically.\nYou may see this warning because you've called styled inside another component.\nTo resolve this only create new StyledComponents outside of any render method and function component.";
-
-    try {
-      (0, _react.useRef)(), Ie.has(n) || (console.warn(n), Ie.add(n));
-    } catch (e) {
-      Ce.test(e.message) && Ie.delete(n);
-    }
-  }
-},
-    Oe = function (e, t, n) {
-  return void 0 === n && (n = E), e.theme !== n.theme && e.theme || t || n.theme;
-},
-    Re = /[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~-]+/g,
-    De = /(^-|-$)/g;
-
-function je(e) {
-  return e.replace(Re, "-").replace(De, "");
-}
-
-var Te = function (e) {
-  return ee(ne(e) >>> 0);
-};
-
-function ke(e) {
-  return "string" == typeof e && ("production" === "development" || e.charAt(0) === e.charAt(0).toLowerCase());
-}
-
-var xe = function (e) {
-  return "function" == typeof e || "object" == typeof e && null !== e && !Array.isArray(e);
-},
-    Ve = function (e) {
-  return "__proto__" !== e && "constructor" !== e && "prototype" !== e;
-};
-
-function Be(e, t, n) {
-  var r = e[n];
-  xe(t) && xe(r) ? Me(r, t) : e[n] = t;
-}
-
-function Me(e) {
-  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
-
-  for (var o = 0, i = n; o < i.length; o++) {
-    var s = i[o];
-    if (xe(s)) for (var a in s) Ve(a) && Be(e, s[a], a);
-  }
-
-  return e;
-}
-
-var ze = _react.default.createContext(),
-    Le = ze.Consumer;
-
-exports.ThemeConsumer = Le;
-exports.ThemeContext = ze;
-
-function Ge(e) {
-  var t = (0, _react.useContext)(ze),
-      n = (0, _react.useMemo)(function () {
-    return function (e, t) {
-      if (!e) return j(14);
-
-      if (b(e)) {
-        var n = e(t);
-        return "production" === "development" || null !== n && !Array.isArray(n) && "object" == typeof n ? n : j(7);
-      }
-
-      return Array.isArray(e) || "object" != typeof e ? j(8) : t ? v({}, t, {}, e) : e;
-    }(e.theme, t);
-  }, [e.theme, t]);
-  return e.children ? _react.default.createElement(ze.Provider, {
-    value: n
-  }, e.children) : null;
-}
-
-var Fe = {};
-
-function Ye(e, t, n) {
-  var o = N(e),
-      s = !ke(e),
-      a = t.attrs,
-      c = void 0 === a ? w : a,
-      d = t.componentId,
-      h = void 0 === d ? function (e, t) {
-    var n = "string" != typeof e ? "sc" : je(e);
-    Fe[n] = (Fe[n] || 0) + 1;
-    var r = n + "-" + Te("5.3.0" + n + Fe[n]);
-    return t ? t + "-" + r : r;
-  }(t.displayName, t.parentComponentId) : d,
-      p = t.displayName,
-      f = void 0 === p ? function (e) {
-    return ke(e) ? "styled." + e : "Styled(" + _(e) + ")";
-  }(e) : p,
-      g = t.displayName && t.componentId ? je(t.displayName) + "-" + t.componentId : t.componentId || h,
-      S = o && e.attrs ? Array.prototype.concat(e.attrs, c).filter(Boolean) : c,
-      A = t.shouldForwardProp;
-  o && e.shouldForwardProp && (A = t.shouldForwardProp ? function (n, r, o) {
-    return e.shouldForwardProp(n, r, o) && t.shouldForwardProp(n, r, o);
-  } : e.shouldForwardProp);
-
-  var C,
-      I = new ie(n, g, o ? e.componentStyle : void 0),
-      P = I.isStatic && 0 === c.length,
-      O = function (e, t) {
-    return function (e, t, n, r) {
-      var o = e.attrs,
-          s = e.componentStyle,
-          a = e.defaultProps,
-          c = e.foldedComponentIds,
-          d = e.shouldForwardProp,
-          h = e.styledComponentId,
-          p = e.target;
-      "production" !== "development" && (0, _react.useDebugValue)(h);
-
-      var f = function (e, t, n) {
-        void 0 === e && (e = E);
-        var r = v({}, t, {
-          theme: e
-        }),
-            o = {};
-        return n.forEach(function (e) {
-          var t,
-              n,
-              i,
-              s = e;
-
-          for (t in b(s) && (s = s(r)), s) r[t] = o[t] = "className" === t ? (n = o[t], i = s[t], n && i ? n + " " + i : n || i) : s[t];
-        }), [r, o];
-      }(Oe(t, (0, _react.useContext)(ze), a) || E, t, o),
-          y = f[0],
-          g = f[1],
-          S = function (e, t, n, r) {
-        var o = fe(),
-            i = me(),
-            s = t ? e.generateAndInjectStyles(E, o, i) : e.generateAndInjectStyles(n, o, i);
-        return "production" !== "development" && (0, _react.useDebugValue)(s), "production" !== "development" && !t && r && r(s), s;
-      }(s, r, y, "production" !== "development" ? e.warnTooManyClasses : void 0),
-          w = n,
-          _ = g.$as || t.$as || g.as || t.as || p,
-          N = ke(_),
-          A = g !== t ? v({}, t, {}, g) : t,
-          C = {};
-
-      for (var I in A) "$" !== I[0] && "as" !== I && ("forwardedAs" === I ? C.as = A[I] : (d ? d(I, _isPropValid.default, _) : !N || (0, _isPropValid.default)(I)) && (C[I] = A[I]));
-
-      return t.style && g.style !== t.style && (C.style = v({}, t.style, {}, g.style)), C.className = Array.prototype.concat(c, h, S !== h ? S : null, t.className, g.className).filter(Boolean).join(" "), C.ref = w, (0, _react.createElement)(_, C);
-    }(C, e, t, P);
-  };
-
-  return O.displayName = f, (C = _react.default.forwardRef(O)).attrs = S, C.componentStyle = I, C.displayName = f, C.shouldForwardProp = A, C.foldedComponentIds = o ? Array.prototype.concat(e.foldedComponentIds, e.styledComponentId) : w, C.styledComponentId = g, C.target = o ? e.target : e, C.withComponent = function (e) {
-    var r = t.componentId,
-        o = function (e, t) {
-      if (null == e) return {};
-      var n,
-          r,
-          o = {},
-          i = Object.keys(e);
-
-      for (r = 0; r < i.length; r++) n = i[r], t.indexOf(n) >= 0 || (o[n] = e[n]);
-
-      return o;
-    }(t, ["componentId"]),
-        i = r && r + "-" + (ke(e) ? e : je(_(e)));
-
-    return Ye(e, v({}, o, {
-      attrs: S,
-      componentId: i
-    }), n);
-  }, Object.defineProperty(C, "defaultProps", {
-    get: function () {
-      return this._foldedDefaultProps;
-    },
-    set: function (t) {
-      this._foldedDefaultProps = o ? Me({}, e.defaultProps, t) : t;
-    }
-  }), "production" !== "development" && (Pe(f, g), C.warnTooManyClasses = function (e, t) {
-    var n = {},
-        r = !1;
-    return function (o) {
-      if (!r && (n[o] = !0, Object.keys(n).length >= 200)) {
-        var i = t ? ' with the id of "' + t + '"' : "";
-        console.warn("Over 200 classes were generated for component " + e + i + ".\nConsider using the attrs method, together with a style object for frequently changed styles.\nExample:\n  const Component = styled.div.attrs(props => ({\n    style: {\n      background: props.background,\n    },\n  }))`width: 100%;`\n\n  <Component />"), r = !0, n = {};
-      }
-    };
-  }(f, g)), C.toString = function () {
-    return "." + C.styledComponentId;
-  }, s && (0, _hoistNonReactStatics.default)(C, e, {
-    attrs: !0,
-    componentStyle: !0,
-    displayName: !0,
-    foldedComponentIds: !0,
-    shouldForwardProp: !0,
-    styledComponentId: !0,
-    target: !0,
-    withComponent: !0
-  }), C;
-}
-
-var qe = function (e) {
-  return function e(t, r, o) {
-    if (void 0 === o && (o = E), !(0, _reactIs.isValidElementType)(r)) return j(1, String(r));
-
-    var i = function () {
-      return t(r, o, Ae.apply(void 0, arguments));
-    };
-
-    return i.withConfig = function (n) {
-      return e(t, r, v({}, o, {}, n));
-    }, i.attrs = function (n) {
-      return e(t, r, v({}, o, {
-        attrs: Array.prototype.concat(o.attrs, n).filter(Boolean)
-      }));
-    }, i;
-  }(Ye, e);
-};
-
-["a", "abbr", "address", "area", "article", "aside", "audio", "b", "base", "bdi", "bdo", "big", "blockquote", "body", "br", "button", "canvas", "caption", "cite", "code", "col", "colgroup", "data", "datalist", "dd", "del", "details", "dfn", "dialog", "div", "dl", "dt", "em", "embed", "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3", "h4", "h5", "h6", "head", "header", "hgroup", "hr", "html", "i", "iframe", "img", "input", "ins", "kbd", "keygen", "label", "legend", "li", "link", "main", "map", "mark", "marquee", "menu", "menuitem", "meta", "meter", "nav", "noscript", "object", "ol", "optgroup", "option", "output", "p", "param", "picture", "pre", "progress", "q", "rp", "rt", "ruby", "s", "samp", "script", "section", "select", "small", "source", "span", "strong", "style", "sub", "summary", "sup", "table", "tbody", "td", "textarea", "tfoot", "th", "thead", "time", "title", "tr", "track", "u", "ul", "var", "video", "wbr", "circle", "clipPath", "defs", "ellipse", "foreignObject", "g", "image", "line", "linearGradient", "marker", "mask", "path", "pattern", "polygon", "polyline", "radialGradient", "rect", "stop", "svg", "text", "textPath", "tspan"].forEach(function (e) {
-  qe[e] = qe(e);
-});
-
-var He = function () {
-  function e(e, t) {
-    this.rules = e, this.componentId = t, this.isStatic = re(e), Z.registerId(this.componentId + 1);
-  }
-
-  var t = e.prototype;
-  return t.createStyles = function (e, t, n, r) {
-    var o = r(Ne(this.rules, t, n, r).join(""), ""),
-        i = this.componentId + e;
-    n.insertRules(i, i, o);
-  }, t.removeStyles = function (e, t) {
-    t.clearRules(this.componentId + e);
-  }, t.renderStyles = function (e, t, n, r) {
-    e > 2 && Z.registerId(this.componentId + e), this.removeStyles(e, n), this.createStyles(e, t, n, r);
-  }, e;
-}();
-
-function $e(e) {
-  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), o = 1; o < t; o++) n[o - 1] = arguments[o];
-
-  var s = Ae.apply(void 0, [e].concat(n)),
-      a = "sc-global-" + Te(JSON.stringify(s)),
-      u = new He(s, a);
-
-  function l(e) {
-    var t = fe(),
-        n = me(),
-        o = (0, _react.useContext)(ze),
-        l = (0, _react.useRef)(t.allocateGSInstance(a)).current;
-    return "production" !== "development" && _react.default.Children.count(e.children) && console.warn("The global style component " + a + " was given child JSX. createGlobalStyle does not render children."), "production" !== "development" && s.some(function (e) {
-      return "string" == typeof e && -1 !== e.indexOf("@import");
-    }) && console.warn("Please do not use @import CSS syntax in createGlobalStyle at this time, as the CSSOM APIs we use in production do not handle it well. Instead, we recommend using a library such as react-helmet to inject a typical <link> meta tag to the stylesheet, or simply embedding it manually in your index.html <head> section for a simpler app."), (0, _react.useLayoutEffect)(function () {
-      return h(l, e, t, o, n), function () {
-        return u.removeStyles(l, t);
-      };
-    }, [l, e, t, o, n]), null;
-  }
-
-  function h(e, t, n, r, o) {
-    if (u.isStatic) u.renderStyles(e, O, n, o);else {
-      var i = v({}, t, {
-        theme: Oe(t, r, l.defaultProps)
-      });
-      u.renderStyles(e, i, n, o);
-    }
-  }
-
-  return "production" !== "development" && Pe(a), _react.default.memo(l);
-}
-
-function We(e) {
-  "production" !== "development" && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("`keyframes` cannot be used on ReactNative, only on the web. To do animation in ReactNative please use Animated.");
-
-  for (var t = arguments.length, n = new Array(t > 1 ? t - 1 : 0), r = 1; r < t; r++) n[r - 1] = arguments[r];
-
-  var o = Ae.apply(void 0, [e].concat(n)).join(""),
-      i = Te(o);
-  return new ve(i, o);
-}
-
-var Ue = function () {
-  function e() {
-    var e = this;
-    this._emitSheetCSS = function () {
-      var t = e.instance.toString(),
-          n = q();
-      return "<style " + [n && 'nonce="' + n + '"', A + '="true"', 'data-styled-version="5.3.0"'].filter(Boolean).join(" ") + ">" + t + "</style>";
-    }, this.getStyleTags = function () {
-      return e.sealed ? j(2) : e._emitSheetCSS();
-    }, this.getStyleElement = function () {
-      var t;
-      if (e.sealed) return j(2);
-      var n = ((t = {})[A] = "", t["data-styled-version"] = "5.3.0", t.dangerouslySetInnerHTML = {
-        __html: e.instance.toString()
-      }, t),
-          o = q();
-      return o && (n.nonce = o), [_react.default.createElement("style", v({}, n, {
-        key: "sc-0-0"
-      }))];
-    }, this.seal = function () {
-      e.sealed = !0;
-    }, this.instance = new Z({
-      isServer: !0
-    }), this.sealed = !1;
-  }
-
-  var t = e.prototype;
-  return t.collectStyles = function (e) {
-    return this.sealed ? j(2) : _react.default.createElement(ye, {
-      sheet: this.instance
-    }, e);
-  }, t.interleaveWithNodeStream = function (e) {
-    return j(3);
-  }, e;
-}(),
-    Je = function (e) {
-  var t = _react.default.forwardRef(function (t, n) {
-    var o = (0, _react.useContext)(ze),
-        s = e.defaultProps,
-        a = Oe(t, o, s);
-    return "production" !== "development" && void 0 === a && console.warn('[withTheme] You are not using a ThemeProvider nor passing a theme prop or a theme in defaultProps in component class "' + _(e) + '"'), _react.default.createElement(e, v({}, t, {
-      theme: a,
-      ref: n
-    }));
-  });
-
-  return (0, _hoistNonReactStatics.default)(t, e), t.displayName = "WithTheme(" + _(e) + ")", t;
-},
-    Xe = function () {
-  return (0, _react.useContext)(ze);
-},
-    Ze = {
-  StyleSheet: Z,
-  masterSheet: he
-};
-
-exports.__PRIVATE__ = Ze;
-exports.useTheme = Xe;
-exports.withTheme = Je;
-exports.ServerStyleSheet = Ue;
-"production" !== "development" && "undefined" != typeof navigator && "ReactNative" === navigator.product && console.warn("It looks like you've imported 'styled-components' on React Native.\nPerhaps you're looking to import 'styled-components/native'?\nRead more about this at https://www.styled-components.com/docs/basics#react-native"), "production" !== "development" && "test" !== "development" && (window["__styled-components-init__"] = window["__styled-components-init__"] || 0, 1 === window["__styled-components-init__"] && console.warn("It looks like there are several instances of 'styled-components' initialized in this application. This may cause dynamic styles to not render properly, errors during the rehydration process, a missing theme prop, and makes your application bigger without good reason.\n\nSee https://s-c.sh/2BAXzed for more info."), window["__styled-components-init__"] += 1);
-var _default = qe;
-exports.default = _default;
-},{"react-is":"../node_modules/react-is/index.js","react":"../node_modules/react/index.js","shallowequal":"../node_modules/shallowequal/index.js","@emotion/stylis":"../node_modules/@emotion/stylis/dist/stylis.browser.esm.js","@emotion/unitless":"../node_modules/@emotion/unitless/dist/unitless.browser.esm.js","@emotion/is-prop-valid":"../node_modules/@emotion/is-prop-valid/dist/is-prop-valid.browser.esm.js","hoist-non-react-statics":"../node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js","process":"../node_modules/process/browser.js"}],"../node_modules/@babel/runtime/helpers/typeof.js":[function(require,module,exports) {
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    module.exports = _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-
-    module.exports["default"] = module.exports, module.exports.__esModule = true;
-  } else {
-    module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-
-    module.exports["default"] = module.exports, module.exports.__esModule = true;
-  }
-
-  return _typeof(obj);
-}
-
-module.exports = _typeof;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-},{}],"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js":[function(require,module,exports) {
-var _typeof = require("@babel/runtime/helpers/typeof")["default"];
-
-function _getRequireWildcardCache(nodeInterop) {
-  if (typeof WeakMap !== "function") return null;
-  var cacheBabelInterop = new WeakMap();
-  var cacheNodeInterop = new WeakMap();
-  return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) {
-    return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-  })(nodeInterop);
-}
-
-function _interopRequireWildcard(obj, nodeInterop) {
-  if (!nodeInterop && obj && obj.__esModule) {
-    return obj;
-  }
-
-  if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") {
-    return {
-      "default": obj
-    };
-  }
-
-  var cache = _getRequireWildcardCache(nodeInterop);
-
-  if (cache && cache.has(obj)) {
-    return cache.get(obj);
-  }
-
-  var newObj = {};
-  var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-
-  for (var key in obj) {
-    if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-      var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-
-      if (desc && (desc.get || desc.set)) {
-        Object.defineProperty(newObj, key, desc);
-      } else {
-        newObj[key] = obj[key];
-      }
-    }
-  }
-
-  newObj["default"] = obj;
-
-  if (cache) {
-    cache.set(obj, newObj);
-  }
-
-  return newObj;
-}
-
-module.exports = _interopRequireWildcard;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-},{"@babel/runtime/helpers/typeof":"../node_modules/@babel/runtime/helpers/typeof.js"}],"../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
+},{"./fonts\\static\\Inter-Regular.ttf":[["Inter-Regular.3b99ff55.ttf","fonts/static/Inter-Regular.ttf"],"fonts/static/Inter-Regular.ttf"],"./fonts\\static\\Inter-Medium.ttf":[["Inter-Medium.ccf17ea8.ttf","fonts/static/Inter-Medium.ttf"],"fonts/static/Inter-Medium.ttf"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js":[function(require,module,exports) {
 /** @license React v16.13.1
  * react-is.development.js
  *
@@ -31124,9 +28576,9 @@ var assign = require('object-assign');
 
 var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
 
-var checkPropTypes = require('./checkPropTypes');
+var has = require('./lib/has');
 
-var has = Function.call.bind(Object.prototype.hasOwnProperty);
+var checkPropTypes = require('./checkPropTypes');
 
 var printWarning = function () {};
 
@@ -31231,6 +28683,7 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
 
   var ReactPropTypes = {
     array: createPrimitiveTypeChecker('array'),
+    bigint: createPrimitiveTypeChecker('bigint'),
     bool: createPrimitiveTypeChecker('boolean'),
     func: createPrimitiveTypeChecker('function'),
     number: createPrimitiveTypeChecker('number'),
@@ -31278,8 +28731,9 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
    */
 
 
-  function PropTypeError(message) {
+  function PropTypeError(message, data) {
     this.message = message;
+    this.data = data && typeof data === 'object' ? data : {};
     this.stack = '';
   } // Make `instanceof Error` still work for returned errors.
 
@@ -31345,7 +28799,9 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
         // check, but we can offer a more precise error message here rather than
         // 'of type `object`'.
         var preciseType = getPreciseType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'), {
+          expectedType: expectedType
+        });
       }
 
       return null;
@@ -31511,15 +28967,23 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
     }
 
     function validate(props, propName, componentName, location, propFullName) {
+      var expectedTypes = [];
+
       for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
         var checker = arrayOfTypeCheckers[i];
+        var checkerResult = checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret);
 
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+        if (checkerResult == null) {
           return null;
+        }
+
+        if (checkerResult.data && has(checkerResult.data, 'expectedType')) {
+          expectedTypes.push(checkerResult.data.expectedType);
         }
       }
 
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
+      var expectedTypesMessage = expectedTypes.length > 0 ? ', expected one of type [' + expectedTypes.join(', ') + ']' : '';
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`' + expectedTypesMessage + '.'));
     }
 
     return createChainableTypeChecker(validate);
@@ -31537,6 +29001,10 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
     return createChainableTypeChecker(validate);
   }
 
+  function invalidValidatorError(componentName, location, propFullName, key, type) {
+    return new PropTypeError((componentName || 'React class') + ': ' + location + ' type `' + propFullName + '.' + key + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + type + '`.');
+  }
+
   function createShapeTypeChecker(shapeTypes) {
     function validate(props, propName, componentName, location, propFullName) {
       var propValue = props[propName];
@@ -31549,8 +29017,8 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
       for (var key in shapeTypes) {
         var checker = shapeTypes[key];
 
-        if (!checker) {
-          continue;
+        if (typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
         }
 
         var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
@@ -31573,14 +29041,17 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
 
       if (propType !== 'object') {
         return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      } // We need to check all keys in case some are required but missing from
-      // props.
+      } // We need to check all keys in case some are required but missing from props.
 
 
       var allKeys = assign({}, props[propName], shapeTypes);
 
       for (var key in allKeys) {
         var checker = shapeTypes[key];
+
+        if (has(shapeTypes, key) && typeof checker !== 'function') {
+          return invalidValidatorError(componentName, location, propFullName, key, getPreciseType(checker));
+        }
 
         if (!checker) {
           return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' + '\nBad object: ' + JSON.stringify(props[propName], null, '  ') + '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  '));
@@ -31753,7 +29224,7 @@ module.exports = function (isValidElement, throwOnDirectAccess) {
   ReactPropTypes.PropTypes = ReactPropTypes;
   return ReactPropTypes;
 };
-},{"react-is":"../node_modules/prop-types/node_modules/react-is/index.js","object-assign":"../node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js","./checkPropTypes":"../node_modules/prop-types/checkPropTypes.js"}],"../node_modules/prop-types/index.js":[function(require,module,exports) {
+},{"react-is":"../node_modules/prop-types/node_modules/react-is/index.js","object-assign":"../node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js","./lib/has":"../node_modules/prop-types/lib/has.js","./checkPropTypes":"../node_modules/prop-types/checkPropTypes.js"}],"../node_modules/prop-types/index.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -31772,2607 +29243,1190 @@ if ("development" !== 'production') {
   // http://fb.me/prop-types-in-prod
   module.exports = require('./factoryWithThrowingShims')();
 }
-},{"react-is":"../node_modules/prop-types/node_modules/react-is/index.js","./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"../node_modules/react-crossword-near/dist/es/context.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrosswordSizeContext = exports.CrosswordContext = void 0;
-
-var _react = _interopRequireDefault(require("react")); // To pass focus/highlight/etc., it's cleaner to use a context.
-
-
-var CrosswordContext = /*#__PURE__*/_react["default"].createContext({
-  focused: false,
-  selectedDirection: null,
-  selectedNumber: null // correct answers?
-
-});
-
-exports.CrosswordContext = CrosswordContext;
-
-var CrosswordSizeContext = /*#__PURE__*/_react["default"].createContext({
-  cellSize: 0,
-  cellPadding: 0,
-  cellInner: 0,
-  cellHalf: 0,
-  fontSize: 0
-});
-
-exports.CrosswordSizeContext = CrosswordSizeContext;
-},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","react":"../node_modules/react/index.js"}],"../node_modules/react-crossword-near/dist/es/Cell.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = Cell;
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _styledComponents = require("styled-components");
-
-var _context = require("./context"); // expected props: row, col, answer, crossword, cellSize
-
-/**
- * An individual-letter answer cell within the crossword grid.
- *
- * A `Cell` lives inside the SVG for a [`Crossword`](#crossword), and renders at
- * a location determined by the `row`, `col`, and `cellSize` properties from
- * `cellData` and `renderContext`.
+},{"react-is":"../node_modules/prop-types/node_modules/react-is/index.js","./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"../node_modules/big.js/big.js":[function(require,module,exports) {
+var define;
+/*
+ *  big.js v5.2.2
+ *  A small, fast, easy-to-use library for arbitrary-precision decimal arithmetic.
+ *  Copyright (c) 2018 Michael Mclaughlin <M8ch88l@gmail.com>
+ *  https://github.com/MikeMcl/big.js/LICENCE
  */
+;(function (GLOBAL) {
+  'use strict';
+  var Big,
 
 
-function Cell(_ref) {
-  var cellData = _ref.cellData,
-      onClick = _ref.onClick,
-      focus = _ref.focus,
-      highlight = _ref.highlight;
+/************************************** EDITABLE DEFAULTS *****************************************/
 
-  var _useContext = (0, _react.useContext)(_context.CrosswordSizeContext),
-      cellSize = _useContext.cellSize,
-      cellPadding = _useContext.cellPadding,
-      cellInner = _useContext.cellInner,
-      cellHalf = _useContext.cellHalf,
-      fontSize = _useContext.fontSize;
 
-  var _useContext2 = (0, _react.useContext)(_styledComponents.ThemeContext),
-      cellBackground = _useContext2.cellBackground,
-      cellBorder = _useContext2.cellBorder,
-      textColor = _useContext2.textColor,
-      numberColor = _useContext2.numberColor,
-      focusBackground = _useContext2.focusBackground,
-      highlightBackground = _useContext2.highlightBackground;
+    // The default values below must be integers within the stated ranges.
 
-  var handleClick = (0, _react.useCallback)(function (event) {
-    event.preventDefault();
+    /*
+     * The maximum number of decimal places (DP) of the results of operations involving division:
+     * div and sqrt, and pow with negative exponents.
+     */
+    DP = 20,          // 0 to MAX_DP
 
-    if (onClick) {
-      onClick(cellData);
+    /*
+     * The rounding mode (RM) used when rounding to the above decimal places.
+     *
+     *  0  Towards zero (i.e. truncate, no rounding).       (ROUND_DOWN)
+     *  1  To nearest neighbour. If equidistant, round up.  (ROUND_HALF_UP)
+     *  2  To nearest neighbour. If equidistant, to even.   (ROUND_HALF_EVEN)
+     *  3  Away from zero.                                  (ROUND_UP)
+     */
+    RM = 1,             // 0, 1, 2 or 3
+
+    // The maximum value of DP and Big.DP.
+    MAX_DP = 1E6,       // 0 to 1000000
+
+    // The maximum magnitude of the exponent argument to the pow method.
+    MAX_POWER = 1E6,    // 1 to 1000000
+
+    /*
+     * The negative exponent (NE) at and beneath which toString returns exponential notation.
+     * (JavaScript numbers: -7)
+     * -1000000 is the minimum recommended exponent value of a Big.
+     */
+    NE = -7,            // 0 to -1000000
+
+    /*
+     * The positive exponent (PE) at and above which toString returns exponential notation.
+     * (JavaScript numbers: 21)
+     * 1000000 is the maximum recommended exponent value of a Big.
+     * (This limit is not enforced or checked.)
+     */
+    PE = 21,            // 0 to 1000000
+
+
+/**************************************************************************************************/
+
+
+    // Error messages.
+    NAME = '[big.js] ',
+    INVALID = NAME + 'Invalid ',
+    INVALID_DP = INVALID + 'decimal places',
+    INVALID_RM = INVALID + 'rounding mode',
+    DIV_BY_ZERO = NAME + 'Division by zero',
+
+    // The shared prototype object.
+    P = {},
+    UNDEFINED = void 0,
+    NUMERIC = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i;
+
+
+  /*
+   * Create and return a Big constructor.
+   *
+   */
+  function _Big_() {
+
+    /*
+     * The Big constructor and exported function.
+     * Create and return a new instance of a Big number object.
+     *
+     * n {number|string|Big} A numeric value.
+     */
+    function Big(n) {
+      var x = this;
+
+      // Enable constructor usage without new.
+      if (!(x instanceof Big)) return n === UNDEFINED ? _Big_() : new Big(n);
+
+      // Duplicate.
+      if (n instanceof Big) {
+        x.s = n.s;
+        x.e = n.e;
+        x.c = n.c.slice();
+      } else {
+        parse(x, n);
+      }
+
+      /*
+       * Retain a reference to this Big constructor, and shadow Big.prototype.constructor which
+       * points to Object.
+       */
+      x.constructor = Big;
     }
-  }, [cellData, onClick]);
-  var row = cellData.row,
-      col = cellData.col,
-      guess = cellData.guess,
-      number = cellData.number;
-  var x = col * cellSize;
-  var y = row * cellSize;
-  return /*#__PURE__*/_react["default"].createElement("g", {
-    onClick: handleClick,
-    style: {
-      cursor: 'default',
-      fontSize: fontSize + "px"
+
+    Big.prototype = P;
+    Big.DP = DP;
+    Big.RM = RM;
+    Big.NE = NE;
+    Big.PE = PE;
+    Big.version = '5.2.2';
+
+    return Big;
+  }
+
+
+  /*
+   * Parse the number or string value passed to a Big constructor.
+   *
+   * x {Big} A Big number instance.
+   * n {number|string} A numeric value.
+   */
+  function parse(x, n) {
+    var e, i, nl;
+
+    // Minus zero?
+    if (n === 0 && 1 / n < 0) n = '-0';
+    else if (!NUMERIC.test(n += '')) throw Error(INVALID + 'number');
+
+    // Determine sign.
+    x.s = n.charAt(0) == '-' ? (n = n.slice(1), -1) : 1;
+
+    // Decimal point?
+    if ((e = n.indexOf('.')) > -1) n = n.replace('.', '');
+
+    // Exponential form?
+    if ((i = n.search(/e/i)) > 0) {
+
+      // Determine exponent.
+      if (e < 0) e = i;
+      e += +n.slice(i + 1);
+      n = n.substring(0, i);
+    } else if (e < 0) {
+
+      // Integer.
+      e = n.length;
     }
-  }, /*#__PURE__*/_react["default"].createElement("rect", {
-    x: x + cellPadding,
-    y: y + cellPadding,
-    width: cellInner,
-    height: cellInner,
-    fill: focus ? focusBackground : highlight ? highlightBackground : cellBackground,
-    stroke: cellBorder,
-    strokeWidth: cellSize / 50
-  }), number && /*#__PURE__*/_react["default"].createElement("text", {
-    x: x + cellPadding * 4,
-    y: y + cellPadding * 4,
-    textAnchor: "start",
-    dominantBaseline: "hanging",
-    style: {
-      fontSize: '50%',
-      fill: numberColor
+
+    nl = n.length;
+
+    // Determine leading zeros.
+    for (i = 0; i < nl && n.charAt(i) == '0';) ++i;
+
+    if (i == nl) {
+
+      // Zero.
+      x.c = [x.e = 0];
+    } else {
+
+      // Determine trailing zeros.
+      for (; nl > 0 && n.charAt(--nl) == '0';);
+      x.e = e - i - 1;
+      x.c = [];
+
+      // Convert string to array of digits without leading/trailing zeros.
+      for (e = 0; i <= nl;) x.c[e++] = +n.charAt(i++);
     }
-  }, number), /*#__PURE__*/_react["default"].createElement("text", {
-    x: x + cellHalf,
-    y: y + cellHalf + 1 // +1 for visual alignment?
-    ,
-    textAnchor: "middle",
-    dominantBaseline: "middle",
-    style: {
-      fill: textColor
+
+    return x;
+  }
+
+
+  /*
+   * Round Big x to a maximum of dp decimal places using rounding mode rm.
+   * Called by stringify, P.div, P.round and P.sqrt.
+   *
+   * x {Big} The Big to round.
+   * dp {number} Integer, 0 to MAX_DP inclusive.
+   * rm {number} 0, 1, 2 or 3 (DOWN, HALF_UP, HALF_EVEN, UP)
+   * [more] {boolean} Whether the result of division was truncated.
+   */
+  function round(x, dp, rm, more) {
+    var xc = x.c,
+      i = x.e + dp + 1;
+
+    if (i < xc.length) {
+      if (rm === 1) {
+
+        // xc[i] is the digit after the digit that may be rounded up.
+        more = xc[i] >= 5;
+      } else if (rm === 2) {
+        more = xc[i] > 5 || xc[i] == 5 &&
+          (more || i < 0 || xc[i + 1] !== UNDEFINED || xc[i - 1] & 1);
+      } else if (rm === 3) {
+        more = more || !!xc[0];
+      } else {
+        more = false;
+        if (rm !== 0) throw Error(INVALID_RM);
+      }
+
+      if (i < 1) {
+        xc.length = 1;
+
+        if (more) {
+
+          // 1, 0.1, 0.01, 0.001, 0.0001 etc.
+          x.e = -dp;
+          xc[0] = 1;
+        } else {
+
+          // Zero.
+          xc[0] = x.e = 0;
+        }
+      } else {
+
+        // Remove any digits after the required decimal places.
+        xc.length = i--;
+
+        // Round up?
+        if (more) {
+
+          // Rounding up may mean the previous digit has to be rounded up.
+          for (; ++xc[i] > 9;) {
+            xc[i] = 0;
+            if (!i--) {
+              ++x.e;
+              xc.unshift(1);
+            }
+          }
+        }
+
+        // Remove trailing zeros.
+        for (i = xc.length; !xc[--i];) xc.pop();
+      }
+    } else if (rm < 0 || rm > 3 || rm !== ~~rm) {
+      throw Error(INVALID_RM);
     }
-  }, guess));
-}
 
-"development" !== "production" ? Cell.propTypes = {
-  /** the data specific to this cell */
-  cellData: _propTypes["default"].shape({
-    row: _propTypes["default"].number.isRequired,
-    col: _propTypes["default"].number.isRequired,
-    guess: _propTypes["default"].string.isRequired,
-    number: _propTypes["default"].string
-  }).isRequired,
+    return x;
+  }
 
-  /** whether this cell has focus */
-  focus: _propTypes["default"].bool,
 
-  /** whether this cell is highlighted */
-  highlight: _propTypes["default"].bool,
+  /*
+   * Return a string representing the value of Big x in normal or exponential notation.
+   * Handles P.toExponential, P.toFixed, P.toJSON, P.toPrecision, P.toString and P.valueOf.
+   *
+   * x {Big}
+   * id? {number} Caller id.
+   *         1 toExponential
+   *         2 toFixed
+   *         3 toPrecision
+   *         4 valueOf
+   * n? {number|undefined} Caller's argument.
+   * k? {number|undefined}
+   */
+  function stringify(x, id, n, k) {
+    var e, s,
+      Big = x.constructor,
+      z = !x.c[0];
 
-  /** handler called when the cell is clicked */
-  onClick: _propTypes["default"].func
-} : void 0;
-Cell.defaultProps = {
-  focus: false,
-  highlight: false,
-  onClick: null
-}; // export default Cell;
-},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/interopRequireWildcard":"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./context":"../node_modules/react-crossword-near/dist/es/context.js"}],"../node_modules/@babel/runtime/helpers/extends.js":[function(require,module,exports) {
-function _extends() {
-  module.exports = _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+    if (n !== UNDEFINED) {
+      if (n !== ~~n || n < (id == 3) || n > MAX_DP) {
+        throw Error(id == 3 ? INVALID + 'precision' : INVALID_DP);
+      }
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
+      x = new Big(x);
+
+      // The index of the digit that may be rounded up.
+      n = k - x.e;
+
+      // Round?
+      if (x.c.length > ++k) round(x, n, Big.RM);
+
+      // toFixed: recalculate k as x.e may have changed if value rounded up.
+      if (id == 2) k = x.e + n + 1;
+
+      // Append zeros?
+      for (; x.c.length < k;) x.c.push(0);
+    }
+
+    e = x.e;
+    s = x.c.join('');
+    n = s.length;
+
+    // Exponential notation?
+    if (id != 2 && (id == 1 || id == 3 && k <= e || e <= Big.NE || e >= Big.PE)) {
+      s = s.charAt(0) + (n > 1 ? '.' + s.slice(1) : '') + (e < 0 ? 'e' : 'e+') + e;
+
+    // Normal notation.
+    } else if (e < 0) {
+      for (; ++e;) s = '0' + s;
+      s = '0.' + s;
+    } else if (e > 0) {
+      if (++e > n) for (e -= n; e--;) s += '0';
+      else if (e < n) s = s.slice(0, e) + '.' + s.slice(e);
+    } else if (n > 1) {
+      s = s.charAt(0) + '.' + s.slice(1);
+    }
+
+    return x.s < 0 && (!z || id == 4) ? '-' + s : s;
+  }
+
+
+  // Prototype/instance methods
+
+
+  /*
+   * Return a new Big whose value is the absolute value of this Big.
+   */
+  P.abs = function () {
+    var x = new this.constructor(this);
+    x.s = 1;
+    return x;
+  };
+
+
+  /*
+   * Return 1 if the value of this Big is greater than the value of Big y,
+   *       -1 if the value of this Big is less than the value of Big y, or
+   *        0 if they have the same value.
+  */
+  P.cmp = function (y) {
+    var isneg,
+      x = this,
+      xc = x.c,
+      yc = (y = new x.constructor(y)).c,
+      i = x.s,
+      j = y.s,
+      k = x.e,
+      l = y.e;
+
+    // Either zero?
+    if (!xc[0] || !yc[0]) return !xc[0] ? !yc[0] ? 0 : -j : i;
+
+    // Signs differ?
+    if (i != j) return i;
+
+    isneg = i < 0;
+
+    // Compare exponents.
+    if (k != l) return k > l ^ isneg ? 1 : -1;
+
+    j = (k = xc.length) < (l = yc.length) ? k : l;
+
+    // Compare digit by digit.
+    for (i = -1; ++i < j;) {
+      if (xc[i] != yc[i]) return xc[i] > yc[i] ^ isneg ? 1 : -1;
+    }
+
+    // Compare lengths.
+    return k == l ? 0 : k > l ^ isneg ? 1 : -1;
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big divided by the value of Big y, rounded,
+   * if necessary, to a maximum of Big.DP decimal places using rounding mode Big.RM.
+   */
+  P.div = function (y) {
+    var x = this,
+      Big = x.constructor,
+      a = x.c,                  // dividend
+      b = (y = new Big(y)).c,   // divisor
+      k = x.s == y.s ? 1 : -1,
+      dp = Big.DP;
+
+    if (dp !== ~~dp || dp < 0 || dp > MAX_DP) throw Error(INVALID_DP);
+
+    // Divisor is zero?
+    if (!b[0]) throw Error(DIV_BY_ZERO);
+
+    // Dividend is 0? Return +-0.
+    if (!a[0]) return new Big(k * 0);
+
+    var bl, bt, n, cmp, ri,
+      bz = b.slice(),
+      ai = bl = b.length,
+      al = a.length,
+      r = a.slice(0, bl),   // remainder
+      rl = r.length,
+      q = y,                // quotient
+      qc = q.c = [],
+      qi = 0,
+      d = dp + (q.e = x.e - y.e) + 1;    // number of digits of the result
+
+    q.s = k;
+    k = d < 0 ? 0 : d;
+
+    // Create version of divisor with leading zero.
+    bz.unshift(0);
+
+    // Add zeros to make remainder as long as divisor.
+    for (; rl++ < bl;) r.push(0);
+
+    do {
+
+      // n is how many times the divisor goes into current remainder.
+      for (n = 0; n < 10; n++) {
+
+        // Compare divisor and remainder.
+        if (bl != (rl = r.length)) {
+          cmp = bl > rl ? 1 : -1;
+        } else {
+          for (ri = -1, cmp = 0; ++ri < bl;) {
+            if (b[ri] != r[ri]) {
+              cmp = b[ri] > r[ri] ? 1 : -1;
+              break;
+            }
+          }
+        }
+
+        // If divisor < remainder, subtract divisor from remainder.
+        if (cmp < 0) {
+
+          // Remainder can't be more than 1 digit longer than divisor.
+          // Equalise lengths using divisor with extra leading zero?
+          for (bt = rl == bl ? b : bz; rl;) {
+            if (r[--rl] < bt[rl]) {
+              ri = rl;
+              for (; ri && !r[--ri];) r[ri] = 9;
+              --r[ri];
+              r[rl] += 10;
+            }
+            r[rl] -= bt[rl];
+          }
+
+          for (; !r[0];) r.shift();
+        } else {
+          break;
+        }
+      }
+
+      // Add the digit n to the result array.
+      qc[qi++] = cmp ? n : ++n;
+
+      // Update the remainder.
+      if (r[0] && cmp) r[rl] = a[ai] || 0;
+      else r = [a[ai]];
+
+    } while ((ai++ < al || r[0] !== UNDEFINED) && k--);
+
+    // Leading zero? Do not remove if result is simply zero (qi == 1).
+    if (!qc[0] && qi != 1) {
+
+      // There can't be more than one zero.
+      qc.shift();
+      q.e--;
+    }
+
+    // Round?
+    if (qi > d) round(q, dp, Big.RM, r[0] !== UNDEFINED);
+
+    return q;
+  };
+
+
+  /*
+   * Return true if the value of this Big is equal to the value of Big y, otherwise return false.
+   */
+  P.eq = function (y) {
+    return !this.cmp(y);
+  };
+
+
+  /*
+   * Return true if the value of this Big is greater than the value of Big y, otherwise return
+   * false.
+   */
+  P.gt = function (y) {
+    return this.cmp(y) > 0;
+  };
+
+
+  /*
+   * Return true if the value of this Big is greater than or equal to the value of Big y, otherwise
+   * return false.
+   */
+  P.gte = function (y) {
+    return this.cmp(y) > -1;
+  };
+
+
+  /*
+   * Return true if the value of this Big is less than the value of Big y, otherwise return false.
+   */
+  P.lt = function (y) {
+    return this.cmp(y) < 0;
+  };
+
+
+  /*
+   * Return true if the value of this Big is less than or equal to the value of Big y, otherwise
+   * return false.
+   */
+  P.lte = function (y) {
+    return this.cmp(y) < 1;
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big minus the value of Big y.
+   */
+  P.minus = P.sub = function (y) {
+    var i, j, t, xlty,
+      x = this,
+      Big = x.constructor,
+      a = x.s,
+      b = (y = new Big(y)).s;
+
+    // Signs differ?
+    if (a != b) {
+      y.s = -b;
+      return x.plus(y);
+    }
+
+    var xc = x.c.slice(),
+      xe = x.e,
+      yc = y.c,
+      ye = y.e;
+
+    // Either zero?
+    if (!xc[0] || !yc[0]) {
+
+      // y is non-zero? x is non-zero? Or both are zero.
+      return yc[0] ? (y.s = -b, y) : new Big(xc[0] ? x : 0);
+    }
+
+    // Determine which is the bigger number. Prepend zeros to equalise exponents.
+    if (a = xe - ye) {
+
+      if (xlty = a < 0) {
+        a = -a;
+        t = xc;
+      } else {
+        ye = xe;
+        t = yc;
+      }
+
+      t.reverse();
+      for (b = a; b--;) t.push(0);
+      t.reverse();
+    } else {
+
+      // Exponents equal. Check digit by digit.
+      j = ((xlty = xc.length < yc.length) ? xc : yc).length;
+
+      for (a = b = 0; b < j; b++) {
+        if (xc[b] != yc[b]) {
+          xlty = xc[b] < yc[b];
+          break;
         }
       }
     }
 
-    return target;
-  };
-
-  module.exports["default"] = module.exports, module.exports.__esModule = true;
-  return _extends.apply(this, arguments);
-}
-
-module.exports = _extends;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-},{}],"../node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js":[function(require,module,exports) {
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-module.exports = _objectWithoutPropertiesLoose;
-module.exports["default"] = module.exports, module.exports.__esModule = true;
-},{}],"../node_modules/react-crossword-near/dist/es/Clue.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = Clue;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _objectWithoutPropertiesLoose2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutPropertiesLoose"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _styledComponents = _interopRequireWildcard(require("styled-components"));
-
-var _context = require("./context");
-
-var ClueWrapper = _styledComponents["default"].div.attrs(function (props) {
-  return {
-    className: "clue" + (props.correct ? ' correct' : '')
-  };
-}).withConfig({
-  displayName: "Clue__ClueWrapper",
-  componentId: "sc-6vr1y0-0"
-})(["cursor:default;background-color:", ";"], function (props) {
-  return props.highlight ? props.highlightBackground : 'transparent';
-});
-
-function Clue(_ref) {
-  var direction = _ref.direction,
-      number = _ref.number,
-      children = _ref.children,
-      correct = _ref.correct,
-      props = (0, _objectWithoutPropertiesLoose2["default"])(_ref, ["direction", "number", "children", "correct"]);
-
-  var _useContext = (0, _react.useContext)(_styledComponents.ThemeContext),
-      highlightBackground = _useContext.highlightBackground;
-
-  var _useContext2 = (0, _react.useContext)(_context.CrosswordContext),
-      focused = _useContext2.focused,
-      selectedDirection = _useContext2.selectedDirection,
-      selectedNumber = _useContext2.selectedNumber,
-      onClueSelected = _useContext2.onClueSelected;
-
-  var handleClick = (0, _react.useCallback)(function (event) {
-    event.preventDefault();
-
-    if (onClueSelected) {
-      onClueSelected(direction, number);
+    // x < y? Point xc to the array of the bigger number.
+    if (xlty) {
+      t = xc;
+      xc = yc;
+      yc = t;
+      y.s = -y.s;
     }
-  }, [direction, number, onClueSelected]);
-  return /*#__PURE__*/_react["default"].createElement(ClueWrapper, (0, _extends2["default"])({
-    highlightBackground: highlightBackground,
-    highlight: focused && direction === selectedDirection && number === selectedNumber,
-    correct: correct
-  }, props, {
-    onClick: handleClick,
-    "aria-label": "clue-" + number + "-" + direction
-  }), number, ": ", children);
-}
 
-"development" !== "production" ? Clue.propTypes = {
-  /** direction of the clue: "across" or "down"; passed back in onClick */
-  direction: _propTypes["default"].string.isRequired,
+    /*
+     * Append zeros to xc if shorter. No need to add zeros to yc if shorter as subtraction only
+     * needs to start at yc.length.
+     */
+    if ((b = (j = yc.length) - (i = xc.length)) > 0) for (; b--;) xc[i++] = 0;
 
-  /** number of the clue (the label shown); passed back in onClick */
-  number: _propTypes["default"].string.isRequired,
+    // Subtract yc from xc.
+    for (b = i; j > a;) {
+      if (xc[--j] < yc[j]) {
+        for (i = j; i && !xc[--i];) xc[i] = 9;
+        --xc[i];
+        xc[j] += 10;
+      }
 
-  /** clue text */
-  children: _propTypes["default"].node,
+      xc[j] -= yc[j];
+    }
 
-  /** whether the answer/guess is correct */
-  correct: _propTypes["default"].bool,
-  isFilled: _propTypes["default"].bool
-} : void 0;
-Clue.defaultProps = {
-  children: undefined,
-  correct: undefined,
-  isFilled: undefined
-};
-},{"@babel/runtime/helpers/interopRequireWildcard":"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js","@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutPropertiesLoose":"../node_modules/@babel/runtime/helpers/objectWithoutPropertiesLoose.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./context":"../node_modules/react-crossword-near/dist/es/context.js"}],"../node_modules/react-crossword-near/dist/es/DirectionClues.js":[function(require,module,exports) {
+    // Remove trailing zeros.
+    for (; xc[--b] === 0;) xc.pop();
+
+    // Remove leading zeros and adjust exponent accordingly.
+    for (; xc[0] === 0;) {
+      xc.shift();
+      --ye;
+    }
+
+    if (!xc[0]) {
+
+      // n - n = +0
+      y.s = 1;
+
+      // Result must be zero.
+      xc = [ye = 0];
+    }
+
+    y.c = xc;
+    y.e = ye;
+
+    return y;
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big modulo the value of Big y.
+   */
+  P.mod = function (y) {
+    var ygtx,
+      x = this,
+      Big = x.constructor,
+      a = x.s,
+      b = (y = new Big(y)).s;
+
+    if (!y.c[0]) throw Error(DIV_BY_ZERO);
+
+    x.s = y.s = 1;
+    ygtx = y.cmp(x) == 1;
+    x.s = a;
+    y.s = b;
+
+    if (ygtx) return new Big(x);
+
+    a = Big.DP;
+    b = Big.RM;
+    Big.DP = Big.RM = 0;
+    x = x.div(y);
+    Big.DP = a;
+    Big.RM = b;
+
+    return this.minus(x.times(y));
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big plus the value of Big y.
+   */
+  P.plus = P.add = function (y) {
+    var t,
+      x = this,
+      Big = x.constructor,
+      a = x.s,
+      b = (y = new Big(y)).s;
+
+    // Signs differ?
+    if (a != b) {
+      y.s = -b;
+      return x.minus(y);
+    }
+
+    var xe = x.e,
+      xc = x.c,
+      ye = y.e,
+      yc = y.c;
+
+    // Either zero? y is non-zero? x is non-zero? Or both are zero.
+    if (!xc[0] || !yc[0]) return yc[0] ? y : new Big(xc[0] ? x : a * 0);
+
+    xc = xc.slice();
+
+    // Prepend zeros to equalise exponents.
+    // Note: reverse faster than unshifts.
+    if (a = xe - ye) {
+      if (a > 0) {
+        ye = xe;
+        t = yc;
+      } else {
+        a = -a;
+        t = xc;
+      }
+
+      t.reverse();
+      for (; a--;) t.push(0);
+      t.reverse();
+    }
+
+    // Point xc to the longer array.
+    if (xc.length - yc.length < 0) {
+      t = yc;
+      yc = xc;
+      xc = t;
+    }
+
+    a = yc.length;
+
+    // Only start adding at yc.length - 1 as the further digits of xc can be left as they are.
+    for (b = 0; a; xc[a] %= 10) b = (xc[--a] = xc[a] + yc[a] + b) / 10 | 0;
+
+    // No need to check for zero, as +x + +y != 0 && -x + -y != 0
+
+    if (b) {
+      xc.unshift(b);
+      ++ye;
+    }
+
+    // Remove trailing zeros.
+    for (a = xc.length; xc[--a] === 0;) xc.pop();
+
+    y.c = xc;
+    y.e = ye;
+
+    return y;
+  };
+
+
+  /*
+   * Return a Big whose value is the value of this Big raised to the power n.
+   * If n is negative, round to a maximum of Big.DP decimal places using rounding
+   * mode Big.RM.
+   *
+   * n {number} Integer, -MAX_POWER to MAX_POWER inclusive.
+   */
+  P.pow = function (n) {
+    var x = this,
+      one = new x.constructor(1),
+      y = one,
+      isneg = n < 0;
+
+    if (n !== ~~n || n < -MAX_POWER || n > MAX_POWER) throw Error(INVALID + 'exponent');
+    if (isneg) n = -n;
+
+    for (;;) {
+      if (n & 1) y = y.times(x);
+      n >>= 1;
+      if (!n) break;
+      x = x.times(x);
+    }
+
+    return isneg ? one.div(y) : y;
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big rounded using rounding mode rm
+   * to a maximum of dp decimal places, or, if dp is negative, to an integer which is a
+   * multiple of 10**-dp.
+   * If dp is not specified, round to 0 decimal places.
+   * If rm is not specified, use Big.RM.
+   *
+   * dp? {number} Integer, -MAX_DP to MAX_DP inclusive.
+   * rm? 0, 1, 2 or 3 (ROUND_DOWN, ROUND_HALF_UP, ROUND_HALF_EVEN, ROUND_UP)
+   */
+  P.round = function (dp, rm) {
+    var Big = this.constructor;
+    if (dp === UNDEFINED) dp = 0;
+    else if (dp !== ~~dp || dp < -MAX_DP || dp > MAX_DP) throw Error(INVALID_DP);
+    return round(new Big(this), dp, rm === UNDEFINED ? Big.RM : rm);
+  };
+
+
+  /*
+   * Return a new Big whose value is the square root of the value of this Big, rounded, if
+   * necessary, to a maximum of Big.DP decimal places using rounding mode Big.RM.
+   */
+  P.sqrt = function () {
+    var r, c, t,
+      x = this,
+      Big = x.constructor,
+      s = x.s,
+      e = x.e,
+      half = new Big(0.5);
+
+    // Zero?
+    if (!x.c[0]) return new Big(x);
+
+    // Negative?
+    if (s < 0) throw Error(NAME + 'No square root');
+
+    // Estimate.
+    s = Math.sqrt(x + '');
+
+    // Math.sqrt underflow/overflow?
+    // Re-estimate: pass x coefficient to Math.sqrt as integer, then adjust the result exponent.
+    if (s === 0 || s === 1 / 0) {
+      c = x.c.join('');
+      if (!(c.length + e & 1)) c += '0';
+      s = Math.sqrt(c);
+      e = ((e + 1) / 2 | 0) - (e < 0 || e & 1);
+      r = new Big((s == 1 / 0 ? '1e' : (s = s.toExponential()).slice(0, s.indexOf('e') + 1)) + e);
+    } else {
+      r = new Big(s);
+    }
+
+    e = r.e + (Big.DP += 4);
+
+    // Newton-Raphson iteration.
+    do {
+      t = r;
+      r = half.times(t.plus(x.div(t)));
+    } while (t.c.slice(0, e).join('') !== r.c.slice(0, e).join(''));
+
+    return round(r, Big.DP -= 4, Big.RM);
+  };
+
+
+  /*
+   * Return a new Big whose value is the value of this Big times the value of Big y.
+   */
+  P.times = P.mul = function (y) {
+    var c,
+      x = this,
+      Big = x.constructor,
+      xc = x.c,
+      yc = (y = new Big(y)).c,
+      a = xc.length,
+      b = yc.length,
+      i = x.e,
+      j = y.e;
+
+    // Determine sign of result.
+    y.s = x.s == y.s ? 1 : -1;
+
+    // Return signed 0 if either 0.
+    if (!xc[0] || !yc[0]) return new Big(y.s * 0);
+
+    // Initialise exponent of result as x.e + y.e.
+    y.e = i + j;
+
+    // If array xc has fewer digits than yc, swap xc and yc, and lengths.
+    if (a < b) {
+      c = xc;
+      xc = yc;
+      yc = c;
+      j = a;
+      a = b;
+      b = j;
+    }
+
+    // Initialise coefficient array of result with zeros.
+    for (c = new Array(j = a + b); j--;) c[j] = 0;
+
+    // Multiply.
+
+    // i is initially xc.length.
+    for (i = b; i--;) {
+      b = 0;
+
+      // a is yc.length.
+      for (j = a + i; j > i;) {
+
+        // Current sum of products at this digit position, plus carry.
+        b = c[j] + yc[i] * xc[j - i - 1] + b;
+        c[j--] = b % 10;
+
+        // carry
+        b = b / 10 | 0;
+      }
+
+      c[j] = (c[j] + b) % 10;
+    }
+
+    // Increment result exponent if there is a final carry, otherwise remove leading zero.
+    if (b) ++y.e;
+    else c.shift();
+
+    // Remove trailing zeros.
+    for (i = c.length; !c[--i];) c.pop();
+    y.c = c;
+
+    return y;
+  };
+
+
+  /*
+   * Return a string representing the value of this Big in exponential notation to dp fixed decimal
+   * places and rounded using Big.RM.
+   *
+   * dp? {number} Integer, 0 to MAX_DP inclusive.
+   */
+  P.toExponential = function (dp) {
+    return stringify(this, 1, dp, dp);
+  };
+
+
+  /*
+   * Return a string representing the value of this Big in normal notation to dp fixed decimal
+   * places and rounded using Big.RM.
+   *
+   * dp? {number} Integer, 0 to MAX_DP inclusive.
+   *
+   * (-0).toFixed(0) is '0', but (-0.1).toFixed(0) is '-0'.
+   * (-0).toFixed(1) is '0.0', but (-0.01).toFixed(1) is '-0.0'.
+   */
+  P.toFixed = function (dp) {
+    return stringify(this, 2, dp, this.e + dp);
+  };
+
+
+  /*
+   * Return a string representing the value of this Big rounded to sd significant digits using
+   * Big.RM. Use exponential notation if sd is less than the number of digits necessary to represent
+   * the integer part of the value in normal notation.
+   *
+   * sd {number} Integer, 1 to MAX_DP inclusive.
+   */
+  P.toPrecision = function (sd) {
+    return stringify(this, 3, sd, sd - 1);
+  };
+
+
+  /*
+   * Return a string representing the value of this Big.
+   * Return exponential notation if this Big has a positive exponent equal to or greater than
+   * Big.PE, or a negative exponent equal to or less than Big.NE.
+   * Omit the sign for negative zero.
+   */
+  P.toString = function () {
+    return stringify(this);
+  };
+
+
+  /*
+   * Return a string representing the value of this Big.
+   * Return exponential notation if this Big has a positive exponent equal to or greater than
+   * Big.PE, or a negative exponent equal to or less than Big.NE.
+   * Include the sign for negative zero.
+   */
+  P.valueOf = P.toJSON = function () {
+    return stringify(this, 4);
+  };
+
+
+  // Export
+
+
+  Big = _Big_();
+
+  Big['default'] = Big.Big = Big;
+
+  //AMD.
+  if (typeof define === 'function' && define.amd) {
+    define(function () { return Big; });
+
+  // Node and other CommonJS-like environments that support module.exports.
+  } else if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Big;
+
+  //Browser.
+  } else {
+    GLOBAL.Big = Big;
+  }
+})(this);
+
+},{}],"components/Form.jsx":[function(require,module,exports) {
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = DirectionClues;
+exports.default = Form;
 
 var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _Clue = _interopRequireDefault(require("./Clue")); // import styled from 'styled-components';
+var _big = _interopRequireDefault(require("big.js"));
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function DirectionClues(_ref) {
-  var direction = _ref.direction,
-      clues = _ref.clues;
-  return /*#__PURE__*/_react["default"].createElement("div", {
-    className: "direction"
-  }, /*#__PURE__*/_react["default"].createElement("h3", {
-    className: "header"
-  }, direction.toUpperCase()), clues.map(function (_ref2) {
-    var number = _ref2.number,
-        clue = _ref2.clue,
-        correct = _ref2.correct;
-    return /*#__PURE__*/_react["default"].createElement(_Clue["default"], {
-      key: number,
-      direction: direction,
-      number: number,
-      correct: correct
-    }, clue);
-  }));
+function Form(_ref) {
+  let {
+    onSubmit,
+    currentUser
+  } = _ref;
+  return /*#__PURE__*/_react.default.createElement("form", {
+    onSubmit: onSubmit
+  }, /*#__PURE__*/_react.default.createElement("fieldset", {
+    id: "fieldset"
+  }, /*#__PURE__*/_react.default.createElement("p", null, "Say hello, ", currentUser.accountId, "!"), /*#__PURE__*/_react.default.createElement("p", {
+    className: "highlight"
+  }, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "name"
+  }, "Your name:"), /*#__PURE__*/_react.default.createElement("input", {
+    autoComplete: "off",
+    autoFocus: true,
+    id: "name_prompt",
+    required: true
+  })), /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement("label", {
+    htmlFor: "donation"
+  }, "Donation (optional):"), /*#__PURE__*/_react.default.createElement("input", {
+    autoComplete: "off",
+    defaultValue: '0',
+    id: "donation",
+    max: (0, _big.default)(currentUser.balance).div(10 ** 24),
+    min: "0",
+    step: "0.01",
+    type: "number"
+  }), /*#__PURE__*/_react.default.createElement("span", {
+    title: "NEAR Tokens"
+  }, "\u24C3")), /*#__PURE__*/_react.default.createElement("button", {
+    type: "submit"
+  }, "Hello!")));
 }
 
-"development" !== "production" ? DirectionClues.propTypes = {
-  /** direction of this list of clues ("across" or "down") */
-  direction: _propTypes["default"].string.isRequired,
-
-  /** clues for this List's direction */
-  clues: _propTypes["default"].arrayOf(_propTypes["default"].shape({
-    /** number of the clue (the label shown) */
-    number: _propTypes["default"].string.isRequired,
-
-    /** clue text */
-    clue: _propTypes["default"].node.isRequired,
-
-    /** whether the answer/guess is correct */
-    correct: _propTypes["default"].bool,
-    isFilled: _propTypes["default"].bool,
-    filledCounter: _propTypes["default"].number
-  })).isRequired
-} : void 0;
-DirectionClues.defaultProps = {};
-},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./Clue":"../node_modules/react-crossword-near/dist/es/Clue.js"}],"../node_modules/immer/dist/immer.esm.js":[function(require,module,exports) {
+Form.propTypes = {
+  onSubmit: _propTypes.default.func.isRequired,
+  currentUser: _propTypes.default.shape({
+    accountId: _propTypes.default.string.isRequired,
+    balance: _propTypes.default.string.isRequired
+  })
+};
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js"}],"components/SignIn.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.castDraft = K;
-exports.castImmutable = $;
-exports.current = D;
-exports.enableAllPlugins = J;
-exports.enableES5 = T;
-exports.enableMapSet = C;
-exports.enablePatches = F;
-exports.isDraft = t;
-exports.isDraftable = r;
-exports.original = e;
-exports.setUseProxies = exports.setAutoFreeze = exports.produceWithPatches = exports.produce = exports.nothing = exports.immerable = exports.finishDraft = exports.createDraft = exports.applyPatches = exports.Immer = exports.default = void 0;
+exports.default = SignIn;
 
-function n(n) {
-  for (var t = arguments.length, r = Array(t > 1 ? t - 1 : 0), e = 1; e < t; e++) r[e - 1] = arguments[e];
+var _react = _interopRequireDefault(require("react"));
 
-  if ("production" !== "development") {
-    var i = Y[n],
-        o = i ? "function" == typeof i ? i.apply(null, r) : i : "unknown error nr: " + n;
-    throw Error("[Immer] " + o);
-  }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  throw Error("[Immer] minified error nr: " + n + (r.length ? " " + r.map(function (n) {
-    return "'" + n + "'";
-  }).join(",") : "") + ". Find the full error at: https://bit.ly/3cXEKWf");
+function SignIn() {
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("p", null, "This app demonstrates a key element of NEAR\u2019s UX: once an app has permission to make calls on behalf of a user (that is, once a user signs in), the app can make calls to the blockchain for them without prompting extra confirmation. So you\u2019ll see that if you don\u2019t include a donation, your name gets posted right away."), /*#__PURE__*/_react.default.createElement("p", null, "But if you do add a donation, then NEAR will double-check that you\u2019re ok with sending money to this app."), /*#__PURE__*/_react.default.createElement("p", null, "Go ahead and sign in to try it out!"));
 }
-
-function t(n) {
-  return !!n && !!n[Q];
-}
-
-function r(n) {
-  return !!n && (function (n) {
-    if (!n || "object" != typeof n) return !1;
-    var t = Object.getPrototypeOf(n);
-    return !t || t === Object.prototype;
-  }(n) || Array.isArray(n) || !!n[L] || !!n.constructor[L] || s(n) || v(n));
-}
-
-function e(r) {
-  return t(r) || n(23, r), r[Q].t;
-}
-
-function i(n, t, r) {
-  void 0 === r && (r = !1), 0 === o(n) ? (r ? Object.keys : Z)(n).forEach(function (e) {
-    r && "symbol" == typeof e || t(e, n[e], n);
-  }) : n.forEach(function (r, e) {
-    return t(e, r, n);
-  });
-}
-
-function o(n) {
-  var t = n[Q];
-  return t ? t.i > 3 ? t.i - 4 : t.i : Array.isArray(n) ? 1 : s(n) ? 2 : v(n) ? 3 : 0;
-}
-
-function u(n, t) {
-  return 2 === o(n) ? n.has(t) : Object.prototype.hasOwnProperty.call(n, t);
-}
-
-function a(n, t) {
-  return 2 === o(n) ? n.get(t) : n[t];
-}
-
-function f(n, t, r) {
-  var e = o(n);
-  2 === e ? n.set(t, r) : 3 === e ? (n.delete(t), n.add(r)) : n[t] = r;
-}
-
-function c(n, t) {
-  return n === t ? 0 !== n || 1 / n == 1 / t : n != n && t != t;
-}
-
-function s(n) {
-  return X && n instanceof Map;
-}
-
-function v(n) {
-  return q && n instanceof Set;
-}
-
-function p(n) {
-  return n.o || n.t;
-}
-
-function l(n) {
-  if (Array.isArray(n)) return Array.prototype.slice.call(n);
-  var t = nn(n);
-  delete t[Q];
-
-  for (var r = Z(t), e = 0; e < r.length; e++) {
-    var i = r[e],
-        o = t[i];
-    !1 === o.writable && (o.writable = !0, o.configurable = !0), (o.get || o.set) && (t[i] = {
-      configurable: !0,
-      writable: !0,
-      enumerable: o.enumerable,
-      value: n[i]
-    });
-  }
-
-  return Object.create(Object.getPrototypeOf(n), t);
-}
-
-function d(n, e) {
-  y(n) || t(n) || !r(n) || (o(n) > 1 && (n.set = n.add = n.clear = n.delete = h), Object.freeze(n), e && i(n, function (n, t) {
-    return d(t, !0);
-  }, !0));
-}
-
-function h() {
-  n(2);
-}
-
-function y(n) {
-  return null == n || "object" != typeof n || Object.isFrozen(n);
-}
-
-function b(t) {
-  var r = tn[t];
-  return r || n(18, t), r;
-}
-
-function m(n, t) {
-  tn[n] || (tn[n] = t);
-}
-
-function _() {
-  return "production" === "development" || U || n(0), U;
-}
-
-function j(n, t) {
-  t && (b("Patches"), n.u = [], n.s = [], n.v = t);
-}
-
-function g(n) {
-  O(n), n.p.forEach(S), n.p = null;
-}
-
-function O(n) {
-  n === U && (U = n.l);
-}
-
-function w(n) {
-  return U = {
-    p: [],
-    l: U,
-    h: n,
-    m: !0,
-    _: 0
-  };
-}
-
-function S(n) {
-  var t = n[Q];
-  0 === t.i || 1 === t.i ? t.j() : t.g = !0;
-}
-
-function P(t, e) {
-  e._ = e.p.length;
-  var i = e.p[0],
-      o = void 0 !== t && t !== i;
-  return e.h.O || b("ES5").S(e, t, o), o ? (i[Q].P && (g(e), n(4)), r(t) && (t = M(e, t), e.l || x(e, t)), e.u && b("Patches").M(i[Q], t, e.u, e.s)) : t = M(e, i, []), g(e), e.u && e.v(e.u, e.s), t !== H ? t : void 0;
-}
-
-function M(n, t, r) {
-  if (y(t)) return t;
-  var e = t[Q];
-  if (!e) return i(t, function (i, o) {
-    return A(n, e, t, i, o, r);
-  }, !0), t;
-  if (e.A !== n) return t;
-  if (!e.P) return x(n, e.t, !0), e.t;
-
-  if (!e.I) {
-    e.I = !0, e.A._--;
-    var o = 4 === e.i || 5 === e.i ? e.o = l(e.k) : e.o;
-    i(3 === e.i ? new Set(o) : o, function (t, i) {
-      return A(n, e, o, t, i, r);
-    }), x(n, o, !1), r && n.u && b("Patches").R(e, r, n.u, n.s);
-  }
-
-  return e.o;
-}
-
-function A(e, i, o, a, c, s) {
-  if ("production" !== "development" && c === o && n(5), t(c)) {
-    var v = M(e, c, s && i && 3 !== i.i && !u(i.D, a) ? s.concat(a) : void 0);
-    if (f(o, a, v), !t(v)) return;
-    e.m = !1;
-  }
-
-  if (r(c) && !y(c)) {
-    if (!e.h.N && e._ < 1) return;
-    M(e, c), i && i.A.l || x(e, c);
-  }
-}
-
-function x(n, t, r) {
-  void 0 === r && (r = !1), n.h.N && n.m && d(t, r);
-}
-
-function z(n, t) {
-  var r = n[Q];
-  return (r ? p(r) : n)[t];
-}
-
-function I(n, t) {
-  if (t in n) for (var r = Object.getPrototypeOf(n); r;) {
-    var e = Object.getOwnPropertyDescriptor(r, t);
-    if (e) return e;
-    r = Object.getPrototypeOf(r);
-  }
-}
-
-function E(n) {
-  n.P || (n.P = !0, n.l && E(n.l));
-}
-
-function k(n) {
-  n.o || (n.o = l(n.t));
-}
-
-function R(n, t, r) {
-  var e = s(t) ? b("MapSet").T(t, r) : v(t) ? b("MapSet").F(t, r) : n.O ? function (n, t) {
-    var r = Array.isArray(n),
-        e = {
-      i: r ? 1 : 0,
-      A: t ? t.A : _(),
-      P: !1,
-      I: !1,
-      D: {},
-      l: t,
-      t: n,
-      k: null,
-      o: null,
-      j: null,
-      C: !1
-    },
-        i = e,
-        o = rn;
-    r && (i = [e], o = en);
-    var u = Proxy.revocable(i, o),
-        a = u.revoke,
-        f = u.proxy;
-    return e.k = f, e.j = a, f;
-  }(t, r) : b("ES5").J(t, r);
-  return (r ? r.A : _()).p.push(e), e;
-}
-
-function D(e) {
-  return t(e) || n(22, e), function n(t) {
-    if (!r(t)) return t;
-    var e,
-        u = t[Q],
-        c = o(t);
-
-    if (u) {
-      if (!u.P && (u.i < 4 || !b("ES5").K(u))) return u.t;
-      u.I = !0, e = N(t, c), u.I = !1;
-    } else e = N(t, c);
-
-    return i(e, function (t, r) {
-      u && a(u.t, t) === r || f(e, t, n(r));
-    }), 3 === c ? new Set(e) : e;
-  }(e);
-}
-
-function N(n, t) {
-  switch (t) {
-    case 2:
-      return new Map(n);
-
-    case 3:
-      return Array.from(n);
-  }
-
-  return l(n);
-}
-
-function T() {
-  function r(n, t) {
-    var r = s[n];
-    return r ? r.enumerable = t : s[n] = r = {
-      configurable: !0,
-      enumerable: t,
-      get: function () {
-        var t = this[Q];
-        return "production" !== "development" && f(t), rn.get(t, n);
-      },
-      set: function (t) {
-        var r = this[Q];
-        "production" !== "development" && f(r), rn.set(r, n, t);
-      }
-    }, r;
-  }
-
-  function e(n) {
-    for (var t = n.length - 1; t >= 0; t--) {
-      var r = n[t][Q];
-      if (!r.P) switch (r.i) {
-        case 5:
-          a(r) && E(r);
-          break;
-
-        case 4:
-          o(r) && E(r);
-      }
-    }
-  }
-
-  function o(n) {
-    for (var t = n.t, r = n.k, e = Z(r), i = e.length - 1; i >= 0; i--) {
-      var o = e[i];
-
-      if (o !== Q) {
-        var a = t[o];
-        if (void 0 === a && !u(t, o)) return !0;
-        var f = r[o],
-            s = f && f[Q];
-        if (s ? s.t !== a : !c(f, a)) return !0;
-      }
-    }
-
-    var v = !!t[Q];
-    return e.length !== Z(t).length + (v ? 0 : 1);
-  }
-
-  function a(n) {
-    var t = n.k;
-    if (t.length !== n.t.length) return !0;
-    var r = Object.getOwnPropertyDescriptor(t, t.length - 1);
-    return !(!r || r.get);
-  }
-
-  function f(t) {
-    t.g && n(3, JSON.stringify(p(t)));
-  }
-
-  var s = {};
-  m("ES5", {
-    J: function (n, t) {
-      var e = Array.isArray(n),
-          i = function (n, t) {
-        if (n) {
-          for (var e = Array(t.length), i = 0; i < t.length; i++) Object.defineProperty(e, "" + i, r(i, !0));
-
-          return e;
-        }
-
-        var o = nn(t);
-        delete o[Q];
-
-        for (var u = Z(o), a = 0; a < u.length; a++) {
-          var f = u[a];
-          o[f] = r(f, n || !!o[f].enumerable);
-        }
-
-        return Object.create(Object.getPrototypeOf(t), o);
-      }(e, n),
-          o = {
-        i: e ? 5 : 4,
-        A: t ? t.A : _(),
-        P: !1,
-        I: !1,
-        D: {},
-        l: t,
-        t: n,
-        k: i,
-        o: null,
-        g: !1,
-        C: !1
-      };
-
-      return Object.defineProperty(i, Q, {
-        value: o,
-        writable: !0
-      }), i;
-    },
-    S: function (n, r, o) {
-      o ? t(r) && r[Q].A === n && e(n.p) : (n.u && function n(t) {
-        if (t && "object" == typeof t) {
-          var r = t[Q];
-
-          if (r) {
-            var e = r.t,
-                o = r.k,
-                f = r.D,
-                c = r.i;
-            if (4 === c) i(o, function (t) {
-              t !== Q && (void 0 !== e[t] || u(e, t) ? f[t] || n(o[t]) : (f[t] = !0, E(r)));
-            }), i(e, function (n) {
-              void 0 !== o[n] || u(o, n) || (f[n] = !1, E(r));
-            });else if (5 === c) {
-              if (a(r) && (E(r), f.length = !0), o.length < e.length) for (var s = o.length; s < e.length; s++) f[s] = !1;else for (var v = e.length; v < o.length; v++) f[v] = !0;
-
-              for (var p = Math.min(o.length, e.length), l = 0; l < p; l++) void 0 === f[l] && n(o[l]);
-            }
-          }
-        }
-      }(n.p[0]), e(n.p));
-    },
-    K: function (n) {
-      return 4 === n.i ? o(n) : a(n);
-    }
-  });
-}
-
-function F() {
-  function e(n) {
-    if (!r(n)) return n;
-    if (Array.isArray(n)) return n.map(e);
-    if (s(n)) return new Map(Array.from(n.entries()).map(function (n) {
-      return [n[0], e(n[1])];
-    }));
-    if (v(n)) return new Set(Array.from(n).map(e));
-    var t = Object.create(Object.getPrototypeOf(n));
-
-    for (var i in n) t[i] = e(n[i]);
-
-    return t;
-  }
-
-  function f(n) {
-    return t(n) ? e(n) : n;
-  }
-
-  var c = "add";
-  m("Patches", {
-    $: function (t, r) {
-      return r.forEach(function (r) {
-        for (var i = r.path, u = r.op, f = t, s = 0; s < i.length - 1; s++) "object" != typeof (f = a(f, i[s])) && n(15, i.join("/"));
-
-        var v = o(f),
-            p = e(r.value),
-            l = i[i.length - 1];
-
-        switch (u) {
-          case "replace":
-            switch (v) {
-              case 2:
-                return f.set(l, p);
-
-              case 3:
-                n(16);
-
-              default:
-                return f[l] = p;
-            }
-
-          case c:
-            switch (v) {
-              case 1:
-                return f.splice(l, 0, p);
-
-              case 2:
-                return f.set(l, p);
-
-              case 3:
-                return f.add(p);
-
-              default:
-                return f[l] = p;
-            }
-
-          case "remove":
-            switch (v) {
-              case 1:
-                return f.splice(l, 1);
-
-              case 2:
-                return f.delete(l);
-
-              case 3:
-                return f.delete(r.value);
-
-              default:
-                return delete f[l];
-            }
-
-          default:
-            n(17, u);
-        }
-      }), t;
-    },
-    R: function (n, t, r, e) {
-      switch (n.i) {
-        case 0:
-        case 4:
-        case 2:
-          return function (n, t, r, e) {
-            var o = n.t,
-                s = n.o;
-            i(n.D, function (n, i) {
-              var v = a(o, n),
-                  p = a(s, n),
-                  l = i ? u(o, n) ? "replace" : c : "remove";
-
-              if (v !== p || "replace" !== l) {
-                var d = t.concat(n);
-                r.push("remove" === l ? {
-                  op: l,
-                  path: d
-                } : {
-                  op: l,
-                  path: d,
-                  value: p
-                }), e.push(l === c ? {
-                  op: "remove",
-                  path: d
-                } : "remove" === l ? {
-                  op: c,
-                  path: d,
-                  value: f(v)
-                } : {
-                  op: "replace",
-                  path: d,
-                  value: f(v)
-                });
-              }
-            });
-          }(n, t, r, e);
-
-        case 5:
-        case 1:
-          return function (n, t, r, e) {
-            var i = n.t,
-                o = n.D,
-                u = n.o;
-
-            if (u.length < i.length) {
-              var a = [u, i];
-              i = a[0], u = a[1];
-              var s = [e, r];
-              r = s[0], e = s[1];
-            }
-
-            for (var v = 0; v < i.length; v++) if (o[v] && u[v] !== i[v]) {
-              var p = t.concat([v]);
-              r.push({
-                op: "replace",
-                path: p,
-                value: f(u[v])
-              }), e.push({
-                op: "replace",
-                path: p,
-                value: f(i[v])
-              });
-            }
-
-            for (var l = i.length; l < u.length; l++) {
-              var d = t.concat([l]);
-              r.push({
-                op: c,
-                path: d,
-                value: f(u[l])
-              });
-            }
-
-            i.length < u.length && e.push({
-              op: "replace",
-              path: t.concat(["length"]),
-              value: i.length
-            });
-          }(n, t, r, e);
-
-        case 3:
-          return function (n, t, r, e) {
-            var i = n.t,
-                o = n.o,
-                u = 0;
-            i.forEach(function (n) {
-              if (!o.has(n)) {
-                var i = t.concat([u]);
-                r.push({
-                  op: "remove",
-                  path: i,
-                  value: n
-                }), e.unshift({
-                  op: c,
-                  path: i,
-                  value: n
-                });
-              }
-
-              u++;
-            }), u = 0, o.forEach(function (n) {
-              if (!i.has(n)) {
-                var o = t.concat([u]);
-                r.push({
-                  op: c,
-                  path: o,
-                  value: n
-                }), e.unshift({
-                  op: "remove",
-                  path: o,
-                  value: n
-                });
-              }
-
-              u++;
-            });
-          }(n, t, r, e);
-      }
-    },
-    M: function (n, t, r, e) {
-      r.push({
-        op: "replace",
-        path: [],
-        value: t
-      }), e.push({
-        op: "replace",
-        path: [],
-        value: n.t
-      });
-    }
-  });
-}
-
-function C() {
-  function t(n, t) {
-    function r() {
-      this.constructor = n;
-    }
-
-    a(n, t), n.prototype = (r.prototype = t.prototype, new r());
-  }
-
-  function e(n) {
-    n.o || (n.D = new Map(), n.o = new Map(n.t));
-  }
-
-  function o(n) {
-    n.o || (n.o = new Set(), n.t.forEach(function (t) {
-      if (r(t)) {
-        var e = R(n.A.h, t, n);
-        n.p.set(t, e), n.o.add(e);
-      } else n.o.add(t);
-    }));
-  }
-
-  function u(t) {
-    t.g && n(3, JSON.stringify(p(t)));
-  }
-
-  var a = function (n, t) {
-    return (a = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (n, t) {
-      n.__proto__ = t;
-    } || function (n, t) {
-      for (var r in t) t.hasOwnProperty(r) && (n[r] = t[r]);
-    })(n, t);
-  },
-      f = function () {
-    function n(n, t) {
-      return this[Q] = {
-        i: 2,
-        l: t,
-        A: t ? t.A : _(),
-        P: !1,
-        I: !1,
-        o: void 0,
-        D: void 0,
-        t: n,
-        k: this,
-        C: !1,
-        g: !1
-      }, this;
-    }
-
-    t(n, Map);
-    var o = n.prototype;
-    return Object.defineProperty(o, "size", {
-      get: function () {
-        return p(this[Q]).size;
-      }
-    }), o.has = function (n) {
-      return p(this[Q]).has(n);
-    }, o.set = function (n, t) {
-      var r = this[Q];
-      return u(r), p(r).has(n) && p(r).get(n) === t || (e(r), E(r), r.D.set(n, !0), r.o.set(n, t), r.D.set(n, !0)), this;
-    }, o.delete = function (n) {
-      if (!this.has(n)) return !1;
-      var t = this[Q];
-      return u(t), e(t), E(t), t.D.set(n, !1), t.o.delete(n), !0;
-    }, o.clear = function () {
-      var n = this[Q];
-      u(n), p(n).size && (e(n), E(n), n.D = new Map(), i(n.t, function (t) {
-        n.D.set(t, !1);
-      }), n.o.clear());
-    }, o.forEach = function (n, t) {
-      var r = this;
-      p(this[Q]).forEach(function (e, i) {
-        n.call(t, r.get(i), i, r);
-      });
-    }, o.get = function (n) {
-      var t = this[Q];
-      u(t);
-      var i = p(t).get(n);
-      if (t.I || !r(i)) return i;
-      if (i !== t.t.get(n)) return i;
-      var o = R(t.A.h, i, t);
-      return e(t), t.o.set(n, o), o;
-    }, o.keys = function () {
-      return p(this[Q]).keys();
-    }, o.values = function () {
-      var n,
-          t = this,
-          r = this.keys();
-      return (n = {})[V] = function () {
-        return t.values();
-      }, n.next = function () {
-        var n = r.next();
-        return n.done ? n : {
-          done: !1,
-          value: t.get(n.value)
-        };
-      }, n;
-    }, o.entries = function () {
-      var n,
-          t = this,
-          r = this.keys();
-      return (n = {})[V] = function () {
-        return t.entries();
-      }, n.next = function () {
-        var n = r.next();
-        if (n.done) return n;
-        var e = t.get(n.value);
-        return {
-          done: !1,
-          value: [n.value, e]
-        };
-      }, n;
-    }, o[V] = function () {
-      return this.entries();
-    }, n;
-  }(),
-      c = function () {
-    function n(n, t) {
-      return this[Q] = {
-        i: 3,
-        l: t,
-        A: t ? t.A : _(),
-        P: !1,
-        I: !1,
-        o: void 0,
-        t: n,
-        k: this,
-        p: new Map(),
-        g: !1,
-        C: !1
-      }, this;
-    }
-
-    t(n, Set);
-    var r = n.prototype;
-    return Object.defineProperty(r, "size", {
-      get: function () {
-        return p(this[Q]).size;
-      }
-    }), r.has = function (n) {
-      var t = this[Q];
-      return u(t), t.o ? !!t.o.has(n) || !(!t.p.has(n) || !t.o.has(t.p.get(n))) : t.t.has(n);
-    }, r.add = function (n) {
-      var t = this[Q];
-      return u(t), this.has(n) || (o(t), E(t), t.o.add(n)), this;
-    }, r.delete = function (n) {
-      if (!this.has(n)) return !1;
-      var t = this[Q];
-      return u(t), o(t), E(t), t.o.delete(n) || !!t.p.has(n) && t.o.delete(t.p.get(n));
-    }, r.clear = function () {
-      var n = this[Q];
-      u(n), p(n).size && (o(n), E(n), n.o.clear());
-    }, r.values = function () {
-      var n = this[Q];
-      return u(n), o(n), n.o.values();
-    }, r.entries = function () {
-      var n = this[Q];
-      return u(n), o(n), n.o.entries();
-    }, r.keys = function () {
-      return this.values();
-    }, r[V] = function () {
-      return this.values();
-    }, r.forEach = function (n, t) {
-      for (var r = this.values(), e = r.next(); !e.done;) n.call(t, e.value, e.value, this), e = r.next();
-    }, n;
-  }();
-
-  m("MapSet", {
-    T: function (n, t) {
-      return new f(n, t);
-    },
-    F: function (n, t) {
-      return new c(n, t);
-    }
-  });
-}
-
-function J() {
-  T(), C(), F();
-}
-
-function K(n) {
-  return n;
-}
-
-function $(n) {
-  return n;
-}
-
-var G,
-    U,
-    W = "undefined" != typeof Symbol && "symbol" == typeof Symbol("x"),
-    X = "undefined" != typeof Map,
-    q = "undefined" != typeof Set,
-    B = "undefined" != typeof Proxy && void 0 !== Proxy.revocable && "undefined" != typeof Reflect,
-    H = W ? Symbol.for("immer-nothing") : ((G = {})["immer-nothing"] = !0, G),
-    L = W ? Symbol.for("immer-draftable") : "__$immer_draftable",
-    Q = W ? Symbol.for("immer-state") : "__$immer_state",
-    V = "undefined" != typeof Symbol && Symbol.iterator || "@@iterator",
-    Y = {
-  0: "Illegal state",
-  1: "Immer drafts cannot have computed properties",
-  2: "This object has been frozen and should not be mutated",
-  3: function (n) {
-    return "Cannot use a proxy that has been revoked. Did you pass an object from inside an immer function to an async process? " + n;
-  },
-  4: "An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft.",
-  5: "Immer forbids circular references",
-  6: "The first or second argument to `produce` must be a function",
-  7: "The third argument to `produce` must be a function or undefined",
-  8: "First argument to `createDraft` must be a plain object, an array, or an immerable object",
-  9: "First argument to `finishDraft` must be a draft returned by `createDraft`",
-  10: "The given draft is already finalized",
-  11: "Object.defineProperty() cannot be used on an Immer draft",
-  12: "Object.setPrototypeOf() cannot be used on an Immer draft",
-  13: "Immer only supports deleting array indices",
-  14: "Immer only supports setting array indices and the 'length' property",
-  15: function (n) {
-    return "Cannot apply patch, path doesn't resolve: " + n;
-  },
-  16: 'Sets cannot have "replace" patches.',
-  17: function (n) {
-    return "Unsupported patch operation: " + n;
-  },
-  18: function (n) {
-    return "The plugin for '" + n + "' has not been loaded into Immer. To enable the plugin, import and call `enable" + n + "()` when initializing your application.";
-  },
-  20: "Cannot use proxies if Proxy, Proxy.revocable or Reflect are not available",
-  21: function (n) {
-    return "produce can only be called on things that are draftable: plain objects, arrays, Map, Set or classes that are marked with '[immerable]: true'. Got '" + n + "'";
-  },
-  22: function (n) {
-    return "'current' expects a draft, got: " + n;
-  },
-  23: function (n) {
-    return "'original' expects a draft, got: " + n;
-  }
-},
-    Z = "undefined" != typeof Reflect && Reflect.ownKeys ? Reflect.ownKeys : void 0 !== Object.getOwnPropertySymbols ? function (n) {
-  return Object.getOwnPropertyNames(n).concat(Object.getOwnPropertySymbols(n));
-} : Object.getOwnPropertyNames,
-    nn = Object.getOwnPropertyDescriptors || function (n) {
-  var t = {};
-  return Z(n).forEach(function (r) {
-    t[r] = Object.getOwnPropertyDescriptor(n, r);
-  }), t;
-},
-    tn = {},
-    rn = {
-  get: function (n, t) {
-    if (t === Q) return n;
-    var e = p(n);
-    if (!u(e, t)) return function (n, t, r) {
-      var e,
-          i = I(t, r);
-      return i ? "value" in i ? i.value : null === (e = i.get) || void 0 === e ? void 0 : e.call(n.k) : void 0;
-    }(n, e, t);
-    var i = e[t];
-    return n.I || !r(i) ? i : i === z(n.t, t) ? (k(n), n.o[t] = R(n.A.h, i, n)) : i;
-  },
-  has: function (n, t) {
-    return t in p(n);
-  },
-  ownKeys: function (n) {
-    return Reflect.ownKeys(p(n));
-  },
-  set: function (n, t, r) {
-    var e = I(p(n), t);
-    if (null == e ? void 0 : e.set) return e.set.call(n.k, r), !0;
-
-    if (!n.P) {
-      var i = z(p(n), t),
-          o = null == i ? void 0 : i[Q];
-      if (o && o.t === r) return n.o[t] = r, n.D[t] = !1, !0;
-      if (c(r, i) && (void 0 !== r || u(n.t, t))) return !0;
-      k(n), E(n);
-    }
-
-    return n.o[t] = r, n.D[t] = !0, !0;
-  },
-  deleteProperty: function (n, t) {
-    return void 0 !== z(n.t, t) || t in n.t ? (n.D[t] = !1, k(n), E(n)) : delete n.D[t], n.o && delete n.o[t], !0;
-  },
-  getOwnPropertyDescriptor: function (n, t) {
-    var r = p(n),
-        e = Reflect.getOwnPropertyDescriptor(r, t);
-    return e ? {
-      writable: !0,
-      configurable: 1 !== n.i || "length" !== t,
-      enumerable: e.enumerable,
-      value: r[t]
-    } : e;
-  },
-  defineProperty: function () {
-    n(11);
-  },
-  getPrototypeOf: function (n) {
-    return Object.getPrototypeOf(n.t);
-  },
-  setPrototypeOf: function () {
-    n(12);
-  }
-},
-    en = {};
-
-exports.immerable = L;
-exports.nothing = H;
-i(rn, function (n, t) {
-  en[n] = function () {
-    return arguments[0] = arguments[0][0], t.apply(this, arguments);
-  };
-}), en.deleteProperty = function (t, r) {
-  return "production" !== "development" && isNaN(parseInt(r)) && n(13), rn.deleteProperty.call(this, t[0], r);
-}, en.set = function (t, r, e) {
-  return "production" !== "development" && "length" !== r && isNaN(parseInt(r)) && n(14), rn.set.call(this, t[0], r, e, t[0]);
-};
-
-var on = function () {
-  function e(n) {
-    this.O = B, this.N = "production" !== "development", "boolean" == typeof (null == n ? void 0 : n.useProxies) && this.setUseProxies(n.useProxies), "boolean" == typeof (null == n ? void 0 : n.autoFreeze) && this.setAutoFreeze(n.autoFreeze), this.produce = this.produce.bind(this), this.produceWithPatches = this.produceWithPatches.bind(this);
-  }
-
-  var i = e.prototype;
-  return i.produce = function (t, e, i) {
-    if ("function" == typeof t && "function" != typeof e) {
-      var o = e;
-      e = t;
-      var u = this;
-      return function (n) {
-        var t = this;
-        void 0 === n && (n = o);
-
-        for (var r = arguments.length, i = Array(r > 1 ? r - 1 : 0), a = 1; a < r; a++) i[a - 1] = arguments[a];
-
-        return u.produce(n, function (n) {
-          var r;
-          return (r = e).call.apply(r, [t, n].concat(i));
-        });
-      };
-    }
-
-    var a;
-
-    if ("function" != typeof e && n(6), void 0 !== i && "function" != typeof i && n(7), r(t)) {
-      var f = w(this),
-          c = R(this, t, void 0),
-          s = !0;
-
-      try {
-        a = e(c), s = !1;
-      } finally {
-        s ? g(f) : O(f);
-      }
-
-      return "undefined" != typeof Promise && a instanceof Promise ? a.then(function (n) {
-        return j(f, i), P(n, f);
-      }, function (n) {
-        throw g(f), n;
-      }) : (j(f, i), P(a, f));
-    }
-
-    if (!t || "object" != typeof t) {
-      if ((a = e(t)) === H) return;
-      return void 0 === a && (a = t), this.N && d(a, !0), a;
-    }
-
-    n(21, t);
-  }, i.produceWithPatches = function (n, t) {
-    var r,
-        e,
-        i = this;
-    return "function" == typeof n ? function (t) {
-      for (var r = arguments.length, e = Array(r > 1 ? r - 1 : 0), o = 1; o < r; o++) e[o - 1] = arguments[o];
-
-      return i.produceWithPatches(t, function (t) {
-        return n.apply(void 0, [t].concat(e));
-      });
-    } : [this.produce(n, t, function (n, t) {
-      r = n, e = t;
-    }), r, e];
-  }, i.createDraft = function (e) {
-    r(e) || n(8), t(e) && (e = D(e));
-    var i = w(this),
-        o = R(this, e, void 0);
-    return o[Q].C = !0, O(i), o;
-  }, i.finishDraft = function (t, r) {
-    var e = t && t[Q];
-    "production" !== "development" && (e && e.C || n(9), e.I && n(10));
-    var i = e.A;
-    return j(i, r), P(void 0, i);
-  }, i.setAutoFreeze = function (n) {
-    this.N = n;
-  }, i.setUseProxies = function (t) {
-    t && !B && n(20), this.O = t;
-  }, i.applyPatches = function (n, r) {
-    var e;
-
-    for (e = r.length - 1; e >= 0; e--) {
-      var i = r[e];
-
-      if (0 === i.path.length && "replace" === i.op) {
-        n = i.value;
-        break;
-      }
-    }
-
-    var o = b("Patches").$;
-    return t(n) ? o(n, r) : this.produce(n, function (n) {
-      return o(n, r.slice(e + 1));
-    });
-  }, e;
-}(),
-    un = new on(),
-    an = un.produce,
-    fn = un.produceWithPatches.bind(un),
-    cn = un.setAutoFreeze.bind(un),
-    sn = un.setUseProxies.bind(un),
-    vn = un.applyPatches.bind(un),
-    pn = un.createDraft.bind(un),
-    ln = un.finishDraft.bind(un);
-
-exports.finishDraft = ln;
-exports.createDraft = pn;
-exports.applyPatches = vn;
-exports.setUseProxies = sn;
-exports.setAutoFreeze = cn;
-exports.produceWithPatches = fn;
-exports.produce = an;
-exports.Immer = on;
-var _default = an;
-exports.default = _default;
-},{}],"../node_modules/react-crossword-near/dist/es/util.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"App.js":[function(require,module,exports) {
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.isAcross = isAcross;
-exports.otherDirection = otherDirection;
-exports.calculateExtents = calculateExtents;
-exports.createEmptyGrid = createEmptyGrid;
-exports.setCluesFilled = setCluesFilled;
-exports.fillClues = fillClues;
-exports.createGridData = createGridData;
-exports.byNumber = byNumber;
-exports.clearGuesses = clearGuesses;
-exports.saveGuesses = saveGuesses;
-exports.serializeGuesses = serializeGuesses;
-exports.loadGuesses = loadGuesses;
-exports.deserializeGuesses = deserializeGuesses;
-exports.findCorrectAnswers = findCorrectAnswers;
-exports.bothDirections = void 0;
+exports.default = void 0;
 
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var directionInfo = {
-  across: {
-    primary: 'col',
-    orthogonal: 'row'
-  },
-  down: {
-    primary: 'row',
-    orthogonal: 'col'
-  }
-};
-var bothDirections = Object.keys(directionInfo);
-exports.bothDirections = bothDirections;
-
-function isAcross(direction) {
-  return direction === 'across';
-}
-
-function otherDirection(direction) {
-  return isAcross(direction) ? 'down' : 'across';
-}
-
-function calculateExtents(data, direction) {
-  var _ref2;
-
-  var dir = directionInfo[direction];
-  var primaryMax = 0;
-  var orthogonalMax = 0;
-  Object.entries(data[direction]).forEach(function (_ref) {
-    var i = _ref[0],
-        info = _ref[1];
-    var primary = info[dir.primary] + info.answer.length - 1;
-
-    if (primary > primaryMax) {
-      primaryMax = primary;
-    }
-
-    var orthogonal = info[dir.orthogonal];
-
-    if (orthogonal > orthogonalMax) {
-      orthogonalMax = orthogonal;
-    }
-  });
-  return _ref2 = {}, _ref2[dir.primary] = primaryMax, _ref2[dir.orthogonal] = orthogonalMax, _ref2;
-}
-
-var emptyCellData = {
-  used: false,
-  number: null,
-  answer: '',
-  guess: '',
-  locked: false,
-  // row: r,
-  // col: c,
-  across: null,
-  down: null
-};
-
-function createEmptyGrid(size) {
-  var gridData = Array(size); // Rather than [x][y] in column-major order, the cells are indexed as
-  // [row][col] in row-major order.
-
-  for (var r = 0; r < size; r++) {
-    gridData[r] = Array(size);
-
-    for (var c = 0; c < size; c++) {
-      gridData[r][c] = (0, _extends2["default"])({}, emptyCellData, {
-        row: r,
-        col: c
-      });
-    }
-  }
-
-  return gridData;
-}
-
-function setCluesFilled(gridData, clues, data, direction) {
-  var dir = directionInfo[direction];
-  Object.entries(data[direction]).forEach(function (_ref3, idx) {
-    var number = _ref3[0],
-        info = _ref3[1];
-    var rowStart = info.row,
-        colStart = info.col,
-        answer = info.answer;
-    var isFilled = true;
-
-    for (var i = 0; i < answer.length; i++) {
-      var row = rowStart + (dir.primary === 'row' ? i : 0);
-      var col = colStart + (dir.primary === 'col' ? i : 0);
-      var cellData = gridData[row][col];
-
-      if (cellData.guess === '') {
-        isFilled = false;
-      }
-    }
-
-    clues[direction][idx].isFilled = isFilled;
-
-    if (isFilled) {
-      clues[direction][idx].filledCounter += 1;
-    }
-  });
-}
-
-function fillClues(gridData, clues, data, direction) {
-  var dir = directionInfo[direction];
-  Object.entries(data[direction]).forEach(function (_ref4) {
-    var number = _ref4[0],
-        info = _ref4[1];
-    var rowStart = info.row,
-        colStart = info.col,
-        clue = info.clue,
-        answer = info.answer;
-
-    for (var i = 0; i < answer.length; i++) {
-      var row = rowStart + (dir.primary === 'row' ? i : 0);
-      var col = colStart + (dir.primary === 'col' ? i : 0);
-      var cellData = gridData[row][col]; // TODO?: check to ensure the answer is the same if it's already set?
-
-      cellData.used = true;
-      cellData.answer = answer[i];
-      cellData[direction] = number;
-
-      if (i === 0) {
-        // TODO?: check to ensure the number is the same if it's already set?
-        cellData.number = number;
-      }
-    }
-
-    clues[direction].push({
-      number: number,
-      clue: clue
-    });
-  });
-  clues[direction].sort(byNumber);
-} // Given the "nice format" for a crossword, generate the usable data optimized
-// for rendering and our interactivity.
-
-
-function createGridData(data) {
-  var acrossMax = calculateExtents(data, 'across');
-  var downMax = calculateExtents(data, 'down');
-  var size = Math.max.apply(Math, Object.values(acrossMax).concat(Object.values(downMax))) + 1;
-  var gridData = createEmptyGrid(size); // Now fill with answers... and also collect the clues
-
-  var clues = {
-    across: [],
-    down: []
-  };
-  fillClues(gridData, clues, data, 'across');
-  fillClues(gridData, clues, data, 'down');
-  return {
-    size: size,
-    gridData: gridData,
-    clues: clues
-  };
-} // sort helper for clues...
-
-
-function byNumber(a, b) {
-  var aNum = Number.parseInt(a.number, 10);
-  var bNum = Number.parseInt(b.number, 10);
-  return aNum - bNum;
-}
-
-function clearGuesses(storageKey) {
-  if (!window.localStorage) {
-    return;
-  }
-
-  window.localStorage.removeItem(storageKey);
-}
-
-function saveGuesses(gridData, storageKey) {
-  var _window = window,
-      localStorage = _window.localStorage;
-
-  if (!localStorage) {
-    return;
-  }
-
-  var guesses = serializeGuesses(gridData);
-  var saveData = {
-    date: Date.now(),
-    guesses: guesses
-  };
-  localStorage.setItem(storageKey, JSON.stringify(saveData));
-}
-
-function serializeGuesses(gridData) {
-  var guesses = gridData.reduce(function (memo, row, r) {
-    return row.reduce(function (memoInner, cellData, c) {
-      var guess = cellData.guess;
-
-      if (guess !== '') {
-        memoInner[r + "_" + c] = cellData.guess;
-      }
-
-      return memoInner;
-    }, memo);
-  }, {});
-  return guesses;
-}
-
-function loadGuesses(gridData, storageKey) {
-  var _window2 = window,
-      localStorage = _window2.localStorage;
-
-  if (!localStorage) {
-    return;
-  }
-
-  var saveRaw = localStorage.getItem(storageKey);
-
-  if (!saveRaw) {
-    return;
-  }
-
-  var saveData = JSON.parse(saveRaw); // TODO: check date for expiration?
-
-  deserializeGuesses(gridData, saveData.guesses);
-}
-
-function deserializeGuesses(gridData, guesses) {
-  Object.entries(guesses).forEach(function (_ref5) {
-    var key = _ref5[0],
-        val = _ref5[1];
-
-    var _key$split = key.split('_'),
-        r = _key$split[0],
-        c = _key$split[1]; // ignore any out-of-bounds guesses!
-
-
-    if (r <= gridData.length - 1 && c <= gridData[0].length - 1) {
-      gridData[r][c].guess = val;
-    }
-  });
-}
-
-function findCorrectAnswers(data, gridData) {
-  var correctAnswers = [];
-  bothDirections.forEach(function (direction) {
-    var across = isAcross(direction);
-    Object.entries(data[direction]).forEach(function (_ref6) {
-      var num = _ref6[0],
-          info = _ref6[1];
-      var row = info.row,
-          col = info.col;
-      var correct = true;
-
-      for (var i = 0; i < info.answer.length; i++) {
-        var r = across ? row : row + i;
-        var c = across ? col + i : col;
-
-        if (gridData[r][c].guess !== info.answer[i]) {
-          correct = false;
-          break;
-        }
-      }
-
-      if (correct) {
-        // same args as notifyCorrect: direction, number, answer
-        correctAnswers.push([direction, num, info.answer]);
-      }
-    });
-  });
-  return correctAnswers;
-}
-},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../node_modules/@babel/runtime/helpers/extends.js"}],"../node_modules/react-crossword-near/dist/es/Crossword.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+require("./App.css");
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _immer = _interopRequireDefault(require("immer"));
+var _big = _interopRequireDefault(require("big.js"));
 
-var _styledComponents = _interopRequireWildcard(require("styled-components"));
+var _Form = _interopRequireDefault(require("./components/Form"));
 
-var _Cell = _interopRequireDefault(require("./Cell"));
+var _SignIn = _interopRequireDefault(require("./components/SignIn"));
 
-var _DirectionClues = _interopRequireDefault(require("./DirectionClues"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _util = require("./util");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 
-var _context = require("./context"); // TODO: make this a component property!
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+const SUGGESTED_DONATION = '0';
+const BOATLOAD_OF_GAS = (0, _big.default)(3).times(10 ** 13).toFixed();
 
-var defaultStorageKey = 'guesses';
-var defaultTheme = {
-  columnBreakpoint: '768px',
-  gridBackground: 'rgb(0,0,0)',
-  cellBackground: 'rgb(255,255,255)',
-  cellBorder: 'rgb(0,0,0)',
-  textColor: 'rgb(0,0,0)',
-  numberColor: 'rgba(0,0,0, 0.6)',
-  focusBackground: 'rgb(255,255,0)',
-  highlightBackground: 'rgb(255,255,204)'
-}; // eslint-disable-next-line
+const App = _ref => {
+  let {
+    contract,
+    currentUser,
+    nearConfig,
+    wallet
+  } = _ref;
+  const [answer, setAnswer] = (0, _react.useState)("No transaction executed.");
 
-var OuterWrapper = _styledComponents["default"].div.attrs(function (props) {
-  return {
-    className: "crossword" + (props.correct ? ' correct' : '')
+  const onSubmit = e => {
+    e.preventDefault();
+    const {
+      fieldset,
+      hello
+    } = e.target.elements;
+    fieldset.disabled = true;
+    contract.hello({
+      name: name_prompt.value
+    }, BOATLOAD_OF_GAS, (0, _big.default)(donation.value || '0').times(10 ** 24).toFixed()).then(answer => {
+      fieldset.disabled = false;
+      donation.value = SUGGESTED_DONATION;
+      name_prompt.value = '';
+      name_prompt.focus();
+      setAnswer(answer);
+    });
   };
-}).withConfig({
-  displayName: "Crossword__OuterWrapper",
-  componentId: "sc-164tpad-0"
-})(["margin:0;padding:0;border:0;display:flex;flex-direction:row;@media (max-width:", "){flex-direction:column;}"], function (props) {
-  return props.theme.columnBreakpoint;
-});
 
-var GridWrapper = _styledComponents["default"].div.attrs(function () {
-  return {
-    className: 'grid'
+  const signIn = () => {
+    wallet.requestSignIn({
+      contractId: nearConfig.contractName,
+      methodNames: [contract.hello.name]
+    }, //contract requesting access
+    'NEAR Challenge #2 - Hello World', //optional name
+    null, //optional URL to redirect to if the sign in was successful
+    null //optional URL to redirect to if the sign in was NOT successful
+    );
   };
-}).withConfig({
-  displayName: "Crossword__GridWrapper",
-  componentId: "sc-164tpad-1"
-})(["min-width:20rem;max-width:60rem;width:auto;flex:2 1 50%;"]);
 
-var CluesWrapper = _styledComponents["default"].div.attrs(function () {
-  return {
-    className: 'clues'
+  const signOut = () => {
+    wallet.signOut();
+    window.location.replace(window.location.origin + window.location.pathname);
   };
-}).withConfig({
-  displayName: "Crossword__CluesWrapper",
-  componentId: "sc-164tpad-2"
-})(["padding:0 1em;flex:1 2 25%;@media (max-width:", "){margin-top:2em;}.direction{margin-bottom:2em;.header{margin-top:0;margin-bottom:0.5em;}div{margin-top:0.5em;}}"], function (props) {
-  return props.theme.columnBreakpoint;
-});
-/**
- * The primary, and default, export from the react-crossword library, Crossword
- * renders an answer grid and clues, and manages data and user interaction.
- */
 
-
-var Crossword = /*#__PURE__*/_react["default"].forwardRef(function (_ref, ref) {
-  var data = _ref.data,
-      onCorrect = _ref.onCorrect,
-      onLoadedCorrect = _ref.onLoadedCorrect,
-      onCrosswordCorrect = _ref.onCrosswordCorrect,
-      onCrosswordComplete = _ref.onCrosswordComplete,
-      onCellChange = _ref.onCellChange,
-      useStorage = _ref.useStorage,
-      theme = _ref.theme;
-
-  var _useState = (0, _react.useState)(null),
-      size = _useState[0],
-      setSize = _useState[1];
-
-  var _useState2 = (0, _react.useState)(null),
-      gridData = _useState2[0],
-      setGridData = _useState2[1];
-
-  var _useState3 = (0, _react.useState)(null),
-      clues = _useState3[0],
-      setClues = _useState3[1];
-
-  var _useState4 = (0, _react.useState)(false),
-      focused = _useState4[0],
-      setFocused = _useState4[1];
-
-  var _useState5 = (0, _react.useState)(0),
-      focusedRow = _useState5[0],
-      setFocusedRow = _useState5[1];
-
-  var _useState6 = (0, _react.useState)(0),
-      focusedCol = _useState6[0],
-      setFocusedCol = _useState6[1];
-
-  var _useState7 = (0, _react.useState)('across'),
-      currentDirection = _useState7[0],
-      setCurrentDirection = _useState7[1];
-
-  var _useState8 = (0, _react.useState)('1'),
-      currentNumber = _useState8[0],
-      setCurrentNumber = _useState8[1];
-
-  var _useState9 = (0, _react.useState)(null),
-      bulkChange = _useState9[0],
-      setBulkChange = _useState9[1];
-
-  var _useState10 = (0, _react.useState)([]),
-      checkQueue = _useState10[0],
-      setCheckQueue = _useState10[1];
-
-  var _useState11 = (0, _react.useState)(false),
-      crosswordCorrect = _useState11[0],
-      setCrosswordCorrect = _useState11[1];
-
-  var _useState12 = (0, _react.useState)(false),
-      crosswordComplete = _useState12[0],
-      setCrosswordComplete = _useState12[1];
-
-  var inputRef = (0, _react.useRef)();
-  var contextTheme = (0, _react.useContext)(_styledComponents.ThemeContext);
-  var getCellData = (0, _react.useCallback)(function (row, col) {
-    if (row >= 0 && row < size && col >= 0 && col < size) {
-      return gridData[row][col];
-    } // fake cellData to represent "out of bounds"
-
-
-    return {
-      row: row,
-      col: col,
-      used: false,
-      outOfBounds: true
-    };
-  }, [size, gridData]);
-  var setCellCharacter = (0, _react.useCallback)(function (row, col, _char) {
-    var cell = getCellData(row, col);
-
-    if (!cell.used) {
-      return;
-    } // If the character is already the cell's guess, there's nothing to do.
-
-
-    if (cell.guess === _char) {
-      return;
-    } // update the gridData with the guess
-
-
-    setGridData((0, _immer["default"])(function (draft) {
-      draft[row][col].guess = _char;
-    })); // push the row/col for checking!
-
-    setCheckQueue((0, _immer["default"])(function (draft) {
-      draft.push({
-        row: row,
-        col: col
-      });
-    }));
-
-    if (onCellChange) {
-      onCellChange(row, col, _char);
-    }
-  }, [getCellData, onCellChange]);
-  var notifyCorrect = (0, _react.useCallback)(function (direction, number, answer) {
-    if (onCorrect) {
-      // We *used* to need a timeout workaround to ensure this happened
-      // *after* the state had updated and the DOM rendered.... do we still?
-      onCorrect(direction, number, answer); // For future reference, the call looked like:
-      //
-      // setTimeout(() => {
-      //   window.requestAnimationFrame(() => {
-      //     onCorrect(direction, number, answer);
-      //   });
-      // });
-    }
-  }, [onCorrect]); // TODO: consider renaming that to checkCorrectnessAndFilledness
-
-  var checkCorrectness = (0, _react.useCallback)(function (row, col) {
-    var cell = getCellData(row, col); // check all the cells for both across and down answers that use this
-    // cell
-
-    _util.bothDirections.forEach(function (direction) {
-      var across = (0, _util.isAcross)(direction);
-      var number = cell[direction];
-
-      if (!number) {
-        return;
-      }
-
-      var info = data[direction][number]; // We start by looking at the current cell... if it's not correct, we
-      // don't need to check anything else!
-
-      var correct = cell.guess === cell.answer;
-      var filled = cell.guess !== '';
-
-      if (correct) {
-        // We *could* compare cell.guess against cell.answer for all the
-        // cells, but info.answer is a simple string and gets us the length
-        // as well (and we only have to calculate row/col math once).
-        for (var i = 0; i < info.answer.length; i++) {
-          var checkCell = getCellData(info.row + (across ? 0 : i), info.col + (across ? i : 0));
-
-          if (checkCell.guess !== info.answer[i]) {
-            correct = false;
-            break;
-          }
-        }
-      }
-
-      if (filled) {
-        for (var _i = 0; _i < info.answer.length; _i++) {
-          var _checkCell = getCellData(info.row + (across ? 0 : _i), info.col + (across ? _i : 0));
-
-          if (_checkCell.guess === '') {
-            filled = false;
-            break;
-          }
-        }
-      } // update the clue state
-
-
-      setClues((0, _immer["default"])(function (draft) {
-        var clueInfo = draft[direction].find(function (i) {
-          return i.number === number;
-        });
-        clueInfo.correct = correct;
-        clueInfo.isFilled = filled;
-
-        if (filled) {
-          var nextNumber = clueInfo.filledCounter + 1 || 0;
-          clueInfo.filledCounter = nextNumber;
-        }
-      }));
-
-      if (correct) {
-        notifyCorrect(direction, number, info.answer);
-      }
-    });
-  }, [getCellData]); // Any time the checkQueue changes, call checkCorrectness!
-
-  (0, _react.useEffect)(function () {
-    if (checkQueue.length === 0) {
-      return;
-    }
-
-    checkQueue.forEach(function (_ref2) {
-      var row = _ref2.row,
-          col = _ref2.col;
-      checkCorrectness(row, col);
-    });
-    setCheckQueue([]);
-  }, [checkQueue, checkCorrectness]); // Any time the clues change, determine if they are all correct or not. Or filled.
-
-  (0, _react.useEffect)(function () {
-    setCrosswordCorrect(clues && _util.bothDirections.every(function (direction) {
-      return clues[direction].every(function (clueInfo) {
-        return clueInfo.correct;
-      });
-    }));
-
-    if (clues && _util.bothDirections.every(function (direction) {
-      return clues[direction].every(function (clueInfo) {
-        return clueInfo.isFilled;
-      });
-    })) {
-      setCrosswordComplete(crosswordComplete + 1);
-    }
-  }, [clues]); // Let the consumer know everything's correct (or not) if they've asked to
-  // be informed.
-
-  (0, _react.useEffect)(function () {
-    if (onCrosswordCorrect) {
-      onCrosswordCorrect(crosswordCorrect);
-    }
-  }, [crosswordCorrect, onCrosswordCorrect]);
-  (0, _react.useEffect)(function () {
-    if (onCrosswordComplete) {
-      onCrosswordComplete(crosswordComplete);
-    }
-  }, [crosswordComplete, onCrosswordComplete]); // focus and movement
-
-  var _focus = (0, _react.useCallback)(function () {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      setFocused(true);
-    }
-  }, []);
-
-  var moveTo = (0, _react.useCallback)(function (row, col, directionOverride) {
-    var direction = directionOverride != null ? directionOverride : currentDirection;
-    var candidate = getCellData(row, col);
-
-    if (!candidate.used) {
-      return false;
-    }
-
-    if (!candidate[direction]) {
-      direction = (0, _util.otherDirection)(direction);
-    }
-
-    setFocusedRow(row);
-    setFocusedCol(col);
-    setCurrentDirection(direction);
-    setCurrentNumber(candidate[direction]);
-    return candidate;
-  }, [getCellData]);
-  var moveRelative = (0, _react.useCallback)(function (dRow, dCol) {
-    // We expect *only* one of dRow or dCol to have a non-zero value, and
-    // that's the direction we will "prefer".  If *both* are set (or zero),
-    // we don't change the direction.
-    var direction;
-
-    if (dRow !== 0 && dCol === 0) {
-      direction = 'down';
-    } else if (dRow === 0 && dCol !== 0) {
-      direction = 'across';
-    }
-
-    var cell = moveTo(focusedRow + dRow, focusedCol + dCol, direction);
-    return cell;
-  }, [focusedRow, focusedCol, moveTo]);
-  var moveForward = (0, _react.useCallback)(function () {
-    var across = (0, _util.isAcross)(currentDirection);
-    moveRelative(across ? 0 : 1, across ? 1 : 0);
-  }, [currentDirection, moveRelative]);
-  var moveBackward = (0, _react.useCallback)(function () {
-    var across = (0, _util.isAcross)(currentDirection);
-    moveRelative(across ? 0 : -1, across ? -1 : 0);
-  }, [currentDirection, moveRelative]); // keyboard handling
-
-  var handleSingleCharacter = (0, _react.useCallback)(function (_char2) {
-    setCellCharacter(focusedRow, focusedCol, _char2.toUpperCase());
-    moveForward();
-  }, [focusedRow, focusedCol, setCellCharacter, moveForward]); // We use the keydown event for control/arrow keys, but not for textual
-  // input, because it's hard to suss out when a key is "regular" or not.
-
-  var handleInputKeyDown = (0, _react.useCallback)(function (event) {
-    // if ctrl, alt, or meta are down, ignore the event (let it bubble)
-    if (event.ctrlKey || event.altKey || event.metaKey) {
-      return;
-    }
-
-    var preventDefault = true;
-    var key = event.key; // console.log('CROSSWORD KEYDOWN', event.key);
-    // FUTURE: should we "jump" over black space?  That might help some for
-    // keyboard users.
-
-    switch (key) {
-      case 'ArrowUp':
-        moveRelative(-1, 0);
-        break;
-
-      case 'ArrowDown':
-        moveRelative(1, 0);
-        break;
-
-      case 'ArrowLeft':
-        moveRelative(0, -1);
-        break;
-
-      case 'ArrowRight':
-        moveRelative(0, 1);
-        break;
-
-      case ' ': // treat space like tab?
-
-      case 'Tab':
-        {
-          var other = (0, _util.otherDirection)(currentDirection);
-          var cellData = getCellData(focusedRow, focusedCol);
-
-          if (cellData[other]) {
-            setCurrentDirection(other);
-            setCurrentNumber(cellData[other]);
-          }
-
-          break;
-        }
-      // Backspace: delete the current cell, and move to the previous cell
-      // Delete:    delete the current cell, but don't move
-
-      case 'Backspace':
-      case 'Delete':
-        {
-          setCellCharacter(focusedRow, focusedCol, '');
-
-          if (key === 'Backspace') {
-            moveBackward();
-          }
-
-          break;
-        }
-
-      case 'Home':
-      case 'End':
-        {
-          // move to beginning/end of this entry?
-          var info = data[currentDirection][currentNumber];
-          var length = info.answer.length;
-          var row = info.row,
-              col = info.col;
-
-          if (key === 'End') {
-            var across = (0, _util.isAcross)(currentDirection);
-
-            if (across) {
-              col += length - 1;
-            } else {
-              row += length - 1;
-            }
-          }
-
-          moveTo(row, col);
-          break;
-        }
-
-      default:
-        // It would be nice to handle "regular" characters with onInput, but
-        // that is still experimental, so we can't count on it.  Instead, we
-        // assume that only "length 1" values are regular.
-        if (key.length !== 1) {
-          preventDefault = false;
-          break;
-        }
-
-        handleSingleCharacter(key);
-        break;
-    }
-
-    if (preventDefault) {
-      event.preventDefault();
-    }
-  }, [data, focusedRow, focusedCol, currentDirection, currentNumber, getCellData, setCellCharacter, moveRelative]);
-  var handleInputChange = (0, _react.useCallback)(function (event) {
-    event.preventDefault();
-    setBulkChange(event.target.value);
-  }, []);
-  (0, _react.useEffect)(function () {
-    if (!bulkChange) {
-      return;
-    } // handle bulkChange by updating a character at a time (this lets us
-    // leverage the existing character-entry logic).
-
-
-    handleSingleCharacter(bulkChange[0]);
-    setBulkChange(bulkChange.length === 1 ? null : bulkChange.substring(1));
-  }, [bulkChange, handleSingleCharacter]); // When the data changes, recalculate the gridData, size, etc.
-
-  (0, _react.useEffect)(function () {
-    // eslint-disable-next-line no-shadow
-    var _createGridData = (0, _util.createGridData)(data),
-        size = _createGridData.size,
-        gridData = _createGridData.gridData,
-        clues = _createGridData.clues;
-
-    var loadedCorrect;
-
-    if (useStorage) {
-      (0, _util.loadGuesses)(gridData, defaultStorageKey);
-      (0, _util.setCluesFilled)(gridData, clues, data, 'across');
-      (0, _util.setCluesFilled)(gridData, clues, data, 'down');
-      loadedCorrect = (0, _util.findCorrectAnswers)(data, gridData);
-      loadedCorrect.forEach(function (_ref3) {
-        var direction = _ref3[0],
-            num = _ref3[1];
-        var clueInfo = clues[direction].find(function (i) {
-          return i.number === num;
-        });
-        clueInfo.correct = true;
-        clueInfo.isFilled = true;
-        clueInfo.filledCounter += 1;
-      });
-    }
-
-    setSize(size);
-    setGridData(gridData);
-    setClues(clues); // Should we start with 1-across highlighted/focused?
-    // TODO: track input-field focus so we don't draw highlight when we're not
-    // really focused, *and* use first actual clue (whether across or down?)
-
-    setFocusedRow(0);
-    setFocusedCol(0);
-    setCurrentDirection('across');
-    setCurrentNumber('1');
-    setBulkChange(null); // trigger any "loaded correct" guesses...
-
-    if (loadedCorrect && loadedCorrect.length > 0 && onLoadedCorrect) {
-      onLoadedCorrect(loadedCorrect);
-    }
-  }, [data, onLoadedCorrect, useStorage]);
-  (0, _react.useEffect)(function () {
-    if (gridData === null || !useStorage) {
-      return;
-    }
-
-    (0, _util.saveGuesses)(gridData, defaultStorageKey);
-  }, [gridData, useStorage]);
-  var handleCellClick = (0, _react.useCallback)(function (cellData) {
-    var row = cellData.row,
-        col = cellData.col;
-    var other = (0, _util.otherDirection)(currentDirection); // should this use moveTo?
-
-    setFocusedRow(row);
-    setFocusedCol(col);
-    var direction = currentDirection; // We switch to the "other" direction if (a) the current direction isn't
-    // available in the clicked cell, or (b) we're already focused and the
-    // clicked cell is the focused cell, *and* the other direction is
-    // available.
-
-    if (!cellData[currentDirection] || focused && row === focusedRow && col === focusedCol && cellData[other]) {
-      setCurrentDirection(other);
-      direction = other;
-    }
-
-    setCurrentNumber(cellData[direction]);
-
-    _focus();
-  }, [focused, focusedRow, focusedCol, currentDirection, _focus]);
-  var handleInputClick = (0, _react.useCallback)(function () {
-    // *don't* event.preventDefault(), because we want the input to actually
-    // take focus
-    // Like general cell-clicks, clicking on the input can change direction.
-    // Unlike cell clicks, we *know* we're clicking on the already-focused
-    // cell!
-    var other = (0, _util.otherDirection)(currentDirection);
-    var cellData = getCellData(focusedRow, focusedCol);
-    var direction = currentDirection;
-
-    if (focused && cellData[other]) {
-      setCurrentDirection(other);
-      direction = other;
-    }
-
-    setCurrentNumber(cellData[direction]);
-
-    _focus();
-  }, [currentDirection, focusedRow, focusedCol, getCellData, _focus]);
-  var handleClueSelected = (0, _react.useCallback)(function (direction, number) {
-    var info = data[direction][number]; // TODO: sanity-check info?
-
-    moveTo(info.row, info.col, direction);
-
-    _focus();
-  }, [data, moveTo, _focus]); // expose some imperative methods
-
-  (0, _react.useImperativeHandle)(ref, function () {
-    return {
-      /**
-       * Sets focus to the crossword component.
-       */
-      focus: function focus() {
-        _focus();
-      },
-
-      /**
-       * Resets the entire crossword; clearing all answers in the grid and
-       * also any persisted data.
-       */
-      reset: function reset() {
-        setGridData((0, _immer["default"])(function (draft) {
-          draft.forEach(function (rowData) {
-            rowData.forEach(function (cellData) {
-              if (cellData.used) {
-                cellData.guess = '';
-              }
-            });
-          });
-        }));
-        setClues((0, _immer["default"])(function (draft) {
-          _util.bothDirections.forEach(function (direction) {
-            draft[direction].forEach(function (clueInfo) {
-              delete clueInfo.correct;
-              delete clueInfo.isFilled;
-            });
-          });
-        }));
-
-        if (useStorage) {
-          (0, _util.clearGuesses)(defaultStorageKey);
-        }
-      },
-
-      /**
-       * Fills all the answers in the grid and calls the `onLoadedCorrect`
-       * callback with _**every**_ answer.
-       */
-      fillAllAnswers: function fillAllAnswers() {
-        setGridData((0, _immer["default"])(function (draft) {
-          draft.forEach(function (rowData) {
-            rowData.forEach(function (cellData) {
-              if (cellData.used) {
-                cellData.guess = cellData.answer;
-              }
-            });
-          });
-        }));
-        setClues((0, _immer["default"])(function (draft) {
-          _util.bothDirections.forEach(function (direction) {
-            draft[direction].forEach(function (clueInfo) {
-              clueInfo.correct = true;
-              clueInfo.isFilled = true;
-              clueInfo.filledCounter += 1;
-            });
-          });
-        })); // trigger onLoadedCorrect with every clue!
-
-        if (onLoadedCorrect) {
-          var loadedCorrect = [];
-
-          _util.bothDirections.forEach(function (direction) {
-            Object.entries(data[direction]).forEach(function (_ref4) {
-              var number = _ref4[0],
-                  info = _ref4[1];
-              loadedCorrect.push([direction, number, info.answer]);
-            });
-          });
-
-          onLoadedCorrect(loadedCorrect);
-        }
-      },
-
-      /**
-       * Returns whether the crossword is entirely correct or not.
-       *
-       * @since 2.2.0
-       */
-      isCrosswordCorrect: function isCrosswordCorrect() {
-        return crosswordCorrect;
-      },
-      isCrosswordComplete: function isCrosswordComplete() {
-        return crosswordComplete;
-      }
-    };
-  }, [data, onLoadedCorrect, useStorage, _focus, crosswordCorrect, crosswordComplete]); // constants for rendering...
-  // We have several properties that we bundle together as context for the
-  // cells, rather than have them as independent properties.  (Or should they
-  // stay separate? Or be passed as "spread" values?)
-
-  var cellSize = 100 / size;
-  var cellPadding = 0.125;
-  var cellInner = cellSize - cellPadding * 2;
-  var fontSize = cellInner * 0.7; // The final theme is the merger of three values: the "theme" property
-  // passed to the component (which takes precedence), any values from
-  // ThemeContext, and finally the "defaultTheme" values fill in for any
-  // needed ones that are missing.  (We create this in standard last-one-wins
-  // order in Javascript, of course.)
-
-  var finalTheme = (0, _extends2["default"])({}, defaultTheme, contextTheme, theme); // REVIEW: do we want to recalc this all the time, or cache in state?
-
-  var cells = [];
-
-  if (gridData) {
-    gridData.forEach(function (rowData, row) {
-      rowData.forEach(function (cellData, col) {
-        if (!cellData.used) {
-          return;
-        }
-
-        cells.push( /*#__PURE__*/_react["default"].createElement(_Cell["default"] // eslint-disable-next-line react/no-array-index-key
-        , {
-          key: "R" + row + "C" + col,
-          cellData: cellData,
-          focus: focused && row === focusedRow && col === focusedCol,
-          highlight: focused && currentNumber && cellData[currentDirection] === currentNumber,
-          onClick: handleCellClick
-        }));
-      });
-    });
-  }
-
-  return /*#__PURE__*/_react["default"].createElement(_context.CrosswordContext.Provider, {
-    value: {
-      focused: focused,
-      selectedDirection: currentDirection,
-      selectedNumber: currentNumber,
-      onClueSelected: handleClueSelected
-    }
-  }, /*#__PURE__*/_react["default"].createElement(_context.CrosswordSizeContext.Provider, {
-    value: {
-      cellSize: cellSize,
-      cellPadding: cellPadding,
-      cellInner: cellInner,
-      cellHalf: cellSize / 2,
-      fontSize: fontSize
-    }
-  }, /*#__PURE__*/_react["default"].createElement(_styledComponents.ThemeProvider, {
-    theme: finalTheme
-  }, /*#__PURE__*/_react["default"].createElement(OuterWrapper, {
-    correct: crosswordCorrect
-  }, /*#__PURE__*/_react["default"].createElement(GridWrapper, null, /*#__PURE__*/_react["default"].createElement("div", {
-    style: {
-      margin: 0,
-      padding: 0,
-      position: 'relative'
-    }
-  }, /*#__PURE__*/_react["default"].createElement("svg", {
-    viewBox: "0 0 100 100"
-  }, /*#__PURE__*/_react["default"].createElement("rect", {
-    x: 0,
-    y: 0,
-    width: 100,
-    height: 100,
-    fill: finalTheme.gridBackground
-  }), cells), /*#__PURE__*/_react["default"].createElement("input", {
-    ref: inputRef,
-    "aria-label": "crossword-input",
-    type: "text",
-    onClick: handleInputClick,
-    onKeyDown: handleInputKeyDown,
-    onChange: handleInputChange,
-    value: "" // onInput={this.handleInput}
-    ,
-    autoComplete: "off",
-    spellCheck: "false",
-    autoCorrect: "off",
-    style: {
-      position: 'absolute',
-      // In order to ensure the top/left positioning makes sense,
-      // there is an absolutely-positioned <div> with no
-      // margin/padding that we *don't* expose to consumers.  This
-      // keeps the math much more reliable.  (But we're still
-      // seeing a slight vertical deviation towards the bottom of
-      // the grid!  The "* 0.995" seems to help.)
-      top: "calc(" + focusedRow * cellSize * 0.995 + "% + 2px)",
-      left: "calc(" + focusedCol * cellSize + "% + 2px)",
-      width: "calc(" + cellSize + "% - 4px)",
-      height: "calc(" + cellSize + "% - 4px)",
-      fontSize: fontSize * 6 + "px",
-      // waaay too small...?
-      textAlign: 'center',
-      textAnchor: 'middle',
-      backgroundColor: 'transparent',
-      caretColor: 'transparent',
-      margin: 0,
-      padding: 0,
-      border: 0,
-      cursor: 'default'
-    }
-  }))), /*#__PURE__*/_react["default"].createElement(CluesWrapper, null, clues && _util.bothDirections.map(function (direction) {
-    return /*#__PURE__*/_react["default"].createElement(_DirectionClues["default"], {
-      key: direction,
-      direction: direction,
-      clues: clues[direction]
-    });
-  }))))));
-});
-
-Crossword.displayName = 'Crossword';
-var clueShape = "development" !== "production" ? _propTypes["default"].shape({
-  clue: _propTypes["default"].string.isRequired,
-  answer: _propTypes["default"].string.isRequired,
-  row: _propTypes["default"].number.isRequired,
-  col: _propTypes["default"].number.isRequired
-}) : {};
-"development" !== "production" ? Crossword.propTypes = {
-  /** clue/answer data; see <a href="#cluedata-format">Clue/data format</a> for details. */
-  data: _propTypes["default"].shape({
-    /** "across" clues and answers */
-    across: _propTypes["default"].objectOf(clueShape),
-
-    /** "down" clues and answers */
-    down: _propTypes["default"].objectOf(clueShape)
-  }).isRequired,
-
-  /** presentation values for the crossword; these override any values coming from a parent ThemeProvider context. */
-  theme: _propTypes["default"].shape({
-    /** browser-width at which the clues go from showing beneath the grid to showing beside the grid */
-    columnBreakpoint: _propTypes["default"].string,
-
-    /** overall background color (fill) for the crossword grid; can be `'transparent'` to show through a page background image */
-    gridBackground: _propTypes["default"].string,
-
-    /**  background for an answer cell */
-    cellBackground: _propTypes["default"].string,
-
-    /** border for an answer cell */
-    cellBorder: _propTypes["default"].string,
-
-    /** color for answer text (entered by the player) */
-    textColor: _propTypes["default"].string,
-
-    /** color for the across/down numbers in the grid */
-    numberColor: _propTypes["default"].string,
-
-    /** background color for the cell with focus, the one that the player is typing into */
-    focusBackground: _propTypes["default"].string,
-
-    /** background color for the cells in the answer the player is working on,
-     * helps indicate in which direction focus will be moving; also used as a
-     * background on the active clue  */
-    highlightBackground: _propTypes["default"].string
-  }),
-
-  /** whether to use browser storage to persist the player's work-in-progress */
-  useStorage: _propTypes["default"].bool,
-
-  /** callback function that fires when a player answers a clue correctly; called with `(direction, number, answer)` arguments, where `direction` is `'across'` or `'down'`, `number` is the clue number as text (like `'1'`), and `answer` is the answer itself */
-  onCorrect: _propTypes["default"].func,
-
-  /** callback function that's called when a crossword is loaded, to batch up correct answers loaded from storage; passed an array of the same values that `onCorrect` would recieve */
-  onLoadedCorrect: _propTypes["default"].func,
-
-  /** callback function that's called when the overall crossword is completely correct (or not) */
-  onCrosswordCorrect: _propTypes["default"].func,
-  onCrosswordComplete: _propTypes["default"].func,
-
-  /**
-   *  callback function called when a cell changes (e.g. when the user types a
-   *  letter); called with `(row, col, char)` arguments, where the `row` and
-   *  `column` are the 0-based position of the cell, and `char` is the character
-   *  typed (already massaged into upper-case)
-   *
-   *  @since 2.1.0
-   */
-  onCellChange: _propTypes["default"].func
-} : void 0;
-Crossword.defaultProps = {
-  theme: null,
-  useStorage: true,
-  // useStorage: false,
-  onCorrect: null,
-  onLoadedCorrect: null,
-  onCrosswordCorrect: null,
-  onCrosswordComplete: null,
-  onCellChange: null
+  return /*#__PURE__*/_react.default.createElement("main", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Challenge #2 - Hello World"), currentUser ? /*#__PURE__*/_react.default.createElement("button", {
+    onClick: signOut
+  }, "Log out") : /*#__PURE__*/_react.default.createElement("button", {
+    onClick: signIn
+  }, "Log in")), /*#__PURE__*/_react.default.createElement("h3", null, "Status: ", answer), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
+    onSubmit: onSubmit,
+    currentUser: currentUser
+  }) : /*#__PURE__*/_react.default.createElement(_SignIn.default, null));
 };
-var _default = Crossword;
-exports["default"] = _default;
-},{"@babel/runtime/helpers/interopRequireWildcard":"../node_modules/@babel/runtime/helpers/interopRequireWildcard.js","@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../node_modules/@babel/runtime/helpers/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","immer":"../node_modules/immer/dist/immer.esm.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./Cell":"../node_modules/react-crossword-near/dist/es/Cell.js","./DirectionClues":"../node_modules/react-crossword-near/dist/es/DirectionClues.js","./util":"../node_modules/react-crossword-near/dist/es/util.js","./context":"../node_modules/react-crossword-near/dist/es/context.js"}],"../node_modules/react-crossword-near/dist/es/index.js":[function(require,module,exports) {
-"use strict";
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+App.propTypes = {
+  contract: _propTypes.default.shape({
+    hello: _propTypes.default.func.isRequired
+  }).isRequired,
+  currentUser: _propTypes.default.shape({
+    accountId: _propTypes.default.string.isRequired,
+    balance: _propTypes.default.string.isRequired
+  }),
+  nearConfig: _propTypes.default.shape({
+    contractName: _propTypes.default.string.isRequired
+  }).isRequired,
+  wallet: _propTypes.default.shape({
+    requestSignIn: _propTypes.default.func.isRequired,
+    signOut: _propTypes.default.func.isRequired
+  }).isRequired
+};
+var _default = App;
+exports.default = _default;
+},{"./App.css":"App.css","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js","./components/Form":"components/Form.jsx","./components/SignIn":"components/SignIn.jsx"}],"config.js":[function(require,module,exports) {
+const CONTRACT_NAME = undefined || 'hello.cryptosketches.testnet';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "ThemeProvider", {
-  enumerable: true,
-  get: function get() {
-    return _styledComponents.ThemeProvider;
+function getConfig(env) {
+  switch (env) {
+    case 'production':
+    case 'mainnet':
+      return {
+        networkId: 'mainnet',
+        nodeUrl: 'https://rpc.mainnet.near.org',
+        contractName: CONTRACT_NAME,
+        walletUrl: 'https://wallet.near.org',
+        helperUrl: 'https://helper.mainnet.near.org'
+      };
+
+    case 'development':
+    case 'testnet':
+      return {
+        networkId: 'testnet',
+        nodeUrl: 'https://rpc.testnet.near.org',
+        contractName: CONTRACT_NAME,
+        walletUrl: 'https://wallet.testnet.near.org',
+        helperUrl: 'https://helper.testnet.near.org'
+      };
+
+    case 'betanet':
+      return {
+        networkId: 'betanet',
+        nodeUrl: 'https://rpc.betanet.near.org',
+        contractName: CONTRACT_NAME,
+        walletUrl: 'https://wallet.betanet.near.org',
+        helperUrl: 'https://helper.betanet.near.org'
+      };
+
+    case 'local':
+      return {
+        networkId: 'local',
+        nodeUrl: 'http://localhost:3030',
+        keyPath: `${"C:\\Users\\9QJ6PC"}/.near/validator_key.json`,
+        walletUrl: 'http://localhost:4000/wallet',
+        contractName: CONTRACT_NAME
+      };
+
+    case 'test':
+    case 'ci':
+      return {
+        networkId: 'shared-test',
+        nodeUrl: 'https://rpc.ci-testnet.near.org',
+        contractName: CONTRACT_NAME,
+        masterAccount: 'test.near'
+      };
+
+    case 'ci-betanet':
+      return {
+        networkId: 'shared-test-staging',
+        nodeUrl: 'https://rpc.ci-betanet.near.org',
+        contractName: CONTRACT_NAME,
+        masterAccount: 'test.near'
+      };
+
+    default:
+      throw Error(`Unconfigured environment '${env}'. Can be configured in src/config.js.`);
   }
-});
-Object.defineProperty(exports, "Cell", {
-  enumerable: true,
-  get: function get() {
-    return _Cell["default"];
-  }
-});
-Object.defineProperty(exports, "Clue", {
-  enumerable: true,
-  get: function get() {
-    return _Clue["default"];
-  }
-});
-Object.defineProperty(exports, "DirectionClues", {
-  enumerable: true,
-  get: function get() {
-    return _DirectionClues["default"];
-  }
-});
-Object.defineProperty(exports, "Crossword", {
-  enumerable: true,
-  get: function get() {
-    return _Crossword["default"];
-  }
-});
-Object.defineProperty(exports, "CrosswordContext", {
-  enumerable: true,
-  get: function get() {
-    return _context.CrosswordContext;
-  }
-});
-Object.defineProperty(exports, "CrosswordSizeContext", {
-  enumerable: true,
-  get: function get() {
-    return _context.CrosswordSizeContext;
-  }
-});
-exports["default"] = void 0;
+}
 
-var _styledComponents = require("styled-components");
-
-var _Cell = _interopRequireDefault(require("./Cell"));
-
-var _Clue = _interopRequireDefault(require("./Clue"));
-
-var _DirectionClues = _interopRequireDefault(require("./DirectionClues"));
-
-var _Crossword = _interopRequireDefault(require("./Crossword"));
-
-var _context = require("./context"); // We re-export ThemeProvider from styled-components so that consumers don't
-// have to pull it in explicitly if we are the only reason.  (This also helps
-// with our style guide!)
-
-
-var _default = _Crossword["default"];
-exports["default"] = _default;
-},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./Cell":"../node_modules/react-crossword-near/dist/es/Cell.js","./Clue":"../node_modules/react-crossword-near/dist/es/Clue.js","./DirectionClues":"../node_modules/react-crossword-near/dist/es/DirectionClues.js","./Crossword":"../node_modules/react-crossword-near/dist/es/Crossword.js","./context":"../node_modules/react-crossword-near/dist/es/context.js"}],"../node_modules/near-api-js/lib/key_stores/keystore.js":[function(require,module,exports) {
+module.exports = getConfig;
+},{}],"../node_modules/near-api-js/lib/key_stores/keystore.js":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KeyStore = void 0;
@@ -42507,8 +38561,6 @@ function base (ALPHABET) {
     if (typeof source !== 'string') { throw new TypeError('Expected String') }
     if (source.length === 0) { return _Buffer.alloc(0) }
     var psz = 0
-        // Skip leading spaces.
-    if (source[psz] === ' ') { return }
         // Skip and count leading '1's.
     var zeroes = 0
     var length = 0
@@ -42535,8 +38587,6 @@ function base (ALPHABET) {
       length = i
       psz++
     }
-        // Skip trailing spaces.
-    if (source[psz] === ' ') { return }
         // Skip leading zeroes in b256.
     var it4 = size - length
     while (it4 !== size && b256[it4] === 0) {
@@ -44528,11 +40578,12 @@ if (typeof Object.create === 'function') {
  * Copyright(c) 2016 Douglas Christopher Wilson
  * MIT Licensed
  */
-
+'use strict';
 /**
  * Module exports.
  * @public
  */
+
 module.exports = toIdentifier;
 /**
  * Trasform the given string into a JavaScript identifier
@@ -47287,7 +43338,216 @@ Object.defineProperty(exports, "PublicKey", { enumerable: true, get: function ()
 Object.defineProperty(exports, "KeyPair", { enumerable: true, get: function () { return key_pair_1.KeyPair; } });
 Object.defineProperty(exports, "KeyPairEd25519", { enumerable: true, get: function () { return key_pair_1.KeyPairEd25519; } });
 
-},{"./key_pair":"../node_modules/near-api-js/lib/utils/key_pair.js","./serialize":"../node_modules/near-api-js/lib/utils/serialize.js","./web":"../node_modules/near-api-js/lib/utils/web.js","./enums":"../node_modules/near-api-js/lib/utils/enums.js","./format":"../node_modules/near-api-js/lib/utils/format.js","./rpc_errors":"../node_modules/near-api-js/lib/utils/rpc_errors.js"}],"../node_modules/js-sha256/src/sha256.js":[function(require,module,exports) {
+},{"./key_pair":"../node_modules/near-api-js/lib/utils/key_pair.js","./serialize":"../node_modules/near-api-js/lib/utils/serialize.js","./web":"../node_modules/near-api-js/lib/utils/web.js","./enums":"../node_modules/near-api-js/lib/utils/enums.js","./format":"../node_modules/near-api-js/lib/utils/format.js","./rpc_errors":"../node_modules/near-api-js/lib/utils/rpc_errors.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+},{}],"../node_modules/js-sha256/src/sha256.js":[function(require,module,exports) {
 var process = require("process");
 var global = arguments[3];
 var define;
@@ -50012,14 +46272,14 @@ var cache = function (fn) {
     if (!(fn instanceof Function)) {
         called = true;
         store = fn;
-        delete(fn);
+        fn = null;
     }
 
     return function () {
         if (!called) {
             called = true;
             store = fn.apply(this, arguments);
-            delete(fn);
+            fn = null;
         }
         return store;
     };
@@ -50424,269 +46684,7 @@ __exportStar(require("./common-index"), exports);
 __exportStar(require("./browser-connect"), exports);
 require("error-polyfill");
 
-},{"./key_stores/browser-index":"../node_modules/near-api-js/lib/key_stores/browser-index.js","./common-index":"../node_modules/near-api-js/lib/common-index.js","./browser-connect":"../node_modules/near-api-js/lib/browser-connect.js","error-polyfill":"../node_modules/error-polyfill/index.js"}],"utils.js":[function(require,module,exports) {
-"use strict";
-
-var nearAPI = _interopRequireWildcard(require("near-api-js"));
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-// This function takes the input from the Rust smart contract
-// and turns it into what the crossword library would like.
-// Opportunity to enhance the library so this isn't necessary.
-// Our API could be improved here :)
-// See: https://github.com/near/near-api-js/issues/612
-async function viewMethodOnContract(nearConfig, method) {
-  const provider = new nearAPI.providers.JsonRpcProvider(nearConfig.nodeUrl);
-  const rawResult = await provider.query(`call/${nearConfig.contractName}/${method}`, 'AQ4'); // Base 58 of '{}'
-
-  return JSON.parse(rawResult.result.map(x => String.fromCharCode(x)).join(''));
-}
-
-function parseSolutionSeedPhrase(data, gridData) {
-  // JavaScript determining what the highest clue number is
-  // Example: 10 if there are ten clues, some which have both across and down clues
-  let totalClues = Object.keys(data.across).concat(Object.keys(data.down)).map(n => parseInt(n)).reduce((n, m) => Math.max(n, m));
-  let seedPhrase = []; // Assume that crossword starts at 1 and goes to totalClues
-
-  for (let i = 1; i <= totalClues; i++) {
-    let word = ''; // If a number has both across and down clues, do across first.
-
-    let iString = i.toString(); // not strictly necessary
-
-    if (data.across.hasOwnProperty(iString)) {
-      const answerLength = data.across[i].answer.length;
-
-      for (let j = 0; j < answerLength; j++) {
-        word += gridData[data['across'][i].row][data['across'][i].col + j].guess;
-      }
-
-      seedPhrase.push(word);
-    }
-
-    word = ''; // Clear for items where there's both across and down
-
-    if (data.down.hasOwnProperty(iString)) {
-      const answerLength = data.down[i].answer.length;
-
-      for (let j = 0; j < answerLength; j++) {
-        word += gridData[data['down'][i].row + j][data['down'][i].col].guess;
-      }
-
-      seedPhrase.push(word);
-    }
-  }
-
-  const finalSeedPhrase = seedPhrase.map(w => w.toLowerCase()).join(' ');
-  console.log(`Crossword solution as seed phrase: %c${finalSeedPhrase}`, "color: #00C1DE;");
-  return finalSeedPhrase;
-}
-/* Example of expected data for crossword library
-  export const data = {
-    across: {
-      1: {
-        clue: 'one plus one',
-        answer: 'TWO',
-        row: 0,
-        col: 0,
-      },
-    },
-    down: {
-      2: {
-        clue: 'three minus two',
-        answer: 'ONE',
-        row: 0,
-        col: 2,
-      },
-    },
-  };
-*/
-
-
-module.exports = {
-  viewMethodOnContract,
-  parseSolutionSeedPhrase
-};
-},{"near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"App.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-require("./App.css");
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _reactCrosswordNear = _interopRequireDefault(require("react-crossword-near"));
-
-var _utils = require("./utils");
-
-var _util = require("react-crossword-near/dist/es/util");
-
-var _jsSha = _interopRequireDefault(require("js-sha256"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-const App = ({
-  data,
-  solutionHash
-}) => {
-  const crossword = (0, _react.useRef)();
-  const [solutionFound, setSolutionFound] = (0, _react.useState)("Not correct yet");
-  const onCrosswordComplete = (0, _react.useCallback)(async completeCount => {
-    if (completeCount !== false) {
-      let gridData = (0, _util.createGridData)(data).gridData;
-      (0, _util.loadGuesses)(gridData, 'guesses');
-      await checkSolution(gridData);
-    }
-  }, []); // This function is called when all entries are filled
-
-  async function checkSolution(gridData) {
-    let seedPhrase = (0, _utils.parseSolutionSeedPhrase)(data, gridData);
-
-    let answerHash = _jsSha.default.sha256(seedPhrase); // Compare crossword solution's public key with the known public key for this puzzle
-    // (It was given to us when we first fetched the puzzle in index.js)
-
-
-    if (answerHash === solutionHash) {
-      console.log("You're correct!");
-      setSolutionFound("Correct!");
-    } else {
-      console.log("That's not the correct solution. :/");
-      setSolutionFound("Not correct yet");
-    }
-  }
-
-  return /*#__PURE__*/_react.default.createElement("div", {
-    id: "page"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Crossword Puzzle"), /*#__PURE__*/_react.default.createElement("div", {
-    id: "crossword-wrapper"
-  }, /*#__PURE__*/_react.default.createElement("h3", null, "Status: ", solutionFound), /*#__PURE__*/_react.default.createElement(_reactCrosswordNear.default, {
-    data: data,
-    ref: crossword,
-    onCrosswordComplete: onCrosswordComplete
-  }), /*#__PURE__*/_react.default.createElement("p", null, "Thank you ", /*#__PURE__*/_react.default.createElement("a", {
-    href: "https://github.com/JaredReisinger/react-crossword",
-    target: "_blank",
-    rel: "noreferrer"
-  }, "@jaredreisinger/react-crossword"), "!")));
-};
-
-var _default = App;
-exports.default = _default;
-},{"./App.css":"App.css","react":"../node_modules/react/index.js","react-crossword-near":"../node_modules/react-crossword-near/dist/es/index.js","./utils":"utils.js","react-crossword-near/dist/es/util":"../node_modules/react-crossword-near/dist/es/util.js","js-sha256":"../node_modules/js-sha256/src/sha256.js"}],"config.js":[function(require,module,exports) {
-const CONTRACT_NAME = "snippets.demo.testnet" || 'your-crossword-account.testnet';
-
-function getConfig(env) {
-  switch (env) {
-    case 'production':
-    case 'mainnet':
-      return {
-        networkId: 'mainnet',
-        nodeUrl: 'https://rpc.mainnet.near.org',
-        contractName: CONTRACT_NAME,
-        walletUrl: 'https://wallet.near.org',
-        helperUrl: 'https://helper.mainnet.near.org'
-      };
-
-    case 'development':
-    case 'testnet':
-      return {
-        networkId: 'testnet',
-        nodeUrl: 'https://rpc.testnet.near.org',
-        contractName: CONTRACT_NAME,
-        walletUrl: 'https://wallet.testnet.near.org',
-        helperUrl: 'https://helper.testnet.near.org'
-      };
-
-    case 'betanet':
-      return {
-        networkId: 'betanet',
-        nodeUrl: 'https://rpc.betanet.near.org',
-        contractName: CONTRACT_NAME,
-        walletUrl: 'https://wallet.betanet.near.org',
-        helperUrl: 'https://helper.betanet.near.org'
-      };
-
-    case 'local':
-      return {
-        networkId: 'local',
-        nodeUrl: 'http://localhost:3030',
-        keyPath: `${"/Users/mike"}/.near/validator_key.json`,
-        walletUrl: 'http://localhost:4000/wallet',
-        contractName: CONTRACT_NAME
-      };
-
-    case 'test':
-    case 'ci':
-      return {
-        networkId: 'shared-test',
-        nodeUrl: 'https://rpc.ci-testnet.near.org',
-        contractName: CONTRACT_NAME,
-        masterAccount: 'test.near'
-      };
-
-    case 'ci-betanet':
-      return {
-        networkId: 'shared-test-staging',
-        nodeUrl: 'https://rpc.ci-betanet.near.org',
-        contractName: CONTRACT_NAME,
-        masterAccount: 'test.near'
-      };
-
-    default:
-      throw Error(`Unconfigured environment '${env}'. Can be configured in src/config.js.`);
-  }
-}
-
-module.exports = getConfig;
-},{}],"hardcoded-data.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.data = void 0;
-const data = {
-  across: {
-    1: {
-      clue: 'Native token',
-      answer: '????',
-      row: 1,
-      col: 2
-    },
-    3: {
-      clue: 'DeFi decentralizes this',
-      answer: '???????',
-      row: 7,
-      col: 0
-    }
-  },
-  down: {
-    1: {
-      clue: 'Name of the spec/standards site is _______.io',
-      answer: '???????',
-      row: 1,
-      col: 2
-    },
-    2: {
-      clue: 'DeFi site on NEAR is ___.finance',
-      answer: '???',
-      row: 1,
-      col: 5
-    }
-  }
-};
-exports.data = data;
-},{}],"index.js":[function(require,module,exports) {
+},{"./key_stores/browser-index":"../node_modules/near-api-js/lib/key_stores/browser-index.js","./common-index":"../node_modules/near-api-js/lib/common-index.js","./browser-connect":"../node_modules/near-api-js/lib/browser-connect.js","error-polyfill":"../node_modules/error-polyfill/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -50697,31 +46695,79 @@ var _App = _interopRequireDefault(require("./App"));
 
 var _config = _interopRequireDefault(require("./config.js"));
 
-var _utils = require("./utils");
+var nearAPI = _interopRequireWildcard(require("near-api-js"));
 
-var _hardcodedData = require("./hardcoded-data");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-async function initCrossword() {
-  const nearConfig = (0, _config.default)(undefined || 'testnet');
-  const solutionHash = await (0, _utils.viewMethodOnContract)(nearConfig, 'get_solution');
+// Initializing contract
+async function initContract() {
+  // get network configuration values from config.js
+  // based on the network ID we pass to getConfig()
+  const nearConfig = (0, _config.default)(undefined || 'testnet'); // create a keyStore for signing transactions using the user's key
+  // which is located in the browser local storage after user logs in
+
+  const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore(); // Initializing connection to the NEAR testnet
+
+  const near = await nearAPI.connect({
+    keyStore,
+    ...nearConfig
+  }); // Initialize wallet connection
+
+  const walletConnection = new nearAPI.WalletConnection(near); // Load in user's account data
+
+  let currentUser;
+
+  if (walletConnection.getAccountId()) {
+    currentUser = {
+      // Gets the accountId as a string
+      accountId: walletConnection.getAccountId(),
+      // Gets the user's token balance
+      balance: (await walletConnection.account().state()).amount
+    };
+  } // Initializing our contract APIs by contract name and configuration
+
+
+  const contract = await new nearAPI.Contract( // User's accountId as a string
+  walletConnection.account(), // accountId of the contract we will be loading
+  // NOTE: All contracts on NEAR are deployed to an account and
+  // accounts can only have one contract deployed to them.
+  nearConfig.contractName, {
+    // View methods are read-only – they don't modify the state, but usually return some value
+    viewMethods: [],
+    // Change methods can modify the state, but you don't receive the returned value when called
+    changeMethods: ['hello'],
+    // Sender is the account ID to initialize transactions.
+    // getAccountId() will return empty string if user is still unauthorized
+    sender: walletConnection.getAccountId()
+  });
   return {
-    data: _hardcodedData.data,
-    solutionHash
+    contract,
+    currentUser,
+    nearConfig,
+    walletConnection
   };
 }
 
-initCrossword().then(({
-  data,
-  solutionHash
-}) => {
+window.nearInitPromise = initContract().then(_ref => {
+  let {
+    contract,
+    currentUser,
+    nearConfig,
+    walletConnection
+  } = _ref;
+
   _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_App.default, {
-    data: data,
-    solutionHash: solutionHash
+    contract: contract,
+    currentUser: currentUser,
+    nearConfig: nearConfig,
+    wallet: walletConnection
   }), document.getElementById('root'));
 });
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./App":"App.js","./config.js":"config.js","./utils":"utils.js","./hardcoded-data":"hardcoded-data.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./App":"App.js","./config.js":"config.js","near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -50749,7 +46795,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57374" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51433" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -6,15 +6,7 @@ h1 {
     margin-bottom: 1em;
 }
 
-#crossword-wrapper .clue.correct::before {
-    content: "✓";
-    display: inline-block;
-    text-decoration: none;
-    color: rgb(100, 200, 100);
-    margin-right: 0.25em;
-}
-
-#crossword-wrapper {
+#hello-wrapper {
     max-width: 66%;
     margin: 2em auto 0 auto;
 }

@@ -1,6 +1,5 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{near_bindgen};
-//use near_sdk::{env, near_bindgen};
+use near_sdk::{env, near_bindgen};
 
 #[near_bindgen]
 #[derive(Default, BorshDeserialize, BorshSerialize)]
@@ -15,8 +14,14 @@ impl Contract {
         }
     }
     
+    #[payable]
     pub fn hello(&mut self, name: String) -> String {   
-        //env::log_str(format!("Hello {}!", name).as_str())
+        if env::attached_deposit() != 0 {
+            env::log_str(format!("Thanks for the {} NEAR.", env::attached_deposit()).as_str())
+        }
+        else {
+            //near_sdk::env::panic(b"Method do_not_take_my_money doesn't accept deposit");
+        }
         format!("Hello {}!", name)
     }
 }

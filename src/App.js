@@ -5,6 +5,7 @@ import Big from 'big.js';
 import Form from './components/Form';
 import SignIn from './components/SignIn';
 
+const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
@@ -16,12 +17,17 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     const { fieldset, hello } = e.target.elements;
 
     fieldset.disabled = true;
-
+    
     contract.hello(
-      { name: hello.value },
-      BOATLOAD_OF_GAS
+      { name: name_prompt.value },
+      BOATLOAD_OF_GAS,
+      Big(donation.value || '0').times(10 ** 24).toFixed()
     ).then((answer) => {
-      setAnswer(answer)
+      fieldset.disabled = false;
+      donation.value = SUGGESTED_DONATION;
+      name_prompt.value = '';
+      name_prompt.focus();
+      setAnswer(answer);
     });
   };
   
