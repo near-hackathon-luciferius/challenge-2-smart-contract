@@ -36,5 +36,18 @@ mod tests {
         builder
     }
 
-    // TESTS HERE
+    #[test]
+    fn check_hello_world() {
+        // Get Alice as an account ID
+        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        // Set up the testing context and unit test environment
+        let context = get_context(alice);
+        testing_env!(context.build());
+
+        // Set up contract object and call the new method
+        let mut contract = Contract::new();
+        let mut result = contract.hello("Alice".to_string());
+        assert_eq!(!result, "Hello Alice!".to_string(), "Expected correct hello response.");
+        //assert_eq!(get_logs(), ["Try again."], "Expected a failure log.");
+    }
 }
