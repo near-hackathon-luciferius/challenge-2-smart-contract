@@ -32689,7 +32689,50 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function SignIn() {
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("p", null, "This app demonstrates a key element of NEAR\u2019s UX: once an app has permission to make calls on behalf of a user (that is, once a user signs in), the app can make calls to the blockchain for them without prompting extra confirmation. So you\u2019ll see that if you don\u2019t include a donation, your name gets posted right away."), /*#__PURE__*/_react.default.createElement("p", null, "But if you do add a donation, then NEAR will double-check that you\u2019re ok with sending money to this app."), /*#__PURE__*/_react.default.createElement("p", null, "Go ahead and sign in to try it out!"));
 }
-},{"react":"../node_modules/react/index.js"}],"App.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"../package.json":[function(require,module,exports) {
+module.exports = {
+  "name": "hello-react",
+  "version": "1.0.8",
+  "homepage": "https://near-hackathon-luciferius.github.io/challenge-2-smart-contract",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "js-sha256": "^0.9.0",
+    "near-api-js": "^0.42.0",
+    "package.json": "^2.0.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "4.0.3",
+    "root-require": "^0.3.1",
+    "save": "^2.4.0",
+    "save-dev": "^0.0.1-security",
+    "styled-components": "^5.2.0",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build -u 'Pages Bot <pages.bot@nonexisting.io>'"
+  },
+  "eslintConfig": {
+    "extends": ["react-app", "react-app/jest"]
+  },
+  "browserslist": {
+    "production": [">0.2%", "not dead", "not op_mini all"],
+    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3",
+    "parcel-bundler": "^1.12.5"
+  }
+};
+},{}],"App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32715,6 +32758,8 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
+var version = require('../package.json').version;
+
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = (0, _big.default)(3).times(10 ** 13).toFixed();
 
@@ -32723,8 +32768,7 @@ const App = _ref => {
     contract,
     currentUser,
     nearConfig,
-    wallet,
-    version
+    wallet
   } = _ref;
   const [answer, setAnswer] = (0, _react.useState)("No transaction executed.");
 
@@ -32791,9 +32835,8 @@ App.propTypes = {
 };
 var _default = App;
 exports.default = _default;
-},{"./App.css":"App.css","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js","./components/Form":"components/Form.jsx","./components/SignIn":"components/SignIn.jsx"}],"config.js":[function(require,module,exports) {
+},{"./App.css":"App.css","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","big.js":"../node_modules/big.js/big.js","./components/Form":"components/Form.jsx","./components/SignIn":"components/SignIn.jsx","../package.json":"../package.json"}],"config.js":[function(require,module,exports) {
 const CONTRACT_NAME = undefined || 'hello.cryptosketches.testnet';
-const VERSION = undefined || '1.0.0';
 
 function getConfig(env) {
   switch (env) {
@@ -32857,10 +32900,7 @@ function getConfig(env) {
   }
 }
 
-module.exports = {
-  getConfig,
-  VERSION
-};
+module.exports = getConfig;
 },{}],"../node_modules/near-api-js/lib/key_stores/keystore.js":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -49130,7 +49170,7 @@ var _reactRouterDom = require("react-router-dom");
 
 var _App = _interopRequireDefault(require("./App"));
 
-var _config = require("./config.js");
+var _config = _interopRequireDefault(require("./config.js"));
 
 var nearAPI = _interopRequireWildcard(require("near-api-js"));
 
@@ -49144,7 +49184,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 async function initContract() {
   // get network configuration values from config.js
   // based on the network ID we pass to getConfig()
-  const nearConfig = (0, _config.getConfig)(undefined || 'testnet'); // create a keyStore for signing transactions using the user's key
+  const nearConfig = (0, _config.default)(undefined || 'testnet'); // create a keyStore for signing transactions using the user's key
   // which is located in the browser local storage after user logs in
 
   const keyStore = new nearAPI.keyStores.BrowserLocalStorageKeyStore(); // Initializing connection to the NEAR testnet
@@ -49201,8 +49241,7 @@ window.nearInitPromise = initContract().then(_ref => {
     contract: contract,
     currentUser: currentUser,
     nearConfig: nearConfig,
-    wallet: walletConnection,
-    version: _config.VERSION
+    wallet: walletConnection
   })), document.getElementById('root'));
 });
 },{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/index.js","./App":"App.js","./config.js":"config.js","near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -49233,7 +49272,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60247" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61509" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

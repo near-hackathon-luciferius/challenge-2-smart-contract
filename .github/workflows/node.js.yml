@@ -23,7 +23,6 @@ jobs:
         cache: 'npm'
     - run: |
         git remote set-url origin https://Bearer:${{ secrets.GITHUB_TOKEN }}@github.com/near-hackathon-luciferius/challenge-2-smart-contract.git
-        env VERSION=1.0.${{ github.run_number }}
-        echo $VERSION
+        npm --no-git-tag-version version 1.0.${{ github.run_number }}
         npm ci
         npm run deploy --if-present

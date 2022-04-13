@@ -1,5 +1,4 @@
 const CONTRACT_NAME = process.env.CONTRACT_NAME || 'hello.cryptosketches.testnet';
-const VERSION = process.env.VERSION || '1.0.0';
 
 function getConfig(env) {
   switch(env) {
@@ -57,4 +56,4 @@ function getConfig(env) {
   }
 }
 
-module.exports = {getConfig, VERSION};
+module.exports = getConfig;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router } from "react-router-dom";
 import App from './App';
-import {getConfig, VERSION} from './config.js';
+import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
 
 // Initializing contract
@@ -63,7 +63,6 @@ window.nearInitPromise = initContract().then(
           currentUser={currentUser}
           nearConfig={nearConfig}
           wallet={walletConnection}
-          version={VERSION}
         />
 	  </Router>,
       document.getElementById('root')
