@@ -8,7 +8,7 @@ import SignIn from './components/SignIn';
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
-const App = ({ contract, currentUser, nearConfig, wallet }) => {
+const App = ({ contract, currentUser, nearConfig, wallet, version }) => {
   const [answer, setAnswer] = useState("No transaction executed.");
 
   const onSubmit = (e) => {
@@ -48,7 +48,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
   return (
     <main>
       <header>
-        <h1>NEAR Challenge #2 - Hello World</h1>
+        <h1>NEAR Challenge #2 - Hello World - {version}</h1>
         { currentUser
           ? <button onClick={signOut}>Log out</button>
           : <button onClick={signIn}>Log in</button>
