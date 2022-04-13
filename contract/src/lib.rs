@@ -1,5 +1,6 @@
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{env, near_bindgen};
+use near_sdk::{env, near_bindgen, PanicOnDefault, AccountId};
+use near_sdk::collections::UnorderedMap;
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
@@ -22,27 +23,31 @@ impl Contract {
     
     #[payable]
     pub fn remember_me(&mut self, name: String) -> String {   
-        if env::attached_deposit() != 0 {
-            env::log_str(format!("Thanks for the {} NEAR.", env::attached_deposit()).as_str())
+        if env::attached_deposit() >= 450000000000000000000 {
+            let deposit = env::attached_deposit()/u64.pow(10,24);
+            env::log_str(format!("Thanks for the {} NEAR.", deposit).as_str())
         }
         else {
-            near_sdk::env::panic(b"You need to deposit x NEAR in order to use this funtion. Storage is expensive...");
+            env::panic_str("You need to deposit at least 0.00045 NEAR in order to use this funtion. Storage is expensive...");
+        }
+        if name.len() > 15 {
+            env::panic_str(format!("I can only remember 15 characters. Your name has {} characters. I'm sorry.", name.len()).as_str());
         }
         self.names.insert(&env::predecessor_account_id(), &name);
-        format!("Hello {}!", name)
+        format!("Hello {}! I will remember you.", name)
     }
     
-    pub fn get_last_message(self, account_id: AccountId) -> Option<String> { 
-        let name = self.names.get(&account_id)
+    pub fn get_last_message(self, account_id: AccountId) -> String { 
+        let name = self.names.get(&account_id);
         if name.is_some(){
             format!("Hello {}!", name.unwrap())
         }
         else{
-            "I don't remember you."
+            "I don't remember you.".to_string()
         }
     }
     
-    pub fn count_remembered_names(self, account_id: AccountId) -> u64 { 
+    pub fn count_remembered_names(self) -> u64 { 
         self.names.len()
     }
     
@@ -98,13 +103,60 @@ mod tests {
         // Get Alice as an account ID
         let alice = AccountId::new_unchecked("alice.testnet".to_string());
         // Set up the testing context and unit test environment
-        let context = get_context(alice);
-        context.attached_deposit = 1000;
+        let mut context = get_context(alice);
+        context.attached_deposit(0.1*u64.pow(10,24));
         testing_env!(context.build());
 
         // Set up contract object and call the new method
         let mut contract = Contract::new();
         let result = contract.remember_me("Alice".to_string());
+        assert_eq!(result, "Hello Alice! I will remember you.".to_string(), "Expected correct hello response.");
+    }
+
+    #[test]
+    #[should_panic]
+    fn remember_me_without_deposit_should_fail() {
+        // Get Alice as an account ID
+        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        // Set up the testing context and unit test environment
+        let mut context = get_context(alice);
+        testing_env!(context.build());
+
+        // Set up contract object and call the new method
+        let mut contract = Contract::new();
+        let result = contract.remember_me("Alice".to_string());
+        assert_eq!(result, "Hello Alice!".to_string(), "Expected correct hello response.");
+    }
+
+    #[test]
+    #[should_panic]
+    fn remember_me_with_to_long_name_should_fail() {
+        // Get Alice as an account ID
+        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        // Set up the testing context and unit test environment
+        let mut context = get_context(alice);
+        context.attached_deposit(0.1*u64.pow(10,24));
+        testing_env!(context.build());
+
+        // Set up contract object and call the new method
+        let mut contract = Contract::new();
+        let result = contract.remember_me("AVeryLongNameIndeed".to_string());
+        assert_eq!(result, "Hello Alice!".to_string(), "Expected correct hello response.");
+    }
+
+    #[test]
+    fn remember_me_remembers_name() {
+        // Get Alice as an account ID
+        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        // Set up the testing context and unit test environment
+        let mut context = get_context(alice);
+        context.attached_deposit(0.1*u64.pow(10,24));
+        testing_env!(context.build());
+
+        // Set up contract object and call the new method
+        let mut contract = Contract::new();
+        contract.remember_me("Alice".to_string());
+        let result = contract.get_last_message(alice);
         assert_eq!(result, "Hello Alice!".to_string(), "Expected correct hello response.");
     }
 }
