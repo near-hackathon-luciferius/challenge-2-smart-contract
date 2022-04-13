@@ -21,5 +21,6 @@ jobs:
       with:
         node-version: 16.x
         cache: 'npm'
+    - run: git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/near-hackathon-luciferius/challenge-2-smart-contract.git
     - run: npm ci
     - run: npm run deploy --if-present
