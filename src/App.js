@@ -6,7 +6,6 @@ import Form from './components/Form';
 import SignIn from './components/SignIn';
 var version = require('../package.json').version;
 
-const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
 const App = ({ contract, currentUser, nearConfig, wallet, lastTransaction, provider, errorMessage }) => {
@@ -15,11 +14,11 @@ const App = ({ contract, currentUser, nearConfig, wallet, lastTransaction, provi
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const { fieldset, name_prompt, donation } = e.target.elements;
+    const { fieldset, name_prompt } = e.target.elements;
 
     fieldset.disabled = true;
     //Big(donation.value || '0').times(10 ** 24).toFixed()
-    if (e.nativeEvent.submitter.value == 'hello') {        
+    if (e.nativeEvent.submitter.value === 'hello') {        
         contract.hello(
           { name: name_prompt.value },
           BOATLOAD_OF_GAS,
@@ -67,17 +66,19 @@ const App = ({ contract, currentUser, nearConfig, wallet, lastTransaction, provi
           getLastRememberedMessage(currentUser.accountId);
       }
       window.history.pushState({}, "", window.location.origin + window.location.pathname);
-  }, []);
+
+      async function getState(txHash, accountId) {
+        const result = await provider.txStatus(txHash, accountId);
+        setAnswer(result.receipts_outcome[0].outcome.logs.pop());
+      }
+      
+      async function getLastRememberedMessage(accountId) {
+        const result = await contract.get_last_message({ account_id: accountId });
+        setAnswer(result);
+      }
+  }, [currentUser, errorMessage, lastTransaction, contract, provider]);
   
-  async function getState(txHash, accountId) {
-    const result = await provider.txStatus(txHash, accountId);
-    setAnswer(result.receipts_outcome[0].outcome.logs.pop());
-  }
-  
-  async function getLastRememberedMessage(accountId) {
-    const result = await contract.get_last_message({ account_id: accountId });
-    setAnswer(result);
-  }
+
 
   return (
     <main>

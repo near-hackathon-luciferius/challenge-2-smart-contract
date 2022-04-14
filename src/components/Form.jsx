@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Big from 'big.js';
 
 export default function Form({ onSubmit, currentUser }) {
   return (
@@ -13,6 +12,7 @@ export default function Form({ onSubmit, currentUser }) {
             autoComplete="off"
             autoFocus
             id="name_prompt"
+            className="name_input"
             required
           />
         </p>
