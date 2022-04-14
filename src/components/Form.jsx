@@ -16,21 +16,13 @@ export default function Form({ onSubmit, currentUser }) {
             required
           />
         </p>
-        <p>
-          <label htmlFor="donation">Donation (optional):</label>
-          <input
-            autoComplete="off"
-            defaultValue={'0'}
-            id="donation"
-            max={Big(currentUser.balance).div(10 ** 24)}
-            min="0"
-            step="0.01"
-            type="number"
-          />
-          <span title="NEAR Tokens">Ⓝ</span>
-        </p>
-        <button type="submit">
-          Hello!
+        <button type="submit" value="hello" className="margin_button"
+                title="Executes the method hello which returns a message from NEAR. This does not require a confirmation.">
+          Hello
+        </button>
+        <button type="submit" value="remember" className="margin_button"
+                title="Executes the method remember_me which stores the given name in the smart contract. This does require a confirmation.">
+          Remember me
         </button>
       </fieldset>
     </form>

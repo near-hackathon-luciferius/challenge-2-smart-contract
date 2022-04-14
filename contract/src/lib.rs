@@ -34,7 +34,9 @@ impl Contract {
             env::panic_str(format!("I can only remember 15 characters. Your name has {} characters. I'm sorry.", name.len()).as_str());
         }
         self.names.insert(&env::predecessor_account_id(), &name);
-        format!("Hello {}! I will remember you.", name)
+        let result = format!("Hello {}! I will remember you.", name);
+        env::log_str(result.as_str());
+        result
     }
     
     pub fn get_last_message(self, account_id: AccountId) -> String { 

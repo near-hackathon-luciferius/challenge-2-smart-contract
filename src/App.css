@@ -70,3 +70,14 @@ span.important {
     margin: 0 auto;
     width: 576px;
 }
+
+.margin_button {
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.login_button {
+    margin-left: 10px;
+    font-size: 1.3em;
+}

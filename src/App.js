@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Big from 'big.js';
 import Form from './components/Form';
@@ -9,8 +9,8 @@ var version = require('../package.json').version;
 const SUGGESTED_DONATION = '0';
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
-const App = ({ contract, currentUser, nearConfig, wallet }) => {
-  const [answer, setAnswer] = useState("No transaction executed.");
+const App = ({ contract, currentUser, nearConfig, wallet, lastTransaction, provider, errorMessage }) => {
+  const [answer, setAnswer] = useState(errorMessage ? decodeURI(errorMessage) : currentUser ? "Thinking please wait..." : "Please login first.");
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -18,18 +18,31 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     const { fieldset, name_prompt, donation } = e.target.elements;
 
     fieldset.disabled = true;
-    
-    contract.hello(
-      { name: name_prompt.value },
-      BOATLOAD_OF_GAS,
-      Big(donation.value || '0').times(10 ** 24).toFixed()
-    ).then((answer) => {
-      fieldset.disabled = false;
-      donation.value = SUGGESTED_DONATION;
-      name_prompt.value = '';
-      name_prompt.focus();
-      setAnswer(answer);
-    });
+    //Big(donation.value || '0').times(10 ** 24).toFixed()
+    if (e.nativeEvent.submitter.value == 'hello') {        
+        contract.hello(
+          { name: name_prompt.value },
+          BOATLOAD_OF_GAS,
+          0
+        ).then((answer) => {
+          fieldset.disabled = false;
+          name_prompt.value = '';
+          name_prompt.focus();
+          setAnswer(answer);
+        });
+    }
+    else {
+        contract.remember_me(
+          { name: name_prompt.value },
+          BOATLOAD_OF_GAS,
+          Big('0.00045').times(10 ** 24).toFixed()
+        ).then((answer) => {
+          fieldset.disabled = false;
+          name_prompt.value = '';
+          name_prompt.focus();
+          setAnswer(answer);
+        });
+    }
   };
   
   const signIn = () => {
@@ -45,17 +58,37 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
     wallet.signOut();
     window.location.replace(window.location.origin + window.location.pathname);
   };
+  
+  useEffect(() => {
+      if (currentUser && lastTransaction && !errorMessage) {
+          getState(lastTransaction, currentUser.accountId);
+      }
+      else if (currentUser && !errorMessage){
+          getLastRememberedMessage(currentUser.accountId);
+      }
+      window.history.pushState({}, "", window.location.origin + window.location.pathname);
+  }, []);
+  
+  async function getState(txHash, accountId) {
+    const result = await provider.txStatus(txHash, accountId);
+    setAnswer(result.receipts_outcome[0].outcome.logs.pop());
+  }
+  
+  async function getLastRememberedMessage(accountId) {
+    const result = await contract.get_last_message({ account_id: accountId });
+    setAnswer(result);
+  }
 
   return (
     <main>
       <header>
         <h1>NEAR Challenge #2 - Hello World - {version}</h1>
         { currentUser
-          ? <button onClick={signOut}>Log out</button>
-          : <button onClick={signIn}>Log in</button>
+          ? <button onClick={signOut} className="login_button">Log out</button>
+          : <button onClick={signIn} className="login_button">Log in</button>
         }
       </header>      
-      <h3>Status: { answer }</h3>
+      <h5>Status: { answer }</h5>
       { currentUser
         ? <Form onSubmit={onSubmit} currentUser={currentUser} />
         : <SignIn/>

@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router } from "react-router-dom";
+import { HashRouter as Router, useParams } from "react-router-dom";
 import App from './App';
 import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
 
 // Initializing contract
 async function initContract() {
+  
   // get network configuration values from config.js
   // based on the network ID we pass to getConfig()
   const nearConfig = getConfig(process.env.NEAR_ENV || 'testnet');
@@ -42,20 +43,37 @@ async function initContract() {
     nearConfig.contractName,
     {
       // View methods are read-only – they don't modify the state, but usually return some value
-      viewMethods: [],
+      viewMethods: ['get_last_message'],
       // Change methods can modify the state, but you don't receive the returned value when called
-      changeMethods: ['hello'],
+      changeMethods: ['hello', 'remember_me'],
       // Sender is the account ID to initialize transactions.
       // getAccountId() will return empty string if user is still unauthorized
       sender: walletConnection.getAccountId(),
     }
   );
-
-  return { contract, currentUser, nearConfig, walletConnection };
+  
+  const provider = near.connection.provider;
+  
+  return { contract, currentUser, nearConfig, walletConnection, provider };
 }
 
+function getLastTransactionHash() {
+    let { transactionHashes } = useParams();
+    return transactionHashes;
+}
+
+
 window.nearInitPromise = initContract().then(
-  ({ contract, currentUser, nearConfig, walletConnection }) => {
+  ({ contract, currentUser, nearConfig, walletConnection, provider }) => {
+    let urlParams = new URLSearchParams(window.location.search);
+    let lastTransaction;
+    if(urlParams.has('transactionHashes')){
+        lastTransaction = urlParams.get('transactionHashes');
+    }
+    let errorMessage;
+    if(urlParams.has('errorMessage')){
+        errorMessage = urlParams.get('errorMessage');
+    }
     ReactDOM.render(
 	  <Router>
         <App
@@ -63,6 +81,9 @@ window.nearInitPromise = initContract().then(
           currentUser={currentUser}
           nearConfig={nearConfig}
           wallet={walletConnection}
+          lastTransaction={lastTransaction}
+          provider={provider}
+          errorMessage={errorMessage}
         />
 	  </Router>,
       document.getElementById('root')

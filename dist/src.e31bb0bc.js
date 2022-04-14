@@ -32650,21 +32650,17 @@ function Form(_ref) {
     autoFocus: true,
     id: "name_prompt",
     required: true
-  })), /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement("label", {
-    htmlFor: "donation"
-  }, "Donation (optional):"), /*#__PURE__*/_react.default.createElement("input", {
-    autoComplete: "off",
-    defaultValue: '0',
-    id: "donation",
-    max: (0, _big.default)(currentUser.balance).div(10 ** 24),
-    min: "0",
-    step: "0.01",
-    type: "number"
-  }), /*#__PURE__*/_react.default.createElement("span", {
-    title: "NEAR Tokens"
-  }, "\u24C3")), /*#__PURE__*/_react.default.createElement("button", {
-    type: "submit"
-  }, "Hello!")));
+  })), /*#__PURE__*/_react.default.createElement("button", {
+    type: "submit",
+    value: "hello",
+    className: "margin_button",
+    title: "Executes the method hello which returns a message from NEAR. This does not require a confirmation."
+  }, "Hello"), /*#__PURE__*/_react.default.createElement("button", {
+    type: "submit",
+    value: "remember",
+    className: "margin_button",
+    title: "Executes the method remember_me which stores the given name in the smart contract. This does require a confirmation."
+  }, "Remember me")));
 }
 
 Form.propTypes = {
@@ -32687,12 +32683,12 @@ var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function SignIn() {
-  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("p", null, "This app demonstrates a key element of NEAR\u2019s UX: once an app has permission to make calls on behalf of a user (that is, once a user signs in), the app can make calls to the blockchain for them without prompting extra confirmation. So you\u2019ll see that if you don\u2019t include a donation, your name gets posted right away."), /*#__PURE__*/_react.default.createElement("p", null, "But if you do add a donation, then NEAR will double-check that you\u2019re ok with sending money to this app."), /*#__PURE__*/_react.default.createElement("p", null, "Go ahead and sign in to try it out!"));
+  return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("p", null, "This app demonstrates a key element of NEAR\u2019s UX: once an app has permission to make calls on behalf of a user (that is, once a user signs in), the app can make calls to the blockchain for them without prompting extra confirmation. So you\u2019ll see that if you use the hello button, you will get a response right away."), /*#__PURE__*/_react.default.createElement("p", null, "But if you do use the remember me button, then NEAR will double-check that you\u2019re ok with sending money to this app for remebering the name."), /*#__PURE__*/_react.default.createElement("p", null, "Go ahead and sign in to try it out!"));
 }
 },{"react":"../node_modules/react/index.js"}],"../package.json":[function(require,module,exports) {
 module.exports = {
   "name": "hello-react",
-  "version": "1.0.8",
+  "version": "0.1.0",
   "homepage": "https://near-hackathon-luciferius.github.io/challenge-2-smart-contract",
   "private": true,
   "dependencies": {
@@ -32701,12 +32697,10 @@ module.exports = {
     "@testing-library/user-event": "^12.1.10",
     "js-sha256": "^0.9.0",
     "near-api-js": "^0.42.0",
-    "package.json": "^2.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
-    "root-require": "^0.3.1",
     "save": "^2.4.0",
     "save-dev": "^0.0.1-security",
     "styled-components": "^5.2.0",
@@ -32768,9 +32762,12 @@ const App = _ref => {
     contract,
     currentUser,
     nearConfig,
-    wallet
+    wallet,
+    lastTransaction,
+    provider,
+    errorMessage
   } = _ref;
-  const [answer, setAnswer] = (0, _react.useState)("No transaction executed.");
+  const [answer, setAnswer] = (0, _react.useState)(errorMessage ? decodeURI(errorMessage) : currentUser ? "Thinking please wait..." : "Please login first.");
 
   const onSubmit = e => {
     e.preventDefault();
@@ -32779,16 +32776,27 @@ const App = _ref => {
       name_prompt,
       donation
     } = e.target.elements;
-    fieldset.disabled = true;
-    contract.hello({
-      name: name_prompt.value
-    }, BOATLOAD_OF_GAS, (0, _big.default)(donation.value || '0').times(10 ** 24).toFixed()).then(answer => {
-      fieldset.disabled = false;
-      donation.value = SUGGESTED_DONATION;
-      name_prompt.value = '';
-      name_prompt.focus();
-      setAnswer(answer);
-    });
+    fieldset.disabled = true; //Big(donation.value || '0').times(10 ** 24).toFixed()
+
+    if (e.nativeEvent.submitter.value == 'hello') {
+      contract.hello({
+        name: name_prompt.value
+      }, BOATLOAD_OF_GAS, 0).then(answer => {
+        fieldset.disabled = false;
+        name_prompt.value = '';
+        name_prompt.focus();
+        setAnswer(answer);
+      });
+    } else {
+      contract.remember_me({
+        name: name_prompt.value
+      }, BOATLOAD_OF_GAS, (0, _big.default)('0.00045').times(10 ** 24).toFixed()).then(answer => {
+        fieldset.disabled = false;
+        name_prompt.value = '';
+        name_prompt.focus();
+        setAnswer(answer);
+      });
+    }
   };
 
   const signIn = () => {
@@ -32807,11 +32815,35 @@ const App = _ref => {
     window.location.replace(window.location.origin + window.location.pathname);
   };
 
+  (0, _react.useEffect)(() => {
+    if (currentUser && lastTransaction && !errorMessage) {
+      getState(lastTransaction, currentUser.accountId);
+    } else if (currentUser && !errorMessage) {
+      getLastRememberedMessage(currentUser.accountId);
+    }
+
+    window.history.pushState({}, "", window.location.origin + window.location.pathname);
+  }, []);
+
+  async function getState(txHash, accountId) {
+    const result = await provider.txStatus(txHash, accountId);
+    setAnswer(result.receipts_outcome[0].outcome.logs.pop());
+  }
+
+  async function getLastRememberedMessage(accountId) {
+    const result = await contract.get_last_message({
+      account_id: accountId
+    });
+    setAnswer(result);
+  }
+
   return /*#__PURE__*/_react.default.createElement("main", null, /*#__PURE__*/_react.default.createElement("header", null, /*#__PURE__*/_react.default.createElement("h1", null, "NEAR Challenge #2 - Hello World - ", version), currentUser ? /*#__PURE__*/_react.default.createElement("button", {
-    onClick: signOut
+    onClick: signOut,
+    className: "login_button"
   }, "Log out") : /*#__PURE__*/_react.default.createElement("button", {
-    onClick: signIn
-  }, "Log in")), /*#__PURE__*/_react.default.createElement("h3", null, "Status: ", answer), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
+    onClick: signIn,
+    className: "login_button"
+  }, "Log in")), /*#__PURE__*/_react.default.createElement("h5", null, "Status: ", answer), currentUser ? /*#__PURE__*/_react.default.createElement(_Form.default, {
     onSubmit: onSubmit,
     currentUser: currentUser
   }) : /*#__PURE__*/_react.default.createElement(_SignIn.default, null));
@@ -49214,19 +49246,28 @@ async function initContract() {
   // accounts can only have one contract deployed to them.
   nearConfig.contractName, {
     // View methods are read-only – they don't modify the state, but usually return some value
-    viewMethods: [],
+    viewMethods: ['get_last_message'],
     // Change methods can modify the state, but you don't receive the returned value when called
-    changeMethods: ['hello'],
+    changeMethods: ['hello', 'remember_me'],
     // Sender is the account ID to initialize transactions.
     // getAccountId() will return empty string if user is still unauthorized
     sender: walletConnection.getAccountId()
   });
+  const provider = near.connection.provider;
   return {
     contract,
     currentUser,
     nearConfig,
-    walletConnection
+    walletConnection,
+    provider
   };
+}
+
+function getLastTransactionHash() {
+  let {
+    transactionHashes
+  } = (0, _reactRouterDom.useParams)();
+  return transactionHashes;
 }
 
 window.nearInitPromise = initContract().then(_ref => {
@@ -49234,14 +49275,30 @@ window.nearInitPromise = initContract().then(_ref => {
     contract,
     currentUser,
     nearConfig,
-    walletConnection
+    walletConnection,
+    provider
   } = _ref;
+  let urlParams = new URLSearchParams(window.location.search);
+  let lastTransaction;
+
+  if (urlParams.has('transactionHashes')) {
+    lastTransaction = urlParams.get('transactionHashes');
+  }
+
+  let errorMessage;
+
+  if (urlParams.has('errorMessage')) {
+    errorMessage = urlParams.get('errorMessage');
+  }
 
   _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_reactRouterDom.HashRouter, null, /*#__PURE__*/_react.default.createElement(_App.default, {
     contract: contract,
     currentUser: currentUser,
     nearConfig: nearConfig,
-    wallet: walletConnection
+    wallet: walletConnection,
+    lastTransaction: lastTransaction,
+    provider: provider,
+    errorMessage: errorMessage
   })), document.getElementById('root'));
 });
 },{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/index.js","./App":"App.js","./config.js":"config.js","near-api-js":"../node_modules/near-api-js/lib/browser-index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -49272,7 +49329,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61509" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54041" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -7,12 +7,12 @@ export default function SignIn() {
           This app demonstrates a key element of NEAR’s UX: once an app has
           permission to make calls on behalf of a user (that is, once a user
           signs in), the app can make calls to the blockchain for them without
-          prompting extra confirmation. So you’ll see that if you don’t
-          include a donation, your name gets posted right away.
+          prompting extra confirmation. So you’ll see that if you use the hello
+          button, you will get a response right away.
       </p>
       <p>
-          But if you do add a donation, then NEAR will double-check that
-          you’re ok with sending money to this app.
+          But if you do use the remember me button, then NEAR will double-check that
+          you’re ok with sending money to this app for remebering the name.
       </p>
       <p>
           Go ahead and sign in to try it out!
