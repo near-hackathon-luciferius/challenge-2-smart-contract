@@ -24,7 +24,7 @@ impl Contract {
     #[payable]
     pub fn remember_me(&mut self, name: String) -> String {   
         if env::attached_deposit() >= 450000000000000000000 {
-            let deposit = env::attached_deposit()/u64.pow(10,24);
+            let deposit = (env::attached_deposit() as f64)/(10u128.pow(24) as f64);
             env::log_str(format!("Thanks for the {} NEAR.", deposit).as_str())
         }
         else {
@@ -45,18 +45,6 @@ impl Contract {
         else{
             "I don't remember you.".to_string()
         }
-    }
-    
-    pub fn count_remembered_names(self) -> u64 { 
-        self.names.len()
-    }
-    
-    pub fn get_updates(&self, from_index: u64, limit: u64) -> Vec<(AccountId, String)> {
-        let keys = self.names.keys_as_vector();
-        let values = self.names.values_as_vector();
-        (from_index..std::cmp::min(from_index + limit, self.names.len()))
-            .map(|index| (keys.get(index).unwrap(), values.get(index).unwrap()))
-            .collect()
     }
 }
 
@@ -86,7 +74,7 @@ mod tests {
     #[test]
     fn check_hello_world() {
         // Get Alice as an account ID
-        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        let alice = AccountId::new_unchecked("alice1.testnet".to_string());
         // Set up the testing context and unit test environment
         let context = get_context(alice);
         testing_env!(context.build());
@@ -101,10 +89,10 @@ mod tests {
     #[test]
     fn remember_me_says_hello() {
         // Get Alice as an account ID
-        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        let alice = AccountId::new_unchecked("alice2.testnet".to_string());
         // Set up the testing context and unit test environment
         let mut context = get_context(alice);
-        context.attached_deposit(0.1*u64.pow(10,24));
+        context.attached_deposit(10u128.pow(22));
         testing_env!(context.build());
 
         // Set up contract object and call the new method
@@ -117,9 +105,9 @@ mod tests {
     #[should_panic]
     fn remember_me_without_deposit_should_fail() {
         // Get Alice as an account ID
-        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        let alice = AccountId::new_unchecked("alice3.testnet".to_string());
         // Set up the testing context and unit test environment
-        let mut context = get_context(alice);
+        let context = get_context(alice);
         testing_env!(context.build());
 
         // Set up contract object and call the new method
@@ -132,10 +120,10 @@ mod tests {
     #[should_panic]
     fn remember_me_with_to_long_name_should_fail() {
         // Get Alice as an account ID
-        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        let alice = AccountId::new_unchecked("alice4.testnet".to_string());
         // Set up the testing context and unit test environment
         let mut context = get_context(alice);
-        context.attached_deposit(0.1*u64.pow(10,24));
+        context.attached_deposit(10u128.pow(22));
         testing_env!(context.build());
 
         // Set up contract object and call the new method
@@ -147,11 +135,12 @@ mod tests {
     #[test]
     fn remember_me_remembers_name() {
         // Get Alice as an account ID
-        let alice = AccountId::new_unchecked("alice.testnet".to_string());
+        let alice = AccountId::new_unchecked("alice5.testnet".to_string());
         // Set up the testing context and unit test environment
         let mut context = get_context(alice);
-        context.attached_deposit(0.1*u64.pow(10,24));
+        context.attached_deposit(10u128.pow(22));
         testing_env!(context.build());
+        let alice = AccountId::new_unchecked("alice5.testnet".to_string());
 
         // Set up contract object and call the new method
         let mut contract = Contract::new();
