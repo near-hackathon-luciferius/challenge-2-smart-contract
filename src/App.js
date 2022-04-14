@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import Big from 'big.js';
 import Form from './components/Form';
 import SignIn from './components/SignIn';
+import { Button } from 'react-materialize';
+import 'materialize-css/dist/css/materialize.css';
 var version = require('../package.json').version;
+require('materialize-css');
 
 const BOATLOAD_OF_GAS = Big(3).times(10 ** 13).toFixed();
 
@@ -85,8 +88,8 @@ const App = ({ contract, currentUser, nearConfig, wallet, lastTransaction, provi
       <header>
         <h1>NEAR Challenge #2 - Hello World - {version}</h1>
         { currentUser
-          ? <button onClick={signOut} className="login_button">Log out</button>
-          : <button onClick={signIn} className="login_button">Log in</button>
+          ? <Button onClick={signOut} className="login_button" small>Log out</Button>
+          : <Button onClick={signIn} className="login_button" small>Log in</Button>
         }
       </header>      
       <h5>Status: { answer }</h5>
