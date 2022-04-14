@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/challenge-2-smart-contract/static/css/main.31315085.chunk.css",
-    "main.js": "/challenge-2-smart-contract/static/js/main.1076bd65.chunk.js",
-    "main.js.map": "/challenge-2-smart-contract/static/js/main.1076bd65.chunk.js.map",
+    "main.css": "/challenge-2-smart-contract/static/css/main.7a862f72.chunk.css",
+    "main.js": "/challenge-2-smart-contract/static/js/main.d5ea5701.chunk.js",
+    "main.js.map": "/challenge-2-smart-contract/static/js/main.d5ea5701.chunk.js.map",
     "runtime-main.js": "/challenge-2-smart-contract/static/js/runtime-main.a90c05e6.js",
     "runtime-main.js.map": "/challenge-2-smart-contract/static/js/runtime-main.a90c05e6.js.map",
-    "static/js/2.64234a45.chunk.js": "/challenge-2-smart-contract/static/js/2.64234a45.chunk.js",
-    "static/js/2.64234a45.chunk.js.map": "/challenge-2-smart-contract/static/js/2.64234a45.chunk.js.map",
+    "static/js/2.f1cf94ba.chunk.js": "/challenge-2-smart-contract/static/js/2.f1cf94ba.chunk.js",
+    "static/js/2.f1cf94ba.chunk.js.map": "/challenge-2-smart-contract/static/js/2.f1cf94ba.chunk.js.map",
     "index.html": "/challenge-2-smart-contract/index.html",
-    "static/css/main.31315085.chunk.css.map": "/challenge-2-smart-contract/static/css/main.31315085.chunk.css.map",
-    "static/js/2.64234a45.chunk.js.LICENSE.txt": "/challenge-2-smart-contract/static/js/2.64234a45.chunk.js.LICENSE.txt",
+    "static/css/main.7a862f72.chunk.css.map": "/challenge-2-smart-contract/static/css/main.7a862f72.chunk.css.map",
+    "static/js/2.f1cf94ba.chunk.js.LICENSE.txt": "/challenge-2-smart-contract/static/js/2.f1cf94ba.chunk.js.LICENSE.txt",
     "static/media/App.css": "/challenge-2-smart-contract/static/media/Inter-Regular.9cd7588f.ttf"
   },
   "entrypoints": [
     "static/js/runtime-main.a90c05e6.js",
-    "static/js/2.64234a45.chunk.js",
-    "static/css/main.31315085.chunk.css",
-    "static/js/main.1076bd65.chunk.js"
+    "static/js/2.f1cf94ba.chunk.js",
+    "static/css/main.7a862f72.chunk.css",
+    "static/js/main.d5ea5701.chunk.js"
   ]
 }
