@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router, useParams } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import App from './App';
 import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
@@ -56,12 +56,6 @@ async function initContract() {
   
   return { contract, currentUser, nearConfig, walletConnection, provider };
 }
-
-function getLastTransactionHash() {
-    let { transactionHashes } = useParams();
-    return transactionHashes;
-}
-
 
 window.nearInitPromise = initContract().then(
   ({ contract, currentUser, nearConfig, walletConnection, provider }) => {
